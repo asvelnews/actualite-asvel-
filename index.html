@@ -170,6 +170,58 @@
 
   .nav-social-mobile{ display:none; }
 
+  /* ---------- Écran de maintenance (affiché uniquement par script si dans la période) ---------- */
+  .maintenance-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:var(--ink);
+    color:var(--cream);
+    align-items:center;
+    justify-content:center;
+    padding:2rem;
+    text-align:center;
+  }
+  .maintenance-box{
+    max-width:420px;
+  }
+  .maintenance-box .logo{
+    font-family:'Archivo Black', sans-serif;
+    font-size:1.6rem;
+    color:var(--cream);
+    margin-bottom:2rem;
+  }
+  .maintenance-box .logo .dot{ color:var(--red); }
+  .maintenance-box h1{
+    font-family:'Oswald',sans-serif;
+    font-size:1.7rem;
+    margin-bottom:1rem;
+  }
+  .maintenance-box p{
+    font-size:1rem;
+    line-height:1.6;
+    color:rgba(244,239,227,0.85);
+    margin-bottom:0.8rem;
+  }
+  .maintenance-box .maintenance-sub{
+    font-size:0.88rem;
+    color:rgba(244,239,227,0.6);
+    margin-bottom:1.8rem;
+  }
+  .maintenance-box .footer-social{
+    display:flex;
+    gap:1.4rem;
+    justify-content:center;
+  }
+  .maintenance-box .footer-social a{
+    font-family:'Oswald',sans-serif;
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+
   .back-to-top{
     position:fixed;
     bottom:1.6rem;
@@ -1184,6 +1236,31 @@
 </style>
 </head>
 <body>
+
+  <div class="maintenance-overlay" id="maintenanceOverlay">
+    <div class="maintenance-box">
+      <div class="logo">ACTU<span class="dot">.</span>ASVEL</div>
+      <h1>PAUSE VACANCES</h1>
+      <p>On s'absente quelques jours ! Le site est de retour le <strong>22 août</strong>.</p>
+      <p class="maintenance-sub">En attendant, retrouve-nous sur Instagram et Twitter pour l'actu du club.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var now = new Date();
+      var start = new Date(2026, 7, 17, 0, 0, 0);
+      var end = new Date(2026, 7, 22, 0, 0, 0);
+      if(now >= start && now < end){
+        document.getElementById('maintenanceOverlay').style.display = 'flex';
+        document.documentElement.style.overflow = 'hidden';
+      }
+    })();
+  </script>
 
   <div class="brand-ticker">
     <div class="brand-ticker-inner">
