@@ -20,6 +20,9 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
+  section[id], footer[id]{
+    scroll-margin-top:76px;
+  }
   body{
     background:var(--cream);
     color:var(--ink);
@@ -87,8 +90,16 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:1.6rem 5vw 1.2rem;
+    padding:1.1rem 5vw;
     border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:var(--cream);
+    transition:box-shadow .2s ease;
+  }
+  header.scrolled{
+    box-shadow:0 4px 16px rgba(21,19,15,0.08);
   }
   .logo{
     font-family:'Archivo Black', sans-serif;
@@ -183,11 +194,31 @@
   .back-to-top:hover{ background:var(--red); }
 
   /* ---------- Hero ---------- */
+  #calendrier-belite,
+  #classement{
+    background:var(--cream-dim);
+  }
+  header,
+  .hero,
+  .feed,
+  .games,
+  .palmares-club,
+  .roster,
+  .insta-cta,
+  footer .footer-grid,
+  footer .footer-bottom{
+    max-width:1440px;
+    margin-left:auto;
+    margin-right:auto;
+    box-sizing:border-box;
+  }
   .hero{
     padding:4.5rem 5vw 3.5rem;
-    max-width:60ch;
     border-bottom:1px solid var(--line);
     position:relative;
+  }
+  .hero > div{
+    max-width:60ch;
   }
   .hero-tag{
     display:inline-flex;
@@ -327,10 +358,15 @@
     padding-bottom:0;
   }
   .sidebar-article .num{
-    font-family:'Archivo Black',sans-serif;
-    font-size:0.68rem;
-    color:var(--red);
-    letter-spacing:0.05em;
+    display:inline-block;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:0.65rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.18rem 0.5rem;
   }
   .sidebar-article h5{
     font-family:'Oswald',sans-serif;
@@ -360,10 +396,22 @@
   }
 
   .feature-article .num{
-    font-family:'Archivo Black',sans-serif;
-    font-size:0.78rem;
-    color:var(--red);
+    display:inline-block;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:0.72rem;
     letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.22rem 0.65rem;
+  }
+  .feature-article .byline{
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.03em;
+    color:var(--court);
+    margin-bottom:1rem;
   }
   .feature-article h3{
     font-size:clamp(1.5rem, 3vw, 2.1rem);
@@ -417,7 +465,7 @@
     overflow:hidden;
   }
   .article-toggle{
-    margin-top:1.1rem;
+    margin-top:0;
     background:var(--ink);
     color:var(--cream);
     border:none;
@@ -430,6 +478,39 @@
     transition:background .2s ease;
   }
   .article-toggle:hover{ background:var(--red); }
+
+  .article-actions{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    flex-wrap:wrap;
+    margin-top:1.1rem;
+  }
+  .copy-link-btn{
+    background:none;
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+    padding:0.7rem 1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .copy-link-btn:hover{
+    border-color:var(--red);
+    color:var(--red);
+  }
+  .copy-link-btn.copied{
+    border-color:var(--red);
+    color:var(--red);
+    background:rgba(216,30,44,0.08);
+  }
+  .sidebar-copy{
+    padding:0.5rem 0.9rem;
+    font-size:0.68rem;
+  }
 
   /* ---------- Résultats & calendrier ---------- */
   .games{
@@ -528,13 +609,17 @@
     position:relative;
     cursor:pointer;
     overflow:hidden;
-    transition:transform .2s ease;
+    transition:transform .2s ease, box-shadow .2s ease;
     display:flex;
     flex-direction:column;
     border-right:1px solid var(--line);
     border-bottom:1px solid var(--line);
   }
-  .player:hover{ transform:translateY(-3px); }
+  .player:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px rgba(21,19,15,0.15);
+    z-index:5;
+  }
   .player:focus-visible{ outline:3px solid var(--red); outline-offset:-3px; }
   .player-media{
     position:relative;
@@ -600,7 +685,7 @@
     display:none;
     position:fixed;
     inset:0;
-    z-index:100;
+    z-index:300;
     align-items:center;
     justify-content:center;
     padding:5vw;
@@ -754,7 +839,9 @@
     text-align:center;
     position:relative;
     overflow:hidden;
+    transition:transform .2s ease;
   }
+  .trophy-card:hover{ transform:translateY(-3px); }
   .trophy-card::before{
     content:'';
     position:absolute; top:0; left:0; right:0; height:4px; background:var(--red);
@@ -846,13 +933,63 @@
   .cta-btn:hover{ transform:scale(1.04); }
 
   footer{
-    padding:2.5rem 5vw;
-    display:flex; justify-content:space-between; align-items:center;
+    padding:4rem 5vw 0;
     border-top:1px solid var(--line);
+    background:var(--ink);
+    color:var(--cream);
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr 1fr;
+    gap:2.5rem;
+    padding-bottom:3rem;
+  }
+  .footer-brand .logo{ color:var(--cream); }
+  .footer-brand p{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.88rem;
+    line-height:1.6;
+    color:rgba(244,239,227,0.7);
+    margin:1rem 0 1.3rem;
+    max-width:38ch;
+  }
+  .footer-social{
+    display:flex;
+    gap:1.2rem;
+  }
+  .footer-social a{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+  .footer-col h4{
     font-family:'Oswald',sans-serif;
     font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--court);
+    margin-bottom:1rem;
+  }
+  .footer-col a{
+    display:block;
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.9rem;
+    color:rgba(244,239,227,0.85);
+    margin-bottom:0.7rem;
+  }
+  .footer-col a:hover{ color:var(--red); }
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.6rem 0;
+    border-top:1px solid rgba(244,239,227,0.12);
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
     letter-spacing:0.05em;
-    color:var(--ink-soft);
+    color:rgba(244,239,227,0.55);
   }
 
   @media (max-width:1100px) and (min-width:861px){
@@ -908,6 +1045,8 @@
     .roster-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
     .trophy-grid{ grid-template-columns:1fr; }
     .modal-infos{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+    .footer-bottom{ flex-direction:column; gap:0.5rem; align-items:flex-start; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -933,7 +1072,7 @@
     <a class="logo" href="#">ACTU<span class="dot">.</span>ASVEL</a>
     <nav id="mainNav">
       <a href="#actu">Article</a>
-      <a href="#calendrier">Calendrier</a>
+      <a href="#calendrier">Calendrier EuroLeague</a>
       <a href="#calendrier-belite">Calendrier Betclic</a>
       <a href="#derbys">Derbys</a>
       <a href="#classement">Classement</a>
@@ -985,7 +1124,7 @@
     <div>
       <span class="hero-tag">Club</span>
       <h1>Les frères Buss prêts à racheter l'ASVEL ?</h1>
-      <p>En complément des comptes Instagram et Twitter, retrouvez ici le calendrier des matchs à domicile en Euroligue, l'effectif du club et les articles complets du fil d'actu.</p>
+      <p>En complément des comptes Instagram et Twitter, retrouvez ici le calendrier des matchs à domicile en EuroLeague, l'effectif du club et les articles complets du fil d'actu.</p>
       <div class="hero-meta">
         <span>Mis à jour aujourd'hui</span>
       </div>
@@ -1000,12 +1139,16 @@
 
     <div class="articles-layout">
 
-      <article class="feature-article">
+      <article class="feature-article" id="article-buss">
         <div class="num">Club</div>
         <h3>ASVEL : les frères Buss prêts à racheter le club de Tony Parker ?</h3>
+        <div class="byline">Par la rédaction — Actu ASVEL</div>
         <p class="lead">Joey et Jesse Buss, anciens dirigeants des Los Angeles Lakers, pourraient investir dans l'ASVEL par l'intermédiaire de leur société Buss Sports Capital. Leur intérêt pour Lyon est confirmé, mais aucun rachat du club villeurbannais n'a encore été officialisé.</p>
 
-        <button class="article-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article complet</button>
+        <div class="article-actions">
+          <button class="article-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article complet</button>
+          <button class="copy-link-btn" data-article="article-buss">Copier le lien</button>
+        </div>
 
         <div class="article-collapsible" id="articleBody3">
           <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
@@ -1040,11 +1183,14 @@
       <aside class="articles-sidebar">
         <h4 class="sidebar-title">À lire aussi</h4>
 
-        <article class="sidebar-article">
+        <article class="sidebar-article" id="article-bolomboy">
           <div class="num">Mercato</div>
           <h5>Joel Bolomboy rejoint l'ASVEL pour deux saisons</h5>
           <p class="sidebar-excerpt">Le pivot américano-russe de 32 ans arrive de l'Étoile Rouge de Belgrade, lié au club jusqu'en juin 2028.</p>
-          <button class="article-toggle sidebar-toggle" data-target="articleBody2" aria-expanded="false" aria-controls="articleBody2">Lire l'article</button>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody2" aria-expanded="false" aria-controls="articleBody2">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-bolomboy">Copier le lien</button>
+          </div>
 
           <div class="article-collapsible" id="articleBody2">
             <p>L'ASVEL tient un renfort majeur pour sa raquette. À la recherche d'un intérieur expérimenté et immédiatement opérationnel au plus haut niveau européen, le club villeurbannais a choisi de miser sur Joel Bolomboy. Le pivot de 2,04 m s'est engagé pour les deux prochaines saisons et devient l'une des recrues les plus importantes du nouveau projet lyonnais.</p>
@@ -1070,11 +1216,14 @@
           <div class="meta"><span>Betclic Élite</span><span>Mercato</span></div>
         </article>
 
-        <article class="sidebar-article">
+        <article class="sidebar-article" id="article-sestina">
           <div class="num">Mercato</div>
           <h5>ASVEL : Nate Sestina s'engage pour une saison à Villeurbanne</h5>
           <p class="sidebar-excerpt">L'ailier-fort américain de 29 ans apportera son expérience du très haut niveau européen à l'effectif villeurbannais.</p>
-          <button class="article-toggle sidebar-toggle" data-target="articleBody1" aria-expanded="false" aria-controls="articleBody1">Lire l'article</button>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody1" aria-expanded="false" aria-controls="articleBody1">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-sestina">Copier le lien</button>
+          </div>
 
           <div class="article-collapsible" id="articleBody1">
             <p>Annoncé dans le viseur du club depuis plusieurs semaines, Nate Sestina rejoint finalement Villeurbanne. Mesurant 2,05 m, l'Américain évolue principalement au poste 4, mais peut également dépanner au poste de pivot.</p>
@@ -1100,10 +1249,15 @@
     (function(){
       document.querySelectorAll('.article-toggle').forEach(function(toggle){
         var body = document.getElementById(toggle.getAttribute('data-target'));
+        var isSidebar = toggle.classList.contains('sidebar-toggle');
         toggle.addEventListener('click', function(){
           var isOpen = body.classList.toggle('open');
           toggle.setAttribute('aria-expanded', String(isOpen));
-          toggle.textContent = isOpen ? 'Réduire l\'article' : 'Lire l\'article complet';
+          if(isSidebar){
+            toggle.textContent = isOpen ? 'Réduire' : "Lire l'article";
+          } else {
+            toggle.textContent = isOpen ? "Réduire l'article" : "Lire l'article complet";
+          }
         });
       });
     })();
@@ -1112,7 +1266,7 @@
   <section class="games" id="calendrier">
     <div class="feed-head">
       <h2>Calendrier</h2>
-      <span>Euroligue — saison 2026-2027</span>
+      <span>EuroLeague — saison 2026-2027</span>
     </div>
 
     <div class="tabs">
@@ -1349,6 +1503,49 @@
           });
         });
       });
+
+      // Copier le lien unique de chaque article
+      document.querySelectorAll('.copy-link-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var id = btn.getAttribute('data-article');
+          var url = window.location.origin + window.location.pathname + '#' + id;
+          var originalText = btn.textContent;
+          function showCopied(){
+            btn.textContent = 'Lien copié !';
+            btn.classList.add('copied');
+            setTimeout(function(){
+              btn.textContent = originalText;
+              btn.classList.remove('copied');
+            }, 2000);
+          }
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(url).then(showCopied).catch(function(){
+              window.prompt('Copie ce lien :', url);
+            });
+          } else {
+            window.prompt('Copie ce lien :', url);
+          }
+        });
+      });
+
+      // Ouvrir automatiquement l'article visé si on arrive via son lien direct
+      var hash = window.location.hash.replace('#', '');
+      if(hash){
+        var articleMap = { 'article-buss': 'articleBody3', 'article-bolomboy': 'articleBody2', 'article-sestina': 'articleBody1' };
+        if(articleMap[hash]){
+          var body = document.getElementById(articleMap[hash]);
+          var toggle = document.querySelector('.article-toggle[data-target="' + articleMap[hash] + '"]');
+          if(body && toggle){
+            body.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.textContent = toggle.classList.contains('sidebar-toggle') ? 'Réduire' : "Réduire l'article";
+          }
+          setTimeout(function(){
+            var el = document.getElementById(hash);
+            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
     });
   </script>
 
@@ -1416,11 +1613,11 @@
   <section class="games standings" id="classement">
     <div class="feed-head">
       <h2>Classement</h2>
-      <span>Betclic Élite &amp; Euroligue</span>
+      <span>Betclic Élite &amp; EuroLeague</span>
     </div>
     <div class="standings-grid">
       <div class="standings-col">
-        <h3>Euroligue</h3>
+        <h3>EuroLeague</h3>
         <div class="standings-empty">
           <span class="standings-icon">—</span>
           <p>Aucun match n'a encore été joué cette saison. Le classement sera mis à jour dès le coup d'envoi, le 24 septembre 2026.</p>
@@ -1674,8 +1871,10 @@
   <script>
     (function(){
       var btn = document.getElementById('backToTop');
+      var header = document.querySelector('header');
       window.addEventListener('scroll', function(){
         btn.classList.toggle('visible', window.scrollY > 600);
+        header.classList.toggle('scrolled', window.scrollY > 20);
       });
       btn.addEventListener('click', function(){
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1684,8 +1883,33 @@
   </script>
 
   <footer id="about">
-    <span>Actu ASVEL — projet de fan, non affilié au club</span>
-    <span>© 2026</span>
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <div class="logo">ACTU<span class="dot">.</span>ASVEL</div>
+        <p>Le site qui accompagne le compte Instagram et Twitter Actu ASVEL : articles, calendrier, effectif et palmarès du club, loin des contraintes du format post.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Le site</h4>
+        <a href="#actu">Article</a>
+        <a href="#calendrier">Calendrier EuroLeague</a>
+        <a href="#calendrier-belite">Calendrier Betclic Élite</a>
+        <a href="#derbys">Derbys</a>
+      </div>
+      <div class="footer-col">
+        <h4>Le club</h4>
+        <a href="#classement">Classement</a>
+        <a href="#effectif">Effectif</a>
+        <a href="#palmares">Palmarès</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Actu ASVEL — projet de fan, non affilié au club</span>
+      <span>© 2026</span>
+    </div>
   </footer>
 
 </body>
