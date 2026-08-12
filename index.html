@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
   :root{
     --ink:#15130f;
     --ink-soft:#2a251d;
@@ -20,7 +21,7 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
-  section[id], footer[id]{
+  section[id], footer[id], article[id]{
     scroll-margin-top:76px;
   }
   body{
@@ -288,6 +289,43 @@
   .feed-head h2{ font-size:1.5rem; }
   .feed-head span{ font-family:'Oswald',sans-serif; font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.06em;}
 
+  .quick-articles{
+    display:flex;
+    gap:0.8rem;
+    overflow-x:auto;
+    padding-bottom:1.6rem;
+    margin-bottom:1.6rem;
+    border-bottom:1px solid var(--line);
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .quick-articles::-webkit-scrollbar{ display:none; }
+  .quick-article-chip{
+    flex:0 0 auto;
+    width:220px;
+    background:var(--cream-dim);
+    border-left:3px solid var(--red);
+    padding:0.9rem 1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.4rem;
+    transition:background .2s ease;
+  }
+  .quick-article-chip:hover{ background:var(--line); }
+  .quick-tag{
+    font-family:'Oswald',sans-serif;
+    font-size:0.65rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+  .quick-title{
+    font-family:'Oswald',sans-serif;
+    font-size:0.9rem;
+    line-height:1.25;
+    color:var(--ink);
+  }
+
   .article-grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -328,8 +366,81 @@
   }
   .feature-article{
     max-width:none;
-    border-top:3px solid var(--red);
-    padding-top:1.4rem;
+    padding-top:0;
+  }
+  .article-cover{
+    height:170px;
+    margin-bottom:1.4rem;
+    display:flex;
+    align-items:flex-end;
+    padding:1.2rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .article-cover-club{
+    background:linear-gradient(135deg, var(--ink) 0%, var(--red-deep) 100%);
+  }
+  .article-cover-photo{
+    background:var(--ink);
+    height:260px;
+    align-items:flex-end;
+  }
+  .article-cover-photo::after{
+    background:linear-gradient(to top, rgba(21,19,15,0.75) 0%, rgba(21,19,15,0.1) 55%, transparent 80%);
+  }
+  .article-cover-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top center;
+  }
+  .article-cover::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(45deg, rgba(244,239,227,0.04) 0, rgba(244,239,227,0.04) 2px, transparent 2px, transparent 14px);
+  }
+  .article-cover-tag{
+    position:relative;
+    z-index:1;
+    font-family:'Archivo Black',sans-serif;
+    font-size:1.6rem;
+    color:rgba(244,239,227,0.5);
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+  }
+  .byline-dot{ color:var(--court); margin:0 0.15rem; }
+  .drop-cap::first-letter{
+    font-family:'Archivo Black',sans-serif;
+    font-size:3.4rem;
+    float:left;
+    line-height:0.8;
+    padding-right:0.5rem;
+    padding-top:0.4rem;
+    color:var(--red);
+  }
+  .article-pullquote{
+    border-left:3px solid var(--red);
+    margin:1.6rem 0;
+    padding:0.3rem 0 0.3rem 1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:1.15rem;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.4;
+  }
+  .article-pullquote span{
+    display:block;
+    margin-top:0.5rem;
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.78rem;
+    font-weight:400;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--court);
   }
 
   /* ---------- Sidebar articles ---------- */
@@ -356,6 +467,20 @@
     border-bottom:none;
     margin-bottom:0;
     padding-bottom:0;
+  }
+  .sidebar-cover{
+    height:5px;
+    width:2.4rem;
+    margin-bottom:0.9rem;
+  }
+  .sidebar-cover-mercato{ background:var(--red); }
+  .sidebar-date{
+    font-family:'Oswald',sans-serif;
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+    color:var(--court);
+    text-transform:uppercase;
+    margin-top:0.5rem;
   }
   .sidebar-article .num{
     display:inline-block;
@@ -384,9 +509,6 @@
     margin-top:0;
     padding:0.5rem 1rem;
     font-size:0.72rem;
-  }
-  .sidebar-article .article-collapsible.open{
-    margin-top:1rem;
   }
   .sidebar-article .meta{
     display:flex;
@@ -1058,13 +1180,14 @@
     outline:3px solid var(--red);
     outline-offset:2px;
   }
+
 </style>
 </head>
 <body>
 
   <div class="brand-ticker">
     <div class="brand-ticker-inner">
-      <span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span>
+      <span>MERCATO — Mbaye Ndiaye proche de l'Olympiakos</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span><span>MERCATO — Mbaye Ndiaye proche de l'Olympiakos</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span>
     </div>
   </div>
 
@@ -1122,8 +1245,8 @@
 
   <section class="hero">
     <div>
-      <span class="hero-tag">Club</span>
-      <h1>Les frères Buss prêts à racheter l'ASVEL ?</h1>
+      <span class="hero-tag">Mercato</span>
+      <h1>Mbaye Ndiaye proche de l'Olympiakos.</h1>
       <p>En complément des comptes Instagram et Twitter, retrouvez ici le calendrier des matchs à domicile en EuroLeague, l'effectif du club et les articles complets du fil d'actu.</p>
       <div class="hero-meta">
         <span>Mis à jour aujourd'hui</span>
@@ -1137,56 +1260,122 @@
       <span>Derniers articles</span>
     </div>
 
+    <div class="quick-articles">
+      <a href="#article-mbaye" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Mbaye Ndiaye proche de l'Olympiakos</span>
+      </a>
+      <a href="#article-buss" class="quick-article-chip">
+        <span class="quick-tag">Club</span>
+        <span class="quick-title">Les frères Buss prêts à racheter l'ASVEL ?</span>
+      </a>
+      <a href="#article-bolomboy" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Joel Bolomboy rejoint l'ASVEL</span>
+      </a>
+      <a href="#article-sestina" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Nate Sestina s'engage avec l'ASVEL</span>
+      </a>
+    </div>
+
     <div class="articles-layout">
 
-      <article class="feature-article" id="article-buss">
-        <div class="num">Club</div>
-        <h3>ASVEL : les frères Buss prêts à racheter le club de Tony Parker ?</h3>
-        <div class="byline">Par la rédaction — Actu ASVEL</div>
-        <p class="lead">Joey et Jesse Buss, anciens dirigeants des Los Angeles Lakers, pourraient investir dans l'ASVEL par l'intermédiaire de leur société Buss Sports Capital. Leur intérêt pour Lyon est confirmé, mais aucun rachat du club villeurbannais n'a encore été officialisé.</p>
+      <article class="feature-article" id="article-mbaye">
+        <div class="article-cover article-cover-photo">
+          <img class="article-cover-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2ODApLCBxdWFsaXR5ID0gNzAK/9sAQwAKBwcIBwYKCAgICwoKCw4YEA4NDQ4dFRYRGCMfJSQiHyIhJis3LyYpNCkhIjBBMTQ5Oz4+PiUuRElDPEg3PT47/9sAQwEKCwsODQ4cEBAcOygiKDs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7/8AAEQgCvAK8AwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8A9mooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKQkAZJoAWkrjfEnxO0LQZXtYna/vF48qDlVPoW6flk15pr3xM8TatE0CSrZKx5W3yu0ehbqTQOx7FrXjLw/oCsL/UoVkUcwodz/APfI6fjXGP8AGiKacrYaBPPH2eScR8fkf515HHDGLjfdzpJg5IPPvnPerF1qEM2IYpBBABjEfG760rlKPc9bg+MlgrBb/S5YSevkzLLj+Valv8WfCE7Kr37wFv8AnrERj6kZrwApblsGYsAe54xVwWVgY1dWMhI5VTj+dMVj6W0zxBo+sjOm6lbXRxkrFKCw+o6j8a0K+U1khs7hZreW5gkXlZFbaVPsRXfeGvi3q+mlIdWX+1LMEAzLgTIMf+Pfjz70Cse30VnaLrmna/p6Xum3KzRN1A+8h9GHY1o0CCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoopKAGTzR20LzTSLHHGpZ3Y4CgdSa8R8ffEufXHfTNGdotPBw8vKtN/gvt37+lWPir42k1C9fQNOmZbWBityynHmuP4eOw/nXmLvxtHA/nQMkW7MDbx+8kHRm6CoJbmab78hNRsaSnYLhmjNJS0CDNKGI6HH0pDSUAWEu5kP3tw9G5FOUwTH5z5L+oPB/wqtRk0WHc39C1/VfC+opfWE2ccMM5WRfRh3/AM819E+GPE1h4q0lNQsWI/hkjb70bdwa+W45WXgEj0wa3vDvii/8NavHfWD4zgSx/wAE69wR2PvSA+nqKzPD+u2niLR4NSs2/dyj5lJGY27qfcVp0CCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACuY+IHiI+HPDE88Mirdz/ubcE87j1P4DJ/Kumrwv4wa3/aHihbCPmPT02ZB6u2Cfy4H4GgDgJHYkgsSScsSepqB6kNRMc1QxmKMUp60UCEoxRRSAKTFLRQA010mieAdf8AEGljUdNghmg3MvM6qwI6jBrnDW/4W8aav4UnJspQ9u7ZltpOUf39j7igC/a/Du+utDttaF9bLZysEmJDboDu2ncMdAevNZWv6Be+GNYfTb/aXChg6E7XU9CP1/KvUPh1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TOTWcdbuFYkIBk96vzQhlDMDj1xVOSJEPI47UJR7DdSp/MQfbryZuWKg+lSBCoyxyT3p6gYG0EClYfLVGevVkB60qnPSmMeadECcmrSMmw5NaemW+WDtgKOeapRxgtknAq9aziW6htYvutIAffmmJH0Xp8C2+nW0KDCxxKoA9hVmmoNsaj0AFOqznCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACkPSlqG6lEFpNKeiIzfkKAPFdTndNSuZ1bc3mMxwO2TzToNUiRhOJHZWIDj+6Mdap37HYXB+YcgjtWUbnY/zcN39GrFM7GtDoZpYWyQ3BJ/Csi4hXzTggeprG1W9mhRDG2R29vwrNbVpmY5z69afLfUn2iWjOpZlAC4XOeQTms65CKGIXIzx71iDUpN2dxBxjI5phvWwVZz7Uco3VRqrcRgctg54B7VE0wZiMj0xWSbtiCM8+tQmZs8k1SiZuoarMGbbkVOHVFA/Osq2lYMSatKWc5JwKNhXuWWmLDaKvaAA2tWYPQzpn8xWaq8dOK1NBwNasiennp/MUmy0j6XpaQdKWtDmCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACsvxJP9n0C8fOC0ewc9zxWpXMeOp9mkxQA8yzAnHoAf64pSdkVBXkkeV6guE45BJx/WshlyecH1Fb2pRkv8oJ4544+lYkiYfNc1z0OUz763eXC8le7f3azbvSZrZfOXDoT95c4HsfyrsLGNHbEihgRg5qfX7KA2uyJdhILcE/5NXGp0MZ0b6nmzKfy60w5ye/1rdGlswOSoc8gE44qpLp0sR5XJxzWvMjn9nIzQCT04pdmDxVtbRt+MYx1zU4tl6gU7i5GVrZDmr6Lj3oSJV6DpUqL7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" alt="Mbaye Ndiaye">
+          <span class="article-cover-tag">Mercato</span>
+        </div>
+        <div class="num">Mercato</div>
+        <h3>Mbaye Ndiaye proche de rejoindre l'Olympiakos, un mois après sa prolongation</h3>
+        <div class="byline">Par la rédaction — Actu ASVEL <span class="byline-dot">•</span> 12 août 2026 <span class="byline-dot">•</span> 3 min de lecture</div>
+        <p class="lead">EuroLeague – Mbaye Ndiaye pourrait déjà quitter l'ASVEL. L'intérieur sénégalais de 27 ans serait proche de rejoindre l'Olympiakos, champion d'Europe en titre, alors qu'il avait prolongé son contrat avec Villeurbanne jusqu'en 2029 au début du mois de juillet.</p>
 
         <div class="article-actions">
-          <button class="article-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article complet</button>
-          <button class="copy-link-btn" data-article="article-buss">Copier le lien</button>
+          <button class="article-toggle" data-target="articleBody4" aria-expanded="false" aria-controls="articleBody4">Lire l'article complet</button>
+          <button class="copy-link-btn" data-article="article-mbaye">Copier le lien</button>
         </div>
 
-        <div class="article-collapsible" id="articleBody3">
-          <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
-          <p>Cette candidature ne signifie pas encore que l'ASVEL a été rachetée. Elle pourrait néanmoins conduire à une entrée dans le capital du club, voire à une reprise des parts détenues par Tony Parker.</p>
+        <div class="article-collapsible" id="articleBody4">
+          <p class="drop-cap">L'avenir de Mbaye Ndiaye semble désormais s'écrire loin de Villeurbanne. Selon les informations de <a href="https://basketnews.com/news-253602-olympiacos-nearing-deal-with-versatile-euroleague-forward.html" target="_blank" rel="noopener">BasketNews</a>, l'international sénégalais se rapproche de l'Olympiakos. Des discussions avancées seraient en cours entre les différentes parties.</p>
+          <p>Le club grec souhaite renforcer son secteur intérieur avec un joueur mobile, athlétique et capable de défendre sur plusieurs postes. Ndiaye correspond parfaitement à ce profil grâce à son activité au rebond, sa protection du cercle et sa polyvalence défensive.</p>
+          <p>Aucun accord définitif n'a toutefois encore été officialisé par l'ASVEL ou l'Olympiakos. Le joueur reste donc, pour le moment, sous contrat avec Villeurbanne.</p>
 
-          <h4>Qui sont Joey et Jesse Buss ?</h4>
-          <p>Joey et Jesse sont les deux plus jeunes fils de Jerry Buss, propriétaire historique des Lakers entre 1979 et son décès en 2013.</p>
-          <p>Ils ont travaillé pendant près de vingt ans au sein de la franchise californienne. Jesse était notamment chargé du recrutement et de la préparation de la Draft, tandis que Joey s'occupait de la recherche, du développement et des South Bay Lakers en G League.</p>
-          <p>Les deux hommes ont participé à l'identification et au développement de joueurs comme Kyle Kuzma, Alex Caruso, Austin Reaves, Jordan Clarkson et Josh Hart.</p>
+          <h4>Une prolongation jusqu'en 2029 remise en question</h4>
+          <p>La situation est particulièrement surprenante puisque l'ASVEL avait annoncé la prolongation de Mbaye Ndiaye le 8 juillet dernier. Son nouveau contrat portait sur trois saisons supplémentaires, soit jusqu'à la fin de l'exercice 2028-2029. <a href="https://www.euroleaguebasketball.net/euroleague/news/mbaye-ndiaye-signs-new-three-year-deal-at-asvel/" target="_blank" rel="noopener">L'EuroLeague avait alors présenté cette prolongation</a> comme une volonté du club de sécuriser son avenir.</p>
+          <p>Un mois plus tard, le changement de situation financière de l'ASVEL semble avoir modifié les plans de la direction. Puisque Ndiaye est encore engagé pour trois ans, son départ nécessiterait un accord entre les deux clubs. Villeurbanne pourrait ainsi récupérer une indemnité de transfert.</p>
 
-          <h4>Une fortune de plusieurs centaines de millions de dollars</h4>
-          <p>En 2025, la famille Buss a vendu la majorité des Lakers à Mark Walter dans le cadre d'une opération valorisant la franchise à environ 10 milliards de dollars.</p>
-          <p>D'après ESPN, chacun des six héritiers Buss aurait récupéré près de 500 millions de dollars après impôts. Joey et Jesse conserveraient également une participation minoritaire dans les Lakers.</p>
-          <p>Le montant exact de leur fortune personnelle n'est pas public, mais les deux frères disposent clairement d'une capacité financière importante. Ils ont depuis créé Buss Sports Capital, une société spécialisée dans les investissements sportifs.</p>
+          <h4>La meilleure saison de sa carrière</h4>
+          <p>Arrivé à l'ASVEL en 2023 après trois saisons passées à l'ADA Blois, Mbaye Ndiaye a progressivement pris une place importante dans la rotation villeurbannaise.</p>
+          <p>Son parcours avait pourtant été interrompu en décembre 2024 par une rupture des ligaments croisés du genou droit. Après plusieurs mois d'absence, le Sénégalais est revenu à son meilleur niveau lors de la saison 2025-2026.</p>
+          <p>En Betclic Élite, il a enregistré 9,1 points, 5,9 rebonds, 1,6 passe décisive, 1,1 interception et 1,3 contre en 26 minutes de moyenne sur 29 rencontres. Il a notamment terminé meilleur rebondeur de l'ASVEL en championnat.</p>
+          <blockquote class="article-pullquote">32 matchs disputés en EuroLeague pour 7,7 points, 4,8 rebonds et 1,3 passe décisive : la meilleure saison européenne de sa carrière.</blockquote>
+          <p>Sur la scène européenne, Ndiaye a disputé 32 matchs pour des moyennes de 7,7 points, 4,8 rebonds et 1,3 passe décisive en 23 minutes. Des performances qui lui ont permis de réaliser la meilleure saison d'EuroLeague de sa carrière et d'attirer l'attention de plusieurs formations.</p>
 
-          <h4>Pourquoi l'ASVEL les intéresse</h4>
-          <p>L'intérêt des frères Buss pour l'ASVEL avait été évoqué dès le mois de mai 2026. Leur arrivée devait participer au financement du projet particulièrement ambitieux présenté par Tony Parker.</p>
-          <p>Ce projet s'est toutefois effondré après la non-validation par la DNCCG des garanties apportées par un important partenaire asiatique. Le budget prévisionnel du club a ainsi été ramené de 59 à environ 24 millions d'euros.</p>
-          <p>Cette baisse a obligé l'ASVEL à revoir son recrutement. Sylvain Francisco a notamment quitté Villeurbanne sans avoir disputé le moindre match officiel avec le club.</p>
-          <p>L'arrivée de Buss Sports Capital pourrait permettre à l'ASVEL de retrouver une stabilité financière et de relancer ses ambitions européennes.</p>
+          <h4>Une nouvelle perte importante pour l'ASVEL</h4>
+          <p>Ce possible transfert intervient au terme d'une intersaison particulièrement mouvementée. Après avoir revu ses ambitions financières à la baisse, l'ASVEL a déjà dû se séparer de plusieurs joueurs initialement attendus dans son nouveau projet.</p>
+          <p>Le départ de Mbaye Ndiaye représenterait une perte sportive majeure. Son énergie, sa polyvalence et ses qualités défensives en faisaient l'un des éléments les plus importants de la rotation villeurbannaise.</p>
+          <p>L'arrivée de Nate Sestina et la signature de Joel Bolomboy offrent de nouvelles possibilités dans la raquette. Yves Pons et Bodian Massa figurent également dans l'effectif, mais aucun de ces joueurs ne possède exactement les mêmes caractéristiques que l'international sénégalais.</p>
 
-          <h4>Un projet tourné vers la NBA Europe</h4>
-          <p>La NBA et la FIBA préparent une nouvelle compétition européenne susceptible de débuter en 2027. Lyon fait partie des villes étudiées pour accueillir une franchise permanente.</p>
-          <p>Pour les frères Buss, racheter ou investir dans l'ASVEL présenterait plusieurs avantages : une marque historique, 21 titres de champion de France, un centre de formation, un marché important et l'accès à la LDLC Arena.</p>
-          <p>Tony Parker pourrait également rester impliqué dans le projet grâce à son image et à ses liens avec la NBA, même en cas de changement de propriétaire.</p>
-          <p>Pour le moment, aucun accord, montant ou pourcentage de capital n'a été communiqué. L'intérêt des frères Buss pour Lyon est bien réel, mais le rachat de l'ASVEL reste à confirmer.</p>
+          <h4>Un changement de dimension pour Ndiaye</h4>
+          <p>Rejoindre l'Olympiakos constituerait une étape importante dans la carrière de Mbaye Ndiaye. Le club du Pirée évolue chaque saison parmi les principaux prétendants au titre européen et offrirait au Sénégalais l'occasion de découvrir un environnement particulièrement exigeant.</p>
+          <p>Après avoir réussi son retour de blessure et confirmé sa progression avec l'ASVEL, Ndiaye pourrait ainsi rejoindre l'une des formations les plus ambitieuses du continent.</p>
+          <p>Le transfert n'est pas encore officiel, mais les discussions seraient bien avancées. Sauf retournement de situation, Mbaye Ndiaye pourrait donc quitter Villeurbanne quelques semaines seulement après avoir prolongé jusqu'en 2029.</p>
         </div>
 
-        <div class="meta"><span>Club</span><span>Actu</span></div>
+        <div class="meta"><span>EuroLeague</span><span>Mercato</span></div>
       </article>
 
       <aside class="articles-sidebar">
         <h4 class="sidebar-title">À lire aussi</h4>
 
+        <article class="sidebar-article" id="article-buss">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
+          <div class="num">Club</div>
+          <h5>ASVEL : les frères Buss prêts à racheter le club de Tony Parker ?</h5>
+          <p class="sidebar-excerpt">Joey et Jesse Buss, anciens dirigeants des Lakers, pourraient investir dans l'ASVEL via Buss Sports Capital.</p>
+          <div class="sidebar-date">12 août 2026</div>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-buss">Copier le lien</button>
+          </div>
+
+          <div class="article-collapsible" id="articleBody3">
+            <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
+            <p>Cette candidature ne signifie pas encore que l'ASVEL a été rachetée. Elle pourrait néanmoins conduire à une entrée dans le capital du club, voire à une reprise des parts détenues par Tony Parker.</p>
+
+            <h4>Qui sont Joey et Jesse Buss ?</h4>
+            <p>Joey et Jesse sont les deux plus jeunes fils de Jerry Buss, propriétaire historique des Lakers entre 1979 et son décès en 2013.</p>
+            <p>Ils ont travaillé pendant près de vingt ans au sein de la franchise californienne. Jesse était notamment chargé du recrutement et de la préparation de la Draft, tandis que Joey s'occupait de la recherche, du développement et des South Bay Lakers en G League.</p>
+            <p>Les deux hommes ont participé à l'identification et au développement de joueurs comme Kyle Kuzma, Alex Caruso, Austin Reaves, Jordan Clarkson et Josh Hart.</p>
+
+            <h4>Une fortune de plusieurs centaines de millions de dollars</h4>
+            <p>En 2025, la famille Buss a vendu la majorité des Lakers à Mark Walter dans le cadre d'une opération valorisant la franchise à environ 10 milliards de dollars.</p>
+            <p>D'après ESPN, chacun des six héritiers Buss aurait récupéré près de 500 millions de dollars après impôts. Joey et Jesse conserveraient également une participation minoritaire dans les Lakers.</p>
+            <p>Le montant exact de leur fortune personnelle n'est pas public, mais les deux frères disposent clairement d'une capacité financière importante. Ils ont depuis créé Buss Sports Capital, une société spécialisée dans les investissements sportifs.</p>
+
+            <h4>Pourquoi l'ASVEL les intéresse</h4>
+            <p>L'intérêt des frères Buss pour l'ASVEL avait été évoqué dès le mois de mai 2026. Leur arrivée devait participer au financement du projet particulièrement ambitieux présenté par Tony Parker.</p>
+            <p>Ce projet s'est toutefois effondré après la non-validation par la DNCCG des garanties apportées par un important partenaire asiatique. Le budget prévisionnel du club a ainsi été ramené de 59 à environ 24 millions d'euros.</p>
+            <p>Cette baisse a obligé l'ASVEL à revoir son recrutement. Sylvain Francisco a notamment quitté Villeurbanne sans avoir disputé le moindre match officiel avec le club.</p>
+            <p>L'arrivée de Buss Sports Capital pourrait permettre à l'ASVEL de retrouver une stabilité financière et de relancer ses ambitions européennes.</p>
+
+            <h4>Un projet tourné vers la NBA Europe</h4>
+            <p>La NBA et la FIBA préparent une nouvelle compétition européenne susceptible de débuter en 2027. Lyon fait partie des villes étudiées pour accueillir une franchise permanente.</p>
+            <p>Pour les frères Buss, racheter ou investir dans l'ASVEL présenterait plusieurs avantages : une marque historique, 21 titres de champion de France, un centre de formation, un marché important et l'accès à la LDLC Arena.</p>
+            <p>Tony Parker pourrait également rester impliqué dans le projet grâce à son image et à ses liens avec la NBA, même en cas de changement de propriétaire.</p>
+            <p>Pour le moment, aucun accord, montant ou pourcentage de capital n'a été communiqué. L'intérêt des frères Buss pour Lyon est bien réel, mais le rachat de l'ASVEL reste à confirmer.</p>
+          </div>
+
+          <div class="meta"><span>Club</span><span>Actu</span></div>
+        </article>
+
         <article class="sidebar-article" id="article-bolomboy">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
           <div class="num">Mercato</div>
           <h5>Joel Bolomboy rejoint l'ASVEL pour deux saisons</h5>
           <p class="sidebar-excerpt">Le pivot américano-russe de 32 ans arrive de l'Étoile Rouge de Belgrade, lié au club jusqu'en juin 2028.</p>
+          <div class="sidebar-date">7 juillet 2026</div>
           <div class="article-actions">
             <button class="article-toggle sidebar-toggle" data-target="articleBody2" aria-expanded="false" aria-controls="articleBody2">Lire l'article</button>
             <button class="copy-link-btn sidebar-copy" data-article="article-bolomboy">Copier le lien</button>
@@ -1217,9 +1406,11 @@
         </article>
 
         <article class="sidebar-article" id="article-sestina">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
           <div class="num">Mercato</div>
           <h5>ASVEL : Nate Sestina s'engage pour une saison à Villeurbanne</h5>
           <p class="sidebar-excerpt">L'ailier-fort américain de 29 ans apportera son expérience du très haut niveau européen à l'effectif villeurbannais.</p>
+          <div class="sidebar-date">Juillet 2026</div>
           <div class="article-actions">
             <button class="article-toggle sidebar-toggle" data-target="articleBody1" aria-expanded="false" aria-controls="articleBody1">Lire l'article</button>
             <button class="copy-link-btn sidebar-copy" data-article="article-sestina">Copier le lien</button>
@@ -1262,6 +1453,7 @@
       });
     })();
   </script>
+
 
   <section class="games" id="calendrier">
     <div class="feed-head">
@@ -1528,24 +1720,30 @@
         });
       });
 
-      // Ouvrir automatiquement l'article visé si on arrive via son lien direct
-      var hash = window.location.hash.replace('#', '');
-      if(hash){
-        var articleMap = { 'article-buss': 'articleBody3', 'article-bolomboy': 'articleBody2', 'article-sestina': 'articleBody1' };
-        if(articleMap[hash]){
-          var body = document.getElementById(articleMap[hash]);
-          var toggle = document.querySelector('.article-toggle[data-target="' + articleMap[hash] + '"]');
-          if(body && toggle){
-            body.classList.add('open');
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.textContent = toggle.classList.contains('sidebar-toggle') ? 'Réduire' : "Réduire l'article";
-          }
-          setTimeout(function(){
-            var el = document.getElementById(hash);
-            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 100);
+      // Ouvrir automatiquement l'article visé (au chargement ET à chaque clic sur une ancre)
+      var articleMap = { 'article-mbaye': 'articleBody4', 'article-buss': 'articleBody3', 'article-bolomboy': 'articleBody2', 'article-sestina': 'articleBody1' };
+      function openArticleFromHash(hash){
+        if(!articleMap[hash]) return;
+        var body = document.getElementById(articleMap[hash]);
+        var toggle = document.querySelector('.article-toggle[data-target="' + articleMap[hash] + '"]');
+        if(body && toggle && !body.classList.contains('open')){
+          body.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.textContent = toggle.classList.contains('sidebar-toggle') ? 'Réduire' : "Réduire l'article";
         }
       }
+      var initialHash = window.location.hash.replace('#', '');
+      if(initialHash){
+        openArticleFromHash(initialHash);
+        setTimeout(function(){
+          var el = document.getElementById(initialHash);
+          if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+      window.addEventListener('hashchange', function(){
+        var h = window.location.hash.replace('#', '');
+        openArticleFromHash(h);
+      });
     });
   </script>
 
