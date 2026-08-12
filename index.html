@@ -438,6 +438,33 @@
   .palmares-club{
     padding:1rem 5vw 3rem;
   }
+
+  /* ---------- Onglets ---------- */
+  .tabs{
+    display:flex;
+    gap:0.6rem;
+    margin-bottom:2rem;
+  }
+  .tab-btn{
+    background:none;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    padding:0.7rem 1.3rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .tab-btn:hover{ background:var(--cream-dim); }
+  .tab-btn.active{
+    background:var(--ink);
+    color:var(--cream);
+    border-color:var(--ink);
+  }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
   .games-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -875,6 +902,8 @@
     .insta-cta{ flex-direction:column; text-align:center; }
     .hero-meta{ flex-wrap:wrap; row-gap:0.6rem;}
     .games-grid{ grid-template-columns:1fr; gap:2.2rem; }
+    .tabs{ flex-direction:column; }
+    .tab-btn{ width:100%; }
     .standings-grid{ grid-template-columns:1fr; gap:2.2rem; }
     .roster-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
     .trophy-grid{ grid-template-columns:1fr; }
@@ -896,15 +925,16 @@
 
   <div class="brand-ticker">
     <div class="brand-ticker-inner">
-      <span>MERCATO — Mbaye Ndiaye proche de rejoindre l'Olympiakos</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span><span>MERCATO — Mbaye Ndiaye proche de rejoindre l'Olympiakos</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span>
+      <span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>MERCATO — Joel Bolomboy rejoint l'ASVEL pour deux saisons</span><span class="sep">•</span><span>MERCATO — Nate Sestina s'engage pour la saison 2026-2027</span><span class="sep">•</span><span>EUROLEAGUE — Coup d'envoi le 24 sept. 2026 face à Maccabi Tel-Aviv</span><span class="sep">•</span><span>DERBY — ASVEL vs Chorale de Roanne le 10 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>DERBY — ASVEL vs JL Bourg le 31 oct. 2026 à l'Astroballe</span><span class="sep">•</span><span>PALMARÈS — 21 titres de Champion de France, record du club</span><span class="sep">•</span><span>DERBY — JL Bourg vs ASVEL le 6 mars 2027 à Ekinox</span><span class="sep">•</span><span>DERBY — Chorale de Roanne vs ASVEL le 17 avril 2027 à Roanne</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Joel Bolomboy et 4 autres joueurs à découvrir</span><span class="sep">•</span>
     </div>
   </div>
 
   <header>
-    <div class="logo">ACTU<span class="dot">.</span>ASVEL</div>
+    <a class="logo" href="#">ACTU<span class="dot">.</span>ASVEL</a>
     <nav id="mainNav">
       <a href="#actu">Article</a>
       <a href="#calendrier">Calendrier</a>
+      <a href="#calendrier-belite">Calendrier Betclic</a>
       <a href="#derbys">Derbys</a>
       <a href="#classement">Classement</a>
       <a href="#effectif">Effectif</a>
@@ -953,9 +983,9 @@
 
   <section class="hero">
     <div>
-      <span class="hero-tag">Mercato</span>
-      <h1>Mbaye Ndiaye proche de rejoindre l'Olympiakos</h1>
-      <p>Prolongé jusqu'en 2029 au début du mois de juillet, l'intérieur sénégalais serait désormais proche de rejoindre l'Olympiakos, champion d'Europe en titre.</p>
+      <span class="hero-tag">Club</span>
+      <h1>Les frères Buss prêts à racheter l'ASVEL ?</h1>
+      <p>En complément des comptes Instagram et Twitter, retrouvez ici le calendrier des matchs à domicile en Euroligue, l'effectif du club et les articles complets du fil d'actu.</p>
       <div class="hero-meta">
         <span>Mis à jour aujourd'hui</span>
       </div>
@@ -971,77 +1001,44 @@
     <div class="articles-layout">
 
       <article class="feature-article">
-        <div class="num">Mercato</div>
-        <h3>Mbaye Ndiaye proche de rejoindre l'Olympiakos, un mois seulement après sa prolongation</h3>
-        <p class="lead">Selon BasketNews, l'intérieur sénégalais de 27 ans se rapproche de l'Olympiakos. Un départ aussi important qu'inattendu, quelques semaines seulement après sa prolongation avec l'ASVEL jusqu'en 2029.</p>
+        <div class="num">Club</div>
+        <h3>ASVEL : les frères Buss prêts à racheter le club de Tony Parker ?</h3>
+        <p class="lead">Joey et Jesse Buss, anciens dirigeants des Los Angeles Lakers, pourraient investir dans l'ASVEL par l'intermédiaire de leur société Buss Sports Capital. Leur intérêt pour Lyon est confirmé, mais aucun rachat du club villeurbannais n'a encore été officialisé.</p>
 
-        <button class="article-toggle" data-target="articleBody4" aria-expanded="false" aria-controls="articleBody4">Lire l'article complet</button>
+        <button class="article-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article complet</button>
 
-        <div class="article-collapsible" id="articleBody4">
-          <p>Le mercato de l'ASVEL pourrait connaître un nouveau rebondissement majeur. Très convoité après la meilleure saison européenne de sa carrière, Mbaye Ndiaye serait en discussions avancées avec l'Olympiakos. Le club grec souhaite renforcer son secteur intérieur avec un joueur athlétique, mobile et capable de défendre sur plusieurs postes.</p>
-          <p>À ce stade, aucun accord définitif n'a été officialisé par l'ASVEL ou l'Olympiakos. Le Sénégalais reste donc contractuellement lié au club villeurbannais, mais les négociations seraient suffisamment avancées pour rendre son départ désormais très probable.</p>
+        <div class="article-collapsible" id="articleBody3">
+          <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
+          <p>Cette candidature ne signifie pas encore que l'ASVEL a été rachetée. Elle pourrait néanmoins conduire à une entrée dans le capital du club, voire à une reprise des parts détenues par Tony Parker.</p>
 
-          <h4>Une prolongation rapidement remise en question</h4>
-          <p>La situation est particulièrement surprenante puisque Mbaye Ndiaye avait prolongé son contrat le 8 juillet. L'ASVEL avait alors annoncé un nouvel engagement de trois saisons, jusqu'au terme de l'exercice 2028-2029.</p>
-          <p>Cette prolongation semblait confirmer la volonté du club de construire autour de l'un de ses joueurs les plus performants. Un peu plus d'un mois plus tard, le scénario a complètement changé. Puisqu'il est toujours sous contrat, son transfert nécessiterait un accord entre les deux clubs et pourrait permettre à l'ASVEL de récupérer une indemnité.</p>
+          <h4>Qui sont Joey et Jesse Buss ?</h4>
+          <p>Joey et Jesse sont les deux plus jeunes fils de Jerry Buss, propriétaire historique des Lakers entre 1979 et son décès en 2013.</p>
+          <p>Ils ont travaillé pendant près de vingt ans au sein de la franchise californienne. Jesse était notamment chargé du recrutement et de la préparation de la Draft, tandis que Joey s'occupait de la recherche, du développement et des South Bay Lakers en G League.</p>
+          <p>Les deux hommes ont participé à l'identification et au développement de joueurs comme Kyle Kuzma, Alex Caruso, Austin Reaves, Jordan Clarkson et Josh Hart.</p>
 
-          <h4>La meilleure saison de sa carrière</h4>
-          <p>Arrivé à l'ASVEL en 2023 en provenance de l'ADA Blois, Mbaye Ndiaye a progressivement pris une place importante dans la rotation villeurbannaise. Son évolution avait pourtant été brutalement interrompue en décembre 2024 par une rupture des ligaments croisés du genou droit.</p>
-          <p>Après plusieurs mois d'absence, l'international sénégalais a réussi un retour convaincant. Durant la saison 2025-2026, il a disputé 32 rencontres d'EuroLeague pour des moyennes de 7,7 points, 4,8 rebonds et 1,3 passe décisive en 23 minutes.</p>
-          <p>En Betclic ÉLITE, Ndiaye a compilé 9,1 points, 5,9 rebonds, 1,6 passe décisive, 1,1 interception et 1,3 contre en 29 matchs. Meilleur rebondeur de l'ASVEL en championnat, il s'est également distingué par son activité défensive, sa présence près du cercle et sa capacité à évoluer sur plusieurs positions.</p>
+          <h4>Une fortune de plusieurs centaines de millions de dollars</h4>
+          <p>En 2025, la famille Buss a vendu la majorité des Lakers à Mark Walter dans le cadre d'une opération valorisant la franchise à environ 10 milliards de dollars.</p>
+          <p>D'après ESPN, chacun des six héritiers Buss aurait récupéré près de 500 millions de dollars après impôts. Joey et Jesse conserveraient également une participation minoritaire dans les Lakers.</p>
+          <p>Le montant exact de leur fortune personnelle n'est pas public, mais les deux frères disposent clairement d'une capacité financière importante. Ils ont depuis créé Buss Sports Capital, une société spécialisée dans les investissements sportifs.</p>
 
-          <h4>Une conséquence du changement de cap de l'ASVEL</h4>
-          <p>Ce possible transfert intervient dans un contexte financier particulièrement mouvementé à Villeurbanne. Initialement construit autour d'un budget annoncé à 59 millions d'euros, le projet 2026-2027 a dû être profondément revu après l'absence de garanties suffisantes concernant un partenaire attendu.</p>
-          <p>L'ASVEL a alors présenté un plan alternatif estimé autour de 24 millions d'euros. Cette révision a déjà entraîné de nombreux changements dans l'effectif construit au début de l'été. Le transfert de Mbaye Ndiaye permettrait au club de réduire ses dépenses tout en récupérant une indemnité pour un joueur encore engagé pendant trois saisons.</p>
+          <h4>Pourquoi l'ASVEL les intéresse</h4>
+          <p>L'intérêt des frères Buss pour l'ASVEL avait été évoqué dès le mois de mai 2026. Leur arrivée devait participer au financement du projet particulièrement ambitieux présenté par Tony Parker.</p>
+          <p>Ce projet s'est toutefois effondré après la non-validation par la DNCCG des garanties apportées par un important partenaire asiatique. Le budget prévisionnel du club a ainsi été ramené de 59 à environ 24 millions d'euros.</p>
+          <p>Cette baisse a obligé l'ASVEL à revoir son recrutement. Sylvain Francisco a notamment quitté Villeurbanne sans avoir disputé le moindre match officiel avec le club.</p>
+          <p>L'arrivée de Buss Sports Capital pourrait permettre à l'ASVEL de retrouver une stabilité financière et de relancer ses ambitions européennes.</p>
 
-          <h4>Une raquette villeurbannaise en pleine évolution</h4>
-          <p>L'ASVEL a récemment renforcé son secteur intérieur avec les arrivées de Joel Bolomboy et Nate Sestina. Yves Pons et Bodian Massa offrent également plusieurs solutions dans la raquette.</p>
-          <p>Le départ de Ndiaye représenterait malgré tout une perte sportive importante. Son énergie, sa polyvalence défensive et sa capacité à protéger le cercle en faisaient l'un des profils les plus complets de l'effectif.</p>
-          <p>Pour le joueur, rejoindre l'Olympiakos constituerait une progression majeure. Il intégrerait le champion d'EuroLeague en titre et découvrirait un environnement où les ambitions nationales et européennes sont maximales.</p>
-          <p>L'opération n'est pas encore officielle. Tant que l'ASVEL et l'Olympiakos n'ont pas communiqué, Mbaye Ndiaye reste un joueur villeurbannais. La tendance indique néanmoins un départ de plus en plus probable vers Le Pirée.</p>
+          <h4>Un projet tourné vers la NBA Europe</h4>
+          <p>La NBA et la FIBA préparent une nouvelle compétition européenne susceptible de débuter en 2027. Lyon fait partie des villes étudiées pour accueillir une franchise permanente.</p>
+          <p>Pour les frères Buss, racheter ou investir dans l'ASVEL présenterait plusieurs avantages : une marque historique, 21 titres de champion de France, un centre de formation, un marché important et l'accès à la LDLC Arena.</p>
+          <p>Tony Parker pourrait également rester impliqué dans le projet grâce à son image et à ses liens avec la NBA, même en cas de changement de propriétaire.</p>
+          <p>Pour le moment, aucun accord, montant ou pourcentage de capital n'a été communiqué. L'intérêt des frères Buss pour Lyon est bien réel, mais le rachat de l'ASVEL reste à confirmer.</p>
         </div>
 
-        <div class="meta"><span>EuroLeague</span><span>Mercato</span></div>
+        <div class="meta"><span>Club</span><span>Actu</span></div>
       </article>
 
       <aside class="articles-sidebar">
         <h4 class="sidebar-title">À lire aussi</h4>
-
-        <article class="sidebar-article">
-          <div class="num">Club</div>
-          <h5>Les frères Buss prêts à racheter le club de Tony Parker ?</h5>
-          <p class="sidebar-excerpt">Joey et Jesse Buss, anciens dirigeants des Los Angeles Lakers, s'intéressent à Lyon dans le cadre du projet NBA Europe.</p>
-          <button class="article-toggle sidebar-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article</button>
-
-          <div class="article-collapsible" id="articleBody3">
-            <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
-            <p>Cette candidature ne signifie pas encore que l'ASVEL a été rachetée. Elle pourrait néanmoins conduire à une entrée dans le capital du club, voire à une reprise des parts détenues par Tony Parker.</p>
-
-            <h4>Qui sont Joey et Jesse Buss ?</h4>
-            <p>Joey et Jesse sont les deux plus jeunes fils de Jerry Buss, propriétaire historique des Lakers entre 1979 et son décès en 2013.</p>
-            <p>Ils ont travaillé pendant près de vingt ans au sein de la franchise californienne. Jesse était notamment chargé du recrutement et de la préparation de la Draft, tandis que Joey s'occupait de la recherche, du développement et des South Bay Lakers en G League.</p>
-            <p>Les deux hommes ont participé à l'identification et au développement de joueurs comme Kyle Kuzma, Alex Caruso, Austin Reaves, Jordan Clarkson et Josh Hart.</p>
-
-            <h4>Une fortune de plusieurs centaines de millions de dollars</h4>
-            <p>En 2025, la famille Buss a vendu la majorité des Lakers à Mark Walter dans le cadre d'une opération valorisant la franchise à environ 10 milliards de dollars.</p>
-            <p>D'après ESPN, chacun des six héritiers Buss aurait récupéré près de 500 millions de dollars après impôts. Joey et Jesse conserveraient également une participation minoritaire dans les Lakers.</p>
-            <p>Le montant exact de leur fortune personnelle n'est pas public, mais les deux frères disposent clairement d'une capacité financière importante. Ils ont depuis créé Buss Sports Capital, une société spécialisée dans les investissements sportifs.</p>
-
-            <h4>Pourquoi l'ASVEL les intéresse</h4>
-            <p>L'intérêt des frères Buss pour l'ASVEL avait été évoqué dès le mois de mai 2026. Leur arrivée devait participer au financement du projet particulièrement ambitieux présenté par Tony Parker.</p>
-            <p>Ce projet s'est toutefois effondré après la non-validation par la DNCCG des garanties apportées par un important partenaire asiatique. Le budget prévisionnel du club a ainsi été ramené de 59 à environ 24 millions d'euros.</p>
-            <p>Cette baisse a obligé l'ASVEL à revoir son recrutement. Sylvain Francisco a notamment quitté Villeurbanne sans avoir disputé le moindre match officiel avec le club.</p>
-            <p>L'arrivée de Buss Sports Capital pourrait permettre à l'ASVEL de retrouver une stabilité financière et de relancer ses ambitions européennes.</p>
-
-            <h4>Un projet tourné vers la NBA Europe</h4>
-            <p>La NBA et la FIBA préparent une nouvelle compétition européenne susceptible de débuter en 2027. Lyon fait partie des villes étudiées pour accueillir une franchise permanente.</p>
-            <p>Pour les frères Buss, racheter ou investir dans l'ASVEL présenterait plusieurs avantages : une marque historique, 21 titres de champion de France, un centre de formation, un marché important et l'accès à la LDLC Arena.</p>
-            <p>Tony Parker pourrait également rester impliqué dans le projet grâce à son image et à ses liens avec la NBA, même en cas de changement de propriétaire.</p>
-            <p>Pour le moment, aucun accord, montant ou pourcentage de capital n'a été communiqué. L'intérêt des frères Buss pour Lyon est bien réel, mais le rachat de l'ASVEL reste à confirmer.</p>
-          </div>
-
-          <div class="meta"><span>Club</span><span>Actu</span></div>
-        </article>
 
         <article class="sidebar-article">
           <div class="num">Mercato</div>
@@ -1115,219 +1112,268 @@
   <section class="games" id="calendrier">
     <div class="feed-head">
       <h2>Calendrier</h2>
-      <span>Euroligue — matchs à domicile</span>
+      <span>Euroligue — saison 2026-2027</span>
     </div>
-    <div class="games-grid">
-      <div class="games-col">
-        <h3>Phase régulière — 1ère partie</h3>
-        <div class="game-row">
-          <span class="game-date">24 sept. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Maccabi Tel-Aviv</span>
-          <span class="game-result tbd">20h45</span>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="home">Matchs à domicile</button>
+      <button class="tab-btn" data-tab="away">Matchs à l'extérieur</button>
+    </div>
+
+    <div class="tab-panel active" data-panel="home">
+      <div class="games-grid">
+        <div class="games-col">
+          <h3>Phase régulière — 1ère partie</h3>
+          <div class="game-row">
+            <span class="game-date">24 sept. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Maccabi Tel-Aviv</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">2 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Valencia Basket</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">13 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Étoile Rouge de Belgrade</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">28 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Partizan Belgrade</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">30 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Baskonia</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Bayern Munich</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">13 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Beşiktaş</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">24 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Olimpia Milan</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">17 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Dubai Basketball</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">22 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> FC Barcelone</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
         </div>
-        <div class="game-row">
-          <span class="game-date">2 oct. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Valencia Basket</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">13 oct. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Étoile Rouge de Belgrade</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">28 oct. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Partizan Belgrade</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">30 oct. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Baskonia</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">5 nov. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Bayern Munich</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">13 nov. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Beşiktaş</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">24 nov. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Olimpia Milan</span>
-          <span class="game-result tbd">20h45</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">17 déc. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Dubai Basketball</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">22 déc. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> FC Barcelone</span>
-          <span class="game-result tbd">20h00</span>
+        <div class="games-col">
+          <h3>Phase régulière — 2ème partie</h3>
+          <div class="game-row">
+            <span class="game-date">30 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Olympiakos</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">12 janv. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Žalgiris Kaunas</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">29 janv. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Hapoël Tel-Aviv</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 févr. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Fenerbahçe</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">10 févr. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Anadolu Efes</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">19 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Virtus Bologne</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">23 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Panathinaïkos</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">25 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Paris Basketball</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">8 avril 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Real Madrid</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
         </div>
       </div>
-      <div class="games-col">
-        <h3>Phase régulière — 2ème partie</h3>
-        <div class="game-row">
-          <span class="game-date">30 déc. 2026</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Olympiakos</span>
-          <span class="game-result tbd">20h00</span>
+    </div>
+
+    <div class="tab-panel" data-panel="away">
+      <div class="games-grid">
+        <div class="games-col">
+          <h3>Phase régulière — 1ère partie</h3>
+          <div class="game-row">
+            <span class="game-date">30 sept. 2026</span>
+            <span class="game-teams">Panathinaïkos <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h15</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">7 oct. 2026</span>
+            <span class="game-teams">Paris Basketball <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">15 oct. 2026</span>
+            <span class="game-teams">Real Madrid <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">23 oct. 2026</span>
+            <span class="game-teams">Žalgiris Kaunas <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">17 nov. 2026</span>
+            <span class="game-teams">Fenerbahçe <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">20 nov. 2026</span>
+            <span class="game-teams">Anadolu Efes <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">4 déc. 2026</span>
+            <span class="game-teams">Olympiakos <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h15</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">10 déc. 2026</span>
+            <span class="game-teams">Hapoël Tel-Aviv <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">15 déc. 2026</span>
+            <span class="game-teams">Virtus Bologne <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
         </div>
-        <div class="game-row">
-          <span class="game-date">12 janv. 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Žalgiris Kaunas</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">29 janv. 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Hapoël Tel-Aviv</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">5 févr. 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Fenerbahçe</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">10 févr. 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Anadolu Efes</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">19 mars 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Virtus Bologne</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">23 mars 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Panathinaïkos</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">25 mars 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Paris Basketball</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">8 avril 2027</span>
-          <span class="game-teams">ASVEL <span class="vs">vs</span> Real Madrid</span>
-          <span class="game-result tbd">20h00</span>
+        <div class="games-col">
+          <h3>Phase régulière — 2ème partie</h3>
+          <div class="game-row">
+            <span class="game-date">8 janv. 2027</span>
+            <span class="game-teams">Étoile Rouge de Belgrade <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">14 janv. 2027</span>
+            <span class="game-teams">Olimpia Milan <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">22 janv. 2027</span>
+            <span class="game-teams">Valencia Basket <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">3 févr. 2027</span>
+            <span class="game-teams">FC Barcelone <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 mars 2027</span>
+            <span class="game-teams">Bayern Munich <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">9 mars 2027</span>
+            <span class="game-teams">Beşiktaş <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">11 mars 2027</span>
+            <span class="game-teams">Maccabi Tel-Aviv <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h05</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">2 avril 2027</span>
+            <span class="game-teams">Partizan Belgrade <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">6 avril 2027</span>
+            <span class="game-teams">Baskonia <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">16 avril 2027</span>
+            <span class="game-teams">Dubai Basketball <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="games">
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.tabs').forEach(function(tabGroup){
+        var section = tabGroup.closest('section');
+        var buttons = tabGroup.querySelectorAll('.tab-btn');
+        var panels = section.querySelectorAll('.tab-panel');
+        buttons.forEach(function(btn){
+          btn.addEventListener('click', function(){
+            buttons.forEach(function(b){ b.classList.remove('active'); });
+            panels.forEach(function(p){ p.classList.remove('active'); });
+            btn.classList.add('active');
+            var target = section.querySelector('.tab-panel[data-panel="' + btn.getAttribute('data-tab') + '"]');
+            if(target) target.classList.add('active');
+          });
+        });
+      });
+    });
+  </script>
+
+  <section class="games" id="calendrier-belite">
     <div class="feed-head">
       <h2>Calendrier</h2>
-      <span>Euroligue — matchs à l'extérieur</span>
+      <span>Betclic Élite — saison 2026-2027</span>
     </div>
-    <div class="games-grid">
-      <div class="games-col">
-        <h3>Phase régulière — 1ère partie</h3>
-        <div class="game-row">
-          <span class="game-date">30 sept. 2026</span>
-          <span class="game-teams">Panathinaïkos <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">21h15</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">7 oct. 2026</span>
-          <span class="game-teams">Paris Basketball <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h45</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">15 oct. 2026</span>
-          <span class="game-teams">Real Madrid <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">21h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">23 oct. 2026</span>
-          <span class="game-teams">Žalgiris Kaunas <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">17 nov. 2026</span>
-          <span class="game-teams">Fenerbahçe <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h45</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">20 nov. 2026</span>
-          <span class="game-teams">Anadolu Efes <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">4 déc. 2026</span>
-          <span class="game-teams">Olympiakos <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">21h15</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">10 déc. 2026</span>
-          <span class="game-teams">Hapoël Tel-Aviv <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">15 déc. 2026</span>
-          <span class="game-teams">Virtus Bologne <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="belite-home">Matchs à domicile</button>
+      <button class="tab-btn" data-tab="belite-away">Matchs à l'extérieur</button>
+    </div>
+
+    <div class="tab-panel active" data-panel="belite-home">
+      <div class="standings-empty">
+        <span class="standings-icon">—</span>
+        <p>Le calendrier de Betclic Élite n'a pas encore été publié. Les matchs à domicile apparaîtront ici dès sa sortie.</p>
       </div>
-      <div class="games-col">
-        <h3>Phase régulière — 2ème partie</h3>
-        <div class="game-row">
-          <span class="game-date">8 janv. 2027</span>
-          <span class="game-teams">Étoile Rouge de Belgrade <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">14 janv. 2027</span>
-          <span class="game-teams">Olimpia Milan <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">22 janv. 2027</span>
-          <span class="game-teams">Valencia Basket <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">3 févr. 2027</span>
-          <span class="game-teams">FC Barcelone <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">5 mars 2027</span>
-          <span class="game-teams">Bayern Munich <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">9 mars 2027</span>
-          <span class="game-teams">Beşiktaş <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">11 mars 2027</span>
-          <span class="game-teams">Maccabi Tel-Aviv <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h05</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">2 avril 2027</span>
-          <span class="game-teams">Partizan Belgrade <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h45</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">6 avril 2027</span>
-          <span class="game-teams">Baskonia <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h30</span>
-        </div>
-        <div class="game-row">
-          <span class="game-date">16 avril 2027</span>
-          <span class="game-teams">Dubai Basketball <span class="vs">vs</span> ASVEL</span>
-          <span class="game-result tbd">20h00</span>
-        </div>
+    </div>
+
+    <div class="tab-panel" data-panel="belite-away">
+      <div class="standings-empty">
+        <span class="standings-icon">—</span>
+        <p>Le calendrier de Betclic Élite n'a pas encore été publié. Les matchs à l'extérieur apparaîtront ici dès sa sortie.</p>
       </div>
     </div>
   </section>
