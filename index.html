@@ -1173,6 +1173,7 @@
 
   /* ---------- Effectif ---------- */
   .roster{
+    display:none;
     padding:4rem 5vw 1rem;
   }
   .roster-grid{
@@ -1881,8 +1882,8 @@
 
   <script>
     (function(){
-      document.getElementById('maintenanceOverlay').style.display = 'flex';
-      document.documentElement.style.overflow = 'hidden';
+      document.getElementById('maintenanceOverlay').style.display = 'none';
+      document.documentElement.style.overflow = '';
     })();
   </script>
 
@@ -1916,7 +1917,7 @@
           <a href="#classement-belite" data-nav-section="classement-belite">Betclic ÉLITE</a>
         </div>
       </div>
-      <a href="#effectif" data-nav-section="effectif">Effectif</a>
+      <a href="effectif.html">Effectif</a>
       <a href="#palmares" data-nav-section="palmares">Palmarès</a>
       <div class="nav-social-mobile">
         <a href="#about">À propos</a>
@@ -3355,7 +3356,7 @@
         <h4>Le club</h4>
         <a href="#classement-euroleague">Classement EuroLeague</a>
         <a href="#classement-belite">Classement Betclic ÉLITE</a>
-        <a href="#effectif">Effectif</a>
+        <a href="effectif.html">Effectif</a>
         <a href="#palmares">Palmarès</a>
       </div>
       <div class="footer-col">
