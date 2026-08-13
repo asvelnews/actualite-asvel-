@@ -52,6 +52,7 @@ img{display:block;max-width:100%}
 .article-cover .fallback{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.65);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .article-content{font-family:Georgia,serif;font-size:1.03rem;line-height:1.78;color:#202020}
 .article-content p{margin-bottom:1.25rem}
+.article-content a{font-weight:700;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .article-content h2{margin:2.4rem 0 1rem;padding-left:.8rem;border-left:4px solid #000;font-family:'Archivo Black',sans-serif;font-size:1.45rem;line-height:1.2;text-transform:uppercase;color:#000}
 .article-content blockquote{margin:2rem 0;padding:1.2rem 1.4rem;border-left:4px solid #000;background:var(--shade);font-family:'Source Sans 3',Arial,sans-serif;font-size:1.25rem;font-weight:700;line-height:1.45;color:#000}
 .article-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--line)}

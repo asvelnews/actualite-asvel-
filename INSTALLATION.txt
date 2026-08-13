@@ -1,0 +1,12 @@
+MISE À JOUR DU SITE ACTU ASVEL
+
+1. Décompressez l’archive ZIP.
+2. Ouvrez le dossier obtenu.
+3. Sur GitHub, ouvrez le dépôt actualite-asvel-.
+4. Envoyez tout le CONTENU du dossier à la racine du dépôt.
+5. Confirmez avec « Commit changes ».
+6. Patientez une à trois minutes puis actualisez https://actu-asvel.fr/.
+
+Conservez le fichier CNAME déjà présent sur GitHub.
+Ne placez pas le dossier complet dans un nouveau sous-dossier : index.html doit
+rester directement visible à la racine du dépôt.
