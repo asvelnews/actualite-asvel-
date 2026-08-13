@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ACTU ASVEL — Le fil</title>
+<title>Actu ASVEL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 
   :root{
-    --ink:#15130f;
-    --ink-soft:#2a251d;
-    --red:#d81e2c;
-    --red-deep:#9c1420;
-    --cream:#f4efe3;
-    --cream-dim:#e8e0cd;
-    --court:#b8834c;
-    --line: rgba(21,19,15,0.14);
+    --ink:#000000;
+    --ink-soft:#3a3a3a;
+    --red:#000000;
+    --red-deep:#1a1a1a;
+    --cream:#ffffff;
+    --cream-dim:#f0f0f0;
+    --court:#6b6b6b;
+    --line: rgba(0,0,0,0.14);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -78,7 +78,7 @@
     text-transform:uppercase;
   }
   .brand-ticker-inner span{ color:var(--cream); }
-  .brand-ticker-inner .sep{ color:var(--red); margin:0 1.4rem; }
+  .brand-ticker-inner .sep{ color:var(--cream); opacity:0.5; margin:0 1.4rem; }
   @keyframes brandscroll{
     0%{ transform:translateX(0);}
     100%{ transform:translateX(-50%);}
@@ -192,7 +192,7 @@
     color:var(--cream);
     margin-bottom:2rem;
   }
-  .maintenance-box .logo .dot{ color:var(--red); }
+  .maintenance-box .logo .dot{ color:var(--cream); opacity:0.5; }
   .maintenance-box h1{
     font-family:'Oswald',sans-serif;
     font-size:1.7rem;
@@ -219,7 +219,9 @@
     font-size:0.85rem;
     letter-spacing:0.05em;
     text-transform:uppercase;
-    color:var(--red);
+    color:var(--cream);
+    border-bottom:1px solid var(--cream);
+    padding-bottom:2px;
   }
 
   .back-to-top{
@@ -1018,13 +1020,13 @@
   .trophy-card:hover{ transform:translateY(-3px); }
   .trophy-card::before{
     content:'';
-    position:absolute; top:0; left:0; right:0; height:4px; background:var(--red);
+    position:absolute; top:0; left:0; right:0; height:4px; background:var(--cream);
   }
   .trophy-num{
     display:block;
     font-family:'Archivo Black',sans-serif;
     font-size:2.4rem;
-    color:var(--red);
+    color:var(--cream);
     line-height:1;
     margin-bottom:0.6rem;
   }
@@ -1136,7 +1138,9 @@
     font-size:0.78rem;
     letter-spacing:0.05em;
     text-transform:uppercase;
-    color:var(--red);
+    color:var(--cream);
+    border-bottom:1px solid var(--cream);
+    padding-bottom:2px;
   }
   .footer-col h4{
     font-family:'Oswald',sans-serif;
@@ -1153,7 +1157,7 @@
     color:rgba(244,239,227,0.85);
     margin-bottom:0.7rem;
   }
-  .footer-col a:hover{ color:var(--red); }
+  .footer-col a:hover{ color:var(--cream); text-decoration:underline; }
   .footer-bottom{
     display:flex;
     justify-content:space-between;
@@ -1239,7 +1243,7 @@
 
   <div class="maintenance-overlay" id="maintenanceOverlay">
     <div class="maintenance-box">
-      <div class="logo">ACTU<span class="dot">.</span>ASVEL</div>
+      <div class="logo">ACTU ASVEL</div>
       <h1>PAUSE VACANCES</h1>
       <p>On s'absente quelques jours ! Le site est de retour le <strong>22 août</strong>.</p>
       <p class="maintenance-sub">En attendant, retrouve-nous sur Instagram et Twitter pour l'actu du club.</p>
@@ -1269,7 +1273,7 @@
   </div>
 
   <header>
-    <a class="logo" href="#">ACTU<span class="dot">.</span>ASVEL</a>
+    <a class="logo" href="#">ACTU ASVEL</a>
     <nav id="mainNav">
       <a href="#actu">Article</a>
       <a href="#calendrier">Calendrier EuroLeague</a>
@@ -2153,7 +2157,7 @@
   <footer id="about">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
-        <div class="logo">ACTU<span class="dot">.</span>ASVEL</div>
+        <div class="logo">ACTU ASVEL</div>
         <p>Le site qui accompagne le compte Instagram et Twitter Actu ASVEL : articles, calendrier, effectif et palmarès du club, loin des contraintes du format post.</p>
         <div class="footer-social">
           <a href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
