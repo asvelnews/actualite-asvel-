@@ -72,5 +72,8 @@ function routeHash(){if(location.hash.indexOf('classement')>-1){switchView('stan
 function countdown(){var target=new Date('2026-09-24T20:45:00+02:00').getTime(),diff=Math.max(0,target-Date.now());document.getElementById('days').textContent=Math.floor(diff/86400000);document.getElementById('hours').textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,'0');document.getElementById('minutes').textContent=String(Math.floor(diff%3600000/60000)).padStart(2,'0')}countdown();setInterval(countdown,60000);render();
 })();
 </script>
+<!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
