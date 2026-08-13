@@ -178,13 +178,15 @@
     (function(){
       var menu=document.querySelector('header nav'),menuToggle=document.getElementById('menuToggle');menuToggle.addEventListener('click',function(){var open=menu.classList.toggle('open');menuToggle.classList.toggle('open',open);menuToggle.setAttribute('aria-expanded',String(open))});
       var players=[].slice.call(document.querySelectorAll('.player'));
-      var filters=[].slice.call(document.querySelectorAll('.filter'));
+      var filters=[].slice.call(document.querySelectorAll('.filters .filter'));
+      var allFilter=document.querySelector('.filters [data-filter="all"]');
       var count=document.getElementById('count');
       var modal=document.getElementById('modal');
       document.querySelectorAll('.player-media img').forEach(function(img){img.addEventListener('error',function(){img.style.display='none';img.previousElementSibling.classList.add('show')})});
-      function applyFilter(button){var filter=button.dataset.filter;var total=0;filters.forEach(function(item){item.classList.toggle('active',item===button)});players.forEach(function(player){var visible=filter==='all'||player.dataset.group.split(' ').indexOf(filter)>-1;player.classList.toggle('hidden',!visible);if(visible)total++});count.textContent=total+(total>1?' joueurs affichés':' joueur affiché')}
+      function applyFilter(button){if(!button)return;var filter=button.dataset.filter||'all';var total=0;filters.forEach(function(item){item.classList.toggle('active',item===button)});players.forEach(function(player){var visible=filter==='all'||player.dataset.group.split(' ').indexOf(filter)>-1;player.classList.toggle('hidden',!visible);if(visible)total++});count.textContent=total+(total>1?' joueurs affichés':' joueur affiché')}
       filters.forEach(function(button){button.addEventListener('click',function(){applyFilter(button)})});
-      document.querySelectorAll('[data-show-roster]').forEach(function(button){button.addEventListener('click',function(){applyFilter(filters[0]);document.getElementById('effectif').scrollIntoView({behavior:'smooth',block:'start'})})});
+      document.querySelectorAll('[data-show-roster]').forEach(function(button){button.addEventListener('click',function(){applyFilter(allFilter);document.getElementById('effectif').scrollIntoView({behavior:'smooth',block:'start'})})});
+      applyFilter(allFilter);
       function fillList(id,sectionId,value){var list=document.getElementById(id);var section=document.getElementById(sectionId);list.innerHTML='';if(!value){section.style.display='none';return}section.style.display='block';value.split(';').forEach(function(text){var item=document.createElement('li');item.textContent=text;list.appendChild(item)})}
       function open(player){document.getElementById('modalName').textContent=player.dataset.name;document.getElementById('modalNumber').textContent=player.dataset.num;document.getElementById('modalPosition').textContent=player.dataset.pos;document.getElementById('modalNationality').textContent=player.dataset.nationalite;document.getElementById('modalBirth').textContent=player.dataset.naissance;document.getElementById('modalHeight').textContent=player.dataset.taille;var image=document.getElementById('modalImage');image.src=player.dataset.image;image.alt=player.dataset.name;fillList('modalClubs','clubsSection',player.dataset.clubs);fillList('modalPalmares','palmaresSection',player.dataset.palmares);modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
       function close(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}
