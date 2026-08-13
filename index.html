@@ -1016,8 +1016,10 @@
     position:relative;
     overflow:hidden;
     transition:transform .2s ease;
+    cursor:pointer;
   }
   .trophy-card:hover{ transform:translateY(-3px); }
+  .trophy-card:focus-visible{ outline:3px solid var(--cream); outline-offset:-3px; }
   .trophy-card::before{
     content:'';
     position:absolute; top:0; left:0; right:0; height:4px; background:var(--cream);
@@ -1044,6 +1046,53 @@
     color:var(--court);
     padding-top:0.7rem;
     border-top:1px solid rgba(244,239,227,0.15);
+  }
+
+  /* ---------- Fiche palmarès (modale) ---------- */
+  .trophy-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+    padding:5vw;
+  }
+  .trophy-modal.open{ display:flex; }
+  .trophy-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+  }
+  .trophy-modal-card{
+    position:relative;
+    background:var(--cream);
+    max-width:440px;
+    width:100%;
+    padding:2.4rem 2.2rem;
+    border-top:4px solid var(--ink);
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  .trophy-modal-card h3{
+    font-family:'Oswald',sans-serif;
+    font-size:1.4rem;
+    color:var(--ink);
+    margin-bottom:1.4rem;
+    padding-right:1.5rem;
+  }
+  .trophy-modal-years{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+  .trophy-year-pill{
+    font-family:'Oswald',sans-serif;
+    font-size:0.85rem;
+    letter-spacing:0.03em;
+    background:var(--cream-dim);
+    color:var(--ink);
+    padding:0.4rem 0.8rem;
   }
 
   /* ---------- Classement (état vide) ---------- */
@@ -1244,7 +1293,7 @@
   <div class="maintenance-overlay" id="maintenanceOverlay">
     <div class="maintenance-box">
       <div class="logo">ACTU ASVEL</div>
-      <h1>PAUSE VACANCES</h1>
+      <h1>MAINTENANCE EN COURS</h1>
       <p>On s'absente quelques jours ! Le site est de retour le <strong>22 août</strong>.</p>
       <p class="maintenance-sub">En attendant, retrouve-nous sur Instagram et Twitter pour l'actu du club.</p>
       <div class="footer-social">
@@ -1256,13 +1305,8 @@
 
   <script>
     (function(){
-      var now = new Date();
-      var start = new Date(2026, 7, 17, 0, 0, 0);
-      var end = new Date(2026, 7, 22, 0, 0, 0);
-      if(now >= start && now < end){
-        document.getElementById('maintenanceOverlay').style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-      }
+      document.getElementById('maintenanceOverlay').style.display = 'flex';
+      document.documentElement.style.overflow = 'hidden';
     })();
   </script>
 
@@ -1910,7 +1954,7 @@
       <span>Saison 2026-2027</span>
     </div>
     <div class="roster-grid">
-      <div class="player" tabindex="0" role="button" data-name="Patty Mills" data-num="8" data-pos="Meneur" data-nationalite="Australien" data-naissance="11 août 1988" data-taille="1m83" data-clubs="Portland Trail Blazers (États-Unis, 2009-2011);Melbourne Tigers (Australie, 2011);Xinjiang Flying Tigers (Chine, 2011-2012);San Antonio Spurs (États-Unis, 2011-2021);Brooklyn Nets (États-Unis, 2021-2023);Atlanta Hawks (États-Unis, 2023-2024);Miami Heat (États-Unis, 2024);Utah Jazz (États-Unis, 2024-2025);Los Angeles Clippers (États-Unis, 2025);CB Canarias (Espagne, 2026)">
+      <div class="player" tabindex="0" role="button" data-name="Patty Mills" data-num="8" data-pos="Meneur" data-nationalite="Australien" data-naissance="11 août 1988" data-taille="1m83" data-clubs="Portland Trail Blazers (États-Unis, 2009-2011);Melbourne Tigers (Australie, 2011);Xinjiang Flying Tigers (Chine, 2011-2012);San Antonio Spurs (États-Unis, 2011-2021);Brooklyn Nets (États-Unis, 2021-2023);Atlanta Hawks (États-Unis, 2023-2024);Miami Heat (États-Unis, 2024);Utah Jazz (États-Unis, 2024-2025);Los Angeles Clippers (États-Unis, 2025);CB Canarias (Espagne, 2026)" data-palmares="Champion NBA (2014) avec les San Antonio Spurs;Champion d'Océanie (2007, 2011, 2013, 2015) avec l'Australie;Médaillé de bronze aux Jeux olympiques de Tokyo 2020 avec l'Australie;Finaliste NBA (2013) avec San Antonio;NBA Sportsmanship Award (2022);MVP du championnat d'Océanie (2013);Membre du cinq majeur des Jeux olympiques de Tokyo 2020;Meilleur marqueur des Jeux olympiques de Londres 2012 (21,2 points de moyenne);Vainqueur de la Gaze Medal (2008, 2010, 2021);Vainqueur du Don Award (2021)">
         <div class="player-media">
           <img class="player-photo" src="images/patty-mills.png" alt="Patty Mills">
           <span class="jersey-num">8</span>
@@ -2099,33 +2143,80 @@
       <span>Le club en chiffres</span>
     </div>
     <div class="trophy-grid">
-      <div class="trophy-card">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Champion de France" data-trophy-years="1949, 1950, 1952, 1955, 1956, 1957, 1964, 1966, 1968, 1969, 1971, 1972, 1975, 1977, 1981, 2002, 2009, 2016, 2019, 2021, 2022">
         <span class="trophy-num">21x</span>
         <div class="trophy-label">Champion de France</div>
         <div class="trophy-years">1949, 1950, 1952, 1955, 1956, 1957, 1964, 1966, 1968, 1969, 1971, 1972, 1975, 1977, 1981, 2002, 2009, 2016, 2019, 2021, 2022</div>
       </div>
-      <div class="trophy-card">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Coupe de France" data-trophy-years="1953, 1957, 1965, 1967, 1996, 1997, 2001, 2002, 2019, 2021">
         <span class="trophy-num">10x</span>
         <div class="trophy-label">Coupe de France</div>
         <div class="trophy-years">1953, 1957, 1965, 1967, 1996, 1997, 2001, 2002, 2019, 2021</div>
       </div>
-      <div class="trophy-card">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Coupe de la Fédération" data-trophy-years="1984">
         <span class="trophy-num">1x</span>
         <div class="trophy-label">Coupe de la Fédération</div>
         <div class="trophy-years">1984</div>
       </div>
-      <div class="trophy-card">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Semaine des As" data-trophy-years="2010">
         <span class="trophy-num">1x</span>
         <div class="trophy-label">Semaine des As</div>
         <div class="trophy-years">2010</div>
       </div>
-      <div class="trophy-card">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Leaders Cup" data-trophy-years="2023">
         <span class="trophy-num">1x</span>
         <div class="trophy-label">Leaders Cup</div>
         <div class="trophy-years">2023</div>
       </div>
     </div>
   </section>
+
+  <div class="trophy-modal" id="trophyModal" aria-hidden="true">
+    <div class="trophy-modal-backdrop" data-close-trophy="1"></div>
+    <div class="trophy-modal-card" role="dialog" aria-modal="true" aria-labelledby="trophyModalTitle">
+      <button class="player-modal-close" data-close-trophy="1" aria-label="Fermer">✕</button>
+      <h3 id="trophyModalTitle"></h3>
+      <div class="trophy-modal-years" id="trophyModalYears"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var modal = document.getElementById('trophyModal');
+      var titleEl = document.getElementById('trophyModalTitle');
+      var yearsEl = document.getElementById('trophyModalYears');
+      function openTrophyModal(card){
+        titleEl.textContent = card.getAttribute('data-trophy-title');
+        var years = card.getAttribute('data-trophy-years').split(',').map(function(y){ return y.trim(); });
+        yearsEl.innerHTML = '';
+        years.forEach(function(y){
+          var span = document.createElement('span');
+          span.className = 'trophy-year-pill';
+          span.textContent = y;
+          yearsEl.appendChild(span);
+        });
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      function closeTrophyModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      document.querySelectorAll('.trophy-card').forEach(function(card){
+        card.addEventListener('click', function(){ openTrophyModal(card); });
+        card.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openTrophyModal(card); }
+        });
+      });
+      modal.querySelectorAll('[data-close-trophy]').forEach(function(el){
+        el.addEventListener('click', closeTrophyModal);
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeTrophyModal();
+      });
+    })();
+  </script>
+
 
   <div class="insta-cta">
     <div>
