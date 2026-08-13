@@ -1,0 +1,3300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actu ASVEL — Actualités, mercato et résultats de l’ASVEL</title>
+<meta name="description" content="Suivez toute l’actualité de LDLC ASVEL : mercato, EuroLeague, Betclic ÉLITE, calendrier, effectif, résultats et palmarès.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://actu-asvel.fr/">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Actu ASVEL">
+<meta property="og:title" content="Actu ASVEL — Toute l’actualité du club villeurbannais">
+<meta property="og:description" content="Mercato, EuroLeague, Betclic ÉLITE, calendrier, effectif et palmarès de LDLC ASVEL.">
+<meta property="og:url" content="https://actu-asvel.fr/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#000000;
+    --ink-soft:#3a3a3a;
+    --red:#000000;
+    --red-deep:#1a1a1a;
+    --cream:#ffffff;
+    --cream-dim:#f0f0f0;
+    --court:#6b6b6b;
+    --line: rgba(0,0,0,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  section[id], footer[id], article[id]{
+    scroll-margin-top:76px;
+  }
+  .standings-col[id]{
+    scroll-margin-top:110px;
+  }
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.jersey{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+
+  /* ---------- Ticker ---------- */
+  .ticker{
+    background:var(--ink);
+    color:var(--cream);
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:3px solid var(--red);
+  }
+  .ticker-inner{
+    display:inline-block;
+    padding:9px 0;
+    animation: scroll 26s linear infinite;
+    font-family:'Oswald', sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.08em;
+  }
+  .ticker-inner span{ margin:0 2.2rem; opacity:0.92;}
+  .ticker-inner span b{ color:var(--red); font-weight:600;}
+  @keyframes scroll{
+    0%{ transform:translateX(0);}
+    100%{ transform:translateX(-50%);}
+  }
+
+  /* ---------- Header ---------- */
+  .brand-ticker{
+    background:var(--ink);
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:3px solid var(--red);
+  }
+  .brand-ticker-inner{
+    display:inline-block;
+    padding:8px 0;
+    animation: brandscroll 28s linear infinite;
+    font-family:'Archivo Black', sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .brand-ticker-inner span{ color:var(--cream); }
+  .brand-ticker-inner .sep{ color:var(--cream); opacity:0.5; margin:0 1.4rem; }
+  @keyframes brandscroll{
+    0%{ transform:translateX(0);}
+    100%{ transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .brand-ticker-inner{ animation:none; }
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.1rem 5vw;
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:var(--cream);
+    transition:box-shadow .2s ease;
+  }
+  header.scrolled{
+    box-shadow:0 4px 16px rgba(21,19,15,0.08);
+  }
+  .logo{
+    font-family:'Archivo Black', sans-serif;
+    font-size:1.5rem;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:0.5rem;
+  }
+  .logo .dot{ color:var(--red); }
+  #mainNav{ display:flex; align-items:center; gap:1.65rem; font-family:'Oswald',sans-serif; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;}
+  #mainNav a,
+  .nav-dropdown-toggle{ position:relative; padding:0 0 4px; }
+  #mainNav a::after,
+  .nav-dropdown-toggle::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:2px; background:var(--red);
+    transition:width 0.25s ease;
+  }
+  #mainNav a:hover::after,
+  #mainNav a.active::after,
+  .nav-dropdown-toggle:hover::after,
+  .nav-dropdown-toggle.active::after{ width:100%; }
+  .nav-dropdown{
+    position:relative;
+  }
+  .nav-dropdown-toggle{
+    display:flex;
+    align-items:center;
+    gap:0.45rem;
+    border:0;
+    background:transparent;
+    color:var(--ink);
+    font:inherit;
+    letter-spacing:inherit;
+    text-transform:inherit;
+    cursor:pointer;
+  }
+  .nav-dropdown-chevron{
+    font-size:0.8rem;
+    transition:transform .2s ease;
+  }
+  .nav-dropdown.open .nav-dropdown-chevron{
+    transform:rotate(180deg);
+  }
+  .nav-dropdown-menu{
+    position:absolute;
+    top:calc(100% + 1rem);
+    left:-1rem;
+    min-width:230px;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    padding:0.65rem;
+    background:var(--cream);
+    border:1px solid var(--line);
+    box-shadow:0 14px 32px rgba(0,0,0,0.12);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-6px);
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .nav-dropdown-menu a{
+    padding:0.7rem 0.8rem !important;
+  }
+  .nav-dropdown-menu a::after{ display:none; }
+  .nav-dropdown-menu a:hover,
+  .nav-dropdown-menu a.active{
+    background:var(--cream-dim);
+  }
+  .nav-dropdown.open .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  body.nav-open{ overflow:hidden; }
+  .social-links{
+    display:flex;
+    gap:0.7rem;
+  }
+  .insta-btn{
+    border:1.5px solid var(--ink);
+    padding:0.5rem 1.1rem;
+    font-family:'Oswald', sans-serif;
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .insta-btn:hover{ background:var(--ink); color:var(--cream); }
+
+  /* ---------- Menu mobile ---------- */
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:36px;
+    height:36px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    z-index:210;
+  }
+  .nav-toggle span{
+    display:block;
+    height:2px;
+    width:100%;
+    background:var(--ink);
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .nav-toggle.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  .nav-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(21,19,15,0.5);
+    z-index:190;
+  }
+  .nav-backdrop.open{ display:block; }
+
+  .nav-social-mobile{ display:none; }
+
+  /* ---------- Écran de maintenance (affiché uniquement par script si dans la période) ---------- */
+  .maintenance-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:var(--ink);
+    color:var(--cream);
+    align-items:center;
+    justify-content:center;
+    padding:2rem;
+    text-align:center;
+  }
+  .maintenance-box{
+    max-width:420px;
+  }
+  .maintenance-box .logo{
+    font-family:'Archivo Black', sans-serif;
+    font-size:1.6rem;
+    color:var(--cream);
+    margin-bottom:2rem;
+  }
+  .maintenance-box .logo .dot{ color:var(--cream); opacity:0.5; }
+  .maintenance-box h1{
+    font-family:'Oswald',sans-serif;
+    font-size:1.7rem;
+    margin-bottom:1rem;
+  }
+  .maintenance-box p{
+    font-size:1rem;
+    line-height:1.6;
+    color:rgba(244,239,227,0.85);
+    margin-bottom:0.8rem;
+  }
+  .maintenance-box .maintenance-sub{
+    font-size:0.88rem;
+    color:rgba(244,239,227,0.6);
+    margin-bottom:1.8rem;
+  }
+  .maintenance-box .footer-social{
+    display:flex;
+    gap:1.4rem;
+    justify-content:center;
+  }
+  .maintenance-box .footer-social a{
+    font-family:'Oswald',sans-serif;
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--cream);
+    border-bottom:1px solid var(--cream);
+    padding-bottom:2px;
+  }
+
+  .back-to-top{
+    position:fixed;
+    bottom:1.6rem;
+    right:1.6rem;
+    width:44px;
+    height:44px;
+    background:var(--ink);
+    color:var(--cream);
+    border:none;
+    font-size:1.2rem;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:150;
+  }
+  .back-to-top.visible{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
+  }
+  .back-to-top:hover{ background:var(--red); }
+
+  /* ---------- Hero ---------- */
+  #calendrier-belite,
+  #classement{
+    background:var(--cream-dim);
+  }
+  header,
+  .hero,
+  .feed,
+  .games,
+  .palmares-club,
+  .roster,
+  .insta-cta,
+  footer .footer-grid,
+  footer .footer-bottom{
+    max-width:1440px;
+    margin-left:auto;
+    margin-right:auto;
+    box-sizing:border-box;
+  }
+  .hero{
+    padding:4.5rem 5vw 3.5rem;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(0, 1.35fr) minmax(300px, 0.65fr);
+    gap:3rem;
+    align-items:center;
+  }
+  .hero > div{
+    max-width:60ch;
+  }
+  .hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    background:var(--red);
+    color:var(--cream);
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    padding:0.35rem 0.8rem;
+    margin-bottom:1.2rem;
+  }
+  .hero-tag::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:var(--cream); animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 4.2rem);
+    line-height:1.15;
+    max-width:14ch;
+  }
+  .hero p{
+    margin-top:1.3rem;
+    font-size:1.05rem;
+    max-width:46ch;
+    color:var(--ink-soft);
+  }
+  .hero-meta{
+    display:flex;
+    gap:2.5rem;
+    margin-top:2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.8rem;
+    letter-spacing:0.05em;
+    color:var(--ink-soft);
+  }
+  .next-match-card{
+    background:var(--ink);
+    color:var(--cream);
+    padding:1.5rem;
+    border-bottom:4px solid var(--red);
+    position:relative;
+    overflow:hidden;
+  }
+  .next-match-card::after{
+    content:'';
+    position:absolute;
+    width:150px;
+    height:150px;
+    border:28px solid rgba(255,255,255,0.035);
+    border-radius:50%;
+    right:-65px;
+    top:-65px;
+  }
+  .next-match-kicker{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:1rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.7rem;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.68);
+  }
+  .next-match-live{
+    color:var(--cream);
+    border:1px solid rgba(255,255,255,0.35);
+    padding:0.2rem 0.45rem;
+  }
+  .next-match-date{
+    margin-top:1.25rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.9rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .next-match-teams{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:0.75rem;
+    margin:0.9rem 0;
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(1rem, 2vw, 1.35rem);
+    text-transform:uppercase;
+  }
+  .next-match-teams span:last-child{ text-align:right; }
+  .next-match-vs{
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    color:rgba(255,255,255,0.5);
+  }
+  .hero .next-match-info{
+    margin-top:0;
+    font-size:0.85rem;
+    color:#ffffff;
+    max-width:none;
+    line-height:1.5;
+  }
+  .next-match-link{
+    display:inline-block;
+    margin-top:1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    border-bottom:1px solid var(--cream);
+    padding-bottom:2px;
+    position:relative;
+    z-index:1;
+  }
+  .score-card{
+    background:var(--ink);
+    color:var(--cream);
+    padding:1.8rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .score-card::before{
+    content:'';
+    position:absolute; top:0; right:0; bottom:0; width:6px; background:var(--red);
+  }
+  .score-card .label{
+    font-family:'Oswald',sans-serif; font-size:0.72rem; letter-spacing:0.12em; color:var(--court); text-transform:uppercase;
+  }
+  .score-row{
+    display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(244,239,227,0.15);
+  }
+  .score-row:first-of-type{ border-top:none; padding-top:0.9rem;}
+  .team{ font-family:'Oswald',sans-serif; font-size:1.05rem; text-transform:uppercase;}
+  .team.win{ color:var(--red); font-weight:600;}
+  .score{ font-family:'Archivo Black',sans-serif; font-size:1.4rem;}
+
+  /* ---------- Feed section ---------- */
+  .feed{
+    padding:4rem 5vw 2rem;
+  }
+  .feed-head{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2.2rem; border-bottom:2px solid var(--ink); padding-bottom:0.8rem;
+  }
+  .feed-head h2{ font-size:1.5rem; }
+  .feed-head span{ font-family:'Oswald',sans-serif; font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.06em;}
+
+  .quick-articles{
+    display:flex;
+    gap:0.8rem;
+    overflow-x:auto;
+    padding-bottom:1.6rem;
+    margin-bottom:1.6rem;
+    border-bottom:1px solid var(--line);
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .quick-articles::-webkit-scrollbar{ display:none; }
+  .quick-article-chip{
+    flex:0 0 auto;
+    width:220px;
+    background:var(--cream-dim);
+    border-left:3px solid var(--red);
+    padding:0.9rem 1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.4rem;
+    transition:background .2s ease;
+  }
+  .quick-article-chip:hover{ background:var(--line); }
+  .quick-tag{
+    font-family:'Oswald',sans-serif;
+    font-size:0.65rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+  .quick-title{
+    font-family:'Oswald',sans-serif;
+    font-size:0.9rem;
+    line-height:1.25;
+    color:var(--ink);
+  }
+  .article-tools{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    flex-wrap:wrap;
+    margin-bottom:1.5rem;
+  }
+  .article-search{
+    flex:1 1 280px;
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line);
+    background:var(--cream);
+  }
+  .article-search span{
+    padding-left:0.9rem;
+    color:var(--court);
+  }
+  .article-search input{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:var(--ink);
+    font:inherit;
+    padding:0.8rem 0.9rem;
+    outline:none;
+  }
+  .article-search:focus-within{
+    border-color:var(--ink);
+    box-shadow:0 0 0 2px rgba(0,0,0,0.08);
+  }
+  .article-filters{
+    display:flex;
+    gap:0.45rem;
+    flex-wrap:wrap;
+  }
+  .article-filter{
+    border:1px solid var(--ink);
+    background:var(--cream);
+    color:var(--ink);
+    padding:0.62rem 0.9rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .article-filter.active,
+  .article-filter:hover{
+    background:var(--ink);
+    color:var(--cream);
+  }
+  .article-results-count{
+    width:100%;
+    font-size:0.78rem;
+    color:var(--court);
+  }
+  .article-hidden,
+  .quick-article-chip.article-hidden{ display:none !important; }
+  .articles-layout.feature-hidden .feature-article{ display:none; }
+  .articles-layout.feature-hidden .articles-sidebar{
+    border-left:0;
+    padding-left:0;
+    position:static;
+  }
+  .article-no-results{
+    display:none;
+    border:1px dashed var(--line);
+    padding:2rem;
+    text-align:center;
+    color:var(--ink-soft);
+    margin-bottom:1.5rem;
+  }
+  .article-no-results.visible{ display:block; }
+
+  /* Accueil : un seul article à la une. Les archives sont sur actualites.html. */
+  #actu .article-tools,
+  #actu .article-no-results,
+  #actu .quick-articles,
+  #actu .articles-sidebar,
+  #actu .feature-article > .article-collapsible,
+  #actu .feature-article > .meta{
+    display:none !important;
+  }
+  #actu .articles-layout{ display:block; }
+  .all-news-link{
+    display:inline-block;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    padding:0.72rem 1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    transition:background .2s ease, color .2s ease;
+  }
+  .all-news-link:hover{ background:var(--ink); color:var(--cream); }
+
+  .player-media.image-missing,
+  .article-cover.image-missing{
+    background:linear-gradient(135deg, var(--ink), var(--red-deep));
+  }
+  .player-media.image-missing::after,
+  .article-cover.image-missing::before{
+    content:'Photo à venir';
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    color:rgba(255,255,255,0.68);
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+
+  .article-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:2.4rem;
+  }
+  .card{
+    border-top:3px solid var(--ink);
+    padding-top:1rem;
+    transition:transform .2s ease;
+  }
+  .card:hover{ transform:translateY(-4px); }
+  .card .num{
+    font-family:'Archivo Black',sans-serif;
+    font-size:0.75rem;
+    color:var(--red);
+    letter-spacing:0.05em;
+  }
+  .card h3{
+    font-size:1.25rem;
+    margin:0.6rem 0 0.6rem;
+    line-height:1.15;
+  }
+  .card p{
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  .card .meta{
+    display:flex; gap:0.8rem; margin-top:0.9rem;
+    font-family:'Oswald',sans-serif; font-size:0.72rem; letter-spacing:0.05em; color:var(--court); text-transform:uppercase;
+  }
+
+  .articles-layout{
+    display:block;
+  }
+  .feature-article{
+    display:grid;
+    grid-template-columns:minmax(280px, 0.8fr) minmax(0, 1.2fr);
+    column-gap:2.2rem;
+    align-items:start;
+    max-width:none;
+    padding-top:0;
+  }
+  .feature-article > :not(.article-cover):not(.article-collapsible){
+    grid-column:2;
+  }
+  .feature-article > .article-collapsible{
+    grid-column:1 / -1;
+  }
+  .feature-article > .article-cover{
+    grid-column:1;
+    grid-row:1 / span 7;
+    height:100%;
+    min-height:340px;
+    margin-bottom:0;
+  }
+  .article-cover{
+    height:170px;
+    margin-bottom:1.4rem;
+    display:flex;
+    align-items:flex-end;
+    padding:1.2rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .article-cover-club{
+    background:linear-gradient(135deg, var(--ink) 0%, var(--red-deep) 100%);
+  }
+  .article-cover-photo{
+    background:var(--ink);
+    height:260px;
+    align-items:flex-end;
+  }
+  .article-cover-photo::after{
+    background:linear-gradient(to top, rgba(21,19,15,0.75) 0%, rgba(21,19,15,0.1) 55%, transparent 80%);
+  }
+  .article-cover-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top center;
+  }
+  .article-cover::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(45deg, rgba(244,239,227,0.04) 0, rgba(244,239,227,0.04) 2px, transparent 2px, transparent 14px);
+  }
+  .article-cover-tag{
+    position:relative;
+    z-index:1;
+    font-family:'Archivo Black',sans-serif;
+    font-size:1.6rem;
+    color:rgba(244,239,227,0.5);
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+  }
+  .byline-dot{ color:var(--court); margin:0 0.15rem; }
+  .drop-cap::first-letter{
+    font-family:'Archivo Black',sans-serif;
+    font-size:3.4rem;
+    float:left;
+    line-height:0.8;
+    padding-right:0.5rem;
+    padding-top:0.4rem;
+    color:var(--red);
+  }
+  .article-pullquote{
+    border-left:3px solid var(--red);
+    margin:1.6rem 0;
+    padding:0.3rem 0 0.3rem 1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:1.15rem;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.4;
+  }
+  .article-pullquote span{
+    display:block;
+    margin-top:0.5rem;
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.78rem;
+    font-weight:400;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--court);
+  }
+
+  /* ---------- Sidebar articles ---------- */
+  .articles-sidebar{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:1rem;
+    border-left:0;
+    border-top:1px solid var(--line);
+    padding:1.4rem 0 0;
+    margin-top:1.6rem;
+    position:static;
+  }
+  .sidebar-title{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--red);
+    margin-bottom:0;
+    grid-column:1 / -1;
+  }
+  .sidebar-article{
+    padding:1rem;
+    margin:0;
+    border:1px solid var(--line);
+    min-width:0;
+  }
+  .sidebar-article:last-child{
+    border:1px solid var(--line);
+    margin:0;
+    padding:1rem;
+  }
+  .sidebar-cover{
+    height:5px;
+    width:2.4rem;
+    margin-bottom:0.9rem;
+  }
+  .sidebar-cover-mercato{ background:var(--red); }
+  .sidebar-date{
+    font-family:'Oswald',sans-serif;
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+    color:var(--court);
+    text-transform:uppercase;
+    margin-top:0.5rem;
+  }
+  .sidebar-article .num{
+    display:inline-block;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:0.65rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.18rem 0.5rem;
+  }
+  .sidebar-article h5{
+    font-family:'Oswald',sans-serif;
+    font-size:1.02rem;
+    line-height:1.25;
+    margin:0.45rem 0 0.5rem;
+  }
+  .sidebar-excerpt{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+    margin-bottom:0.7rem;
+    display:none;
+  }
+  .sidebar-toggle{
+    margin-top:0;
+    padding:0.5rem 1rem;
+    font-size:0.72rem;
+  }
+  .sidebar-article .meta{
+    display:flex;
+    gap:0.8rem;
+    margin-top:1rem;
+    padding-top:0.8rem;
+  }
+  .sidebar-article:not(.reading) > .meta{ display:none; }
+  .sidebar-article:not(.reading) .article-actions{
+    margin-top:0.55rem;
+    gap:0.45rem;
+  }
+  .sidebar-article:not(.reading) .sidebar-toggle{
+    padding:0.42rem 0.75rem;
+  }
+  .sidebar-article:not(.reading) .copy-link-btn{
+    font-size:0.68rem;
+  }
+  .article-reader-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:390;
+    background:rgba(0,0,0,0.72);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .2s ease, visibility .2s ease;
+  }
+  .article-reader-backdrop.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  body.article-reader-open{ overflow:hidden; }
+  .sidebar-article.reading{
+    display:block;
+    position:fixed;
+    z-index:400;
+    top:5vh;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(900px, calc(100vw - 2rem));
+    max-height:90vh;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    background:var(--cream);
+    padding:2rem clamp(1.2rem, 4vw, 3rem);
+    margin:0;
+    border:1px solid var(--line);
+    box-shadow:0 24px 70px rgba(0,0,0,0.3);
+  }
+  .sidebar-article.reading .sidebar-excerpt{ display:block; }
+  .sidebar-article.reading h5{
+    font-size:clamp(1.45rem, 3vw, 2.15rem);
+    margin-top:0.75rem;
+  }
+  .sidebar-article.reading .article-actions{
+    position:sticky;
+    top:-2rem;
+    z-index:2;
+    background:var(--cream);
+    padding:0.8rem 0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .feature-article .num{
+    display:inline-block;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.22rem 0.65rem;
+  }
+  .feature-article .byline{
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.03em;
+    color:var(--court);
+    margin-bottom:1rem;
+  }
+  .feature-article h3{
+    font-size:clamp(1.5rem, 3vw, 2.1rem);
+    line-height:1.3;
+    margin:0.7rem 0 1.3rem;
+  }
+  .feature-article .lead{
+    font-size:1.08rem;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.55;
+    margin-bottom:1.3rem;
+  }
+  .feature-article p{
+    font-size:0.98rem;
+    color:var(--ink-soft);
+    line-height:1.65;
+    margin-bottom:1.1rem;
+  }
+  .feature-article h4{
+    font-family:'Oswald',sans-serif;
+    font-size:1.02rem;
+    letter-spacing:0.03em;
+    text-transform:none;
+    color:var(--ink);
+    border-left:3px solid var(--red);
+    padding-left:0.7rem;
+    margin:1.8rem 0 0.9rem;
+  }
+  .feature-article .meta{
+    display:flex; gap:0.8rem; margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--line);
+    font-family:'Oswald',sans-serif; font-size:0.75rem; letter-spacing:0.05em; color:var(--court); text-transform:uppercase;
+  }
+
+  .article-collapsible{
+    display:grid;
+    grid-template-rows:0fr;
+    opacity:0;
+    transition:grid-template-rows .4s ease, opacity .3s ease, margin-top .4s ease;
+    margin-top:0;
+  }
+  .article-collapsible > *{
+    overflow:hidden;
+  }
+  .article-collapsible.open{
+    grid-template-rows:1fr;
+    opacity:1;
+    margin-top:1.4rem;
+  }
+  .article-collapsible:not(.open){
+    overflow:hidden;
+  }
+  .article-toggle,
+  .home-read-btn{
+    margin-top:0;
+    background:var(--ink);
+    color:var(--cream);
+    border:none;
+    padding:0.75rem 1.5rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .article-toggle:hover,
+  .home-read-btn:hover{ background:var(--red); }
+
+  .article-actions{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    flex-wrap:wrap;
+    margin-top:1.1rem;
+  }
+  .copy-link-btn{
+    background:none;
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+    padding:0.7rem 1.2rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .copy-link-btn:hover{
+    border-color:var(--red);
+    color:var(--red);
+  }
+  .copy-link-btn.copied{
+    border-color:var(--red);
+    color:var(--red);
+    background:rgba(216,30,44,0.08);
+  }
+  .sidebar-copy{
+    padding:0.5rem 0.9rem;
+    font-size:0.68rem;
+  }
+
+  /* ---------- Résultats & calendrier ---------- */
+  .games{
+    padding:1rem 5vw 2rem;
+  }
+  .palmares-club{
+    padding:1rem 5vw 3rem;
+  }
+
+  /* ---------- Onglets ---------- */
+  .tabs{
+    display:flex;
+    gap:0.6rem;
+    margin-bottom:2rem;
+  }
+  .tab-btn{
+    background:none;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    padding:0.7rem 1.3rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .tab-btn:hover{ background:var(--cream-dim); }
+  .tab-btn.active{
+    background:var(--ink);
+    color:var(--cream);
+    border-color:var(--ink);
+  }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+  .games-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3rem;
+  }
+  .games-col h3{
+    font-size:1.05rem;
+    padding-bottom:0.7rem;
+    border-bottom:2px solid var(--ink);
+    margin-bottom:1.1rem;
+  }
+  .game-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.9rem 0;
+    border-bottom:1px solid var(--line);
+    font-family:'Oswald',sans-serif;
+    font-size:0.9rem;
+  }
+  .game-row:last-child{ border-bottom:none; }
+  .game-date{
+    width:22%;
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .game-teams{ width:48%; text-transform:uppercase; }
+  .game-teams .vs{ color:var(--court); margin:0 0.4rem; font-size:0.75rem;}
+  .game-result{
+    width:30%;
+    text-align:right;
+    font-family:'Archivo Black',sans-serif;
+    font-size:0.95rem;
+  }
+  .game-result.win{ color:var(--red); }
+  .game-result.tbd{
+    font-family:'Oswald',sans-serif;
+    font-weight:500;
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    text-transform:uppercase;
+  }
+
+  /* ---------- Effectif ---------- */
+  .roster{
+    padding:4rem 5vw 1rem;
+  }
+  .roster-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:0;
+    background:var(--cream);
+    border-top:1px solid var(--line);
+    border-left:1px solid var(--line);
+    align-items:start;
+  }
+  .player{
+    background:var(--cream);
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    transition:transform .2s ease, box-shadow .2s ease;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .player:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px rgba(21,19,15,0.15);
+    z-index:5;
+  }
+  .player:focus-visible{ outline:3px solid var(--red); outline-offset:-3px; }
+  .player-media{
+    position:relative;
+    width:100%;
+    padding-top:133.34%;
+    background:var(--ink);
+    overflow:hidden;
+    flex-shrink:0;
+    margin:0;
+    line-height:0;
+  }
+  .player-photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top center;
+    display:block;
+    margin:0;
+  }
+  .player-media::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(21,19,15,0.55) 0%, transparent 45%);
+    pointer-events:none;
+  }
+  .player .jersey-num{
+    position:absolute;
+    top:0.7rem;
+    left:0.7rem;
+    z-index:2;
+    font-family:'Archivo Black',sans-serif;
+    font-size:1.2rem;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.2rem 0.55rem;
+    line-height:1;
+  }
+  .player-info{
+    padding:0.9rem 1.1rem 1.2rem;
+    margin:0;
+    flex-grow:1;
+  }
+  .player .pos{
+    font-family:'Oswald',sans-serif;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--red);
+    margin:0;
+  }
+  .player h3{
+    font-size:1.05rem;
+    margin:0.35rem 0 0;
+    text-transform:none;
+    font-family:'Oswald',sans-serif;
+  }
+
+  /* ---------- Fiche joueur (modale) ---------- */
+  .player-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+    padding:5vw;
+  }
+  .player-modal.open{ display:flex; }
+  .player-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(21,19,15,0.6);
+  }
+  .player-modal-card{
+    position:relative;
+    background:var(--cream);
+    max-width:480px;
+    width:100%;
+    padding:2.4rem 2.2rem;
+    border-top:4px solid var(--red);
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  .modal-photo{
+    display:block;
+    width:calc(100% + 4.4rem);
+    aspect-ratio:4/5;
+    object-fit:cover;
+    object-position:top center;
+    margin:-2.4rem -2.2rem 1.4rem;
+    background:var(--cream-dim);
+  }
+  .player-modal-card .jersey-num{
+    font-family:'Archivo Black',sans-serif;
+    font-size:3rem;
+    color:var(--ink);
+    opacity:0.15;
+    position:absolute;
+    top:1rem;
+    right:1.4rem;
+    line-height:1;
+  }
+  .player-modal-card.has-photo .jersey-num{
+    position:static;
+    display:inline-block;
+    opacity:1;
+    font-size:1.1rem;
+    color:var(--cream);
+    background:var(--red);
+    padding:0.2rem 0.6rem;
+    margin-right:0.6rem;
+    vertical-align:middle;
+  }
+  .player-modal-card.has-photo .pos{
+    display:inline-block;
+    vertical-align:middle;
+  }
+  .player-modal-card .pos{
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+  .player-modal-card h3{
+    font-size:1.6rem;
+    margin:0.5rem 0 1.1rem;
+  }
+  .player-modal-card p{
+    font-size:0.95rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin-bottom:0.6rem;
+  }
+  .modal-infos{
+    display:none;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0.9rem;
+    background:var(--cream-dim);
+    padding:0.9rem 1rem;
+    margin-bottom:1.2rem;
+  }
+  .modal-info{
+    display:flex;
+    flex-direction:column;
+    gap:0.25rem;
+  }
+  .modal-info-label{
+    font-family:'Oswald',sans-serif;
+    font-size:0.65rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--court);
+  }
+  .modal-info span:last-child{
+    font-family:'Oswald',sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+  }
+  .modal-section{
+    margin-top:1.4rem;
+    padding-top:1.1rem;
+    border-top:1px solid var(--line);
+  }
+  .modal-section h4{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--red);
+    margin-bottom:0.7rem;
+  }
+  .modal-section ul{
+    list-style:none;
+  }
+  .modal-section li{
+    font-size:0.92rem;
+    line-height:1.5;
+    color:var(--ink-soft);
+    padding-left:1rem;
+    position:relative;
+    margin-bottom:0.45rem;
+  }
+  .modal-section li::before{
+    content:'—';
+    position:absolute;
+    left:0;
+    color:var(--court);
+  }
+  .player-modal-close{
+    position:absolute;
+    top:1rem;
+    left:1.2rem;
+    background:none;
+    border:none;
+    font-size:1.1rem;
+    color:var(--ink);
+    cursor:pointer;
+    line-height:1;
+  }
+
+  /* ---------- Palmarès du club ---------- */
+  .trophy-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:1.6px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .trophy-card{
+    background:var(--ink);
+    color:var(--cream);
+    padding:1.8rem 1.1rem;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    transition:transform .2s ease;
+    cursor:pointer;
+  }
+  .trophy-card:hover{ transform:translateY(-3px); }
+  .trophy-card:focus-visible{ outline:3px solid var(--cream); outline-offset:-3px; }
+  .trophy-card::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:4px; background:var(--cream);
+  }
+  .trophy-num{
+    display:block;
+    font-family:'Archivo Black',sans-serif;
+    font-size:2.4rem;
+    color:var(--cream);
+    line-height:1;
+    margin-bottom:0.6rem;
+  }
+  .trophy-label{
+    font-family:'Oswald',sans-serif;
+    font-size:0.8rem;
+    letter-spacing:0.03em;
+    line-height:1.3;
+    color:var(--cream);
+    margin-bottom:0.8rem;
+  }
+  .trophy-years{
+    font-size:0.72rem;
+    line-height:1.5;
+    color:var(--court);
+    padding-top:0.7rem;
+    border-top:1px solid rgba(244,239,227,0.15);
+  }
+
+  /* ---------- Fiche palmarès (modale) ---------- */
+  .trophy-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+    padding:5vw;
+  }
+  .trophy-modal.open{ display:flex; }
+  .trophy-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+  }
+  .trophy-modal-card{
+    position:relative;
+    background:var(--cream);
+    max-width:440px;
+    width:100%;
+    padding:2.4rem 2.2rem;
+    border-top:4px solid var(--ink);
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  .trophy-modal-card h3{
+    font-family:'Oswald',sans-serif;
+    font-size:1.4rem;
+    color:var(--ink);
+    margin-bottom:1.4rem;
+    padding-right:1.5rem;
+  }
+  .trophy-modal-years{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+  .trophy-year-pill{
+    font-family:'Oswald',sans-serif;
+    font-size:0.85rem;
+    letter-spacing:0.03em;
+    background:var(--cream-dim);
+    color:var(--ink);
+    padding:0.4rem 0.8rem;
+    border:1px solid transparent;
+  }
+  button.trophy-year-pill{
+    cursor:pointer;
+    transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+  button.trophy-year-pill:hover,
+  button.trophy-year-pill.active{
+    background:var(--ink);
+    color:var(--cream);
+    border-color:var(--ink);
+  }
+  .trophy-modal-hint{
+    margin:-0.65rem 0 1.2rem;
+    color:var(--ink-soft);
+    font-size:0.82rem;
+    line-height:1.5;
+  }
+  .trophy-detail{
+    display:none;
+    margin-top:1.35rem;
+    padding:1.25rem 1.3rem;
+    background:var(--ink);
+    color:var(--cream);
+    border-left:4px solid var(--red);
+  }
+  .trophy-detail.open{ display:block; }
+  .trophy-detail h4{
+    font-family:'Oswald',sans-serif;
+    font-size:1.15rem;
+    margin:0 0 0.35rem;
+    color:var(--cream);
+  }
+  .trophy-detail-result{
+    color:var(--court);
+    font-family:'Oswald',sans-serif;
+    font-size:0.95rem;
+    margin-bottom:0.8rem;
+  }
+  .trophy-detail-games{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-top:1px solid rgba(244,239,227,0.16);
+  }
+  .trophy-detail-games li{
+    padding:0.55rem 0;
+    border-bottom:1px solid rgba(244,239,227,0.16);
+    font-size:0.84rem;
+    line-height:1.35;
+  }
+  .trophy-detail-note{
+    margin-top:0.8rem;
+    color:rgba(244,239,227,0.72);
+    font-size:0.78rem;
+    line-height:1.5;
+  }
+
+  /* ---------- Classement (état vide) ---------- */
+  .standings-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2.4rem;
+  }
+  .standings-col h3{
+    font-size:1.05rem;
+    padding-bottom:0.7rem;
+    border-bottom:2px solid var(--ink);
+    margin-bottom:1.1rem;
+  }
+  .standings-toggle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding:0 0 0.7rem;
+    margin-bottom:1.1rem;
+    border:0;
+    border-bottom:2px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    text-align:left;
+  }
+  .standings-toggle-title{
+    font-family:'Oswald',sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .standings-toggle-action{
+    display:inline-flex;
+    align-items:center;
+    gap:0.55rem;
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .standings-toggle-icon{
+    width:1.6rem;
+    height:1.6rem;
+    display:grid;
+    place-items:center;
+    border:1px solid var(--ink);
+    font-size:1.1rem;
+    line-height:1;
+    transition:transform .25s ease, background .2s ease, color .2s ease;
+  }
+  .standings-toggle:hover .standings-toggle-icon{
+    background:var(--ink);
+    color:var(--cream);
+  }
+  .standings-toggle[aria-expanded="true"] .standings-toggle-icon{
+    transform:rotate(45deg);
+  }
+  .standings-collapse{
+    display:grid;
+    grid-template-rows:0fr;
+    opacity:0;
+    transition:grid-template-rows .35s ease, opacity .25s ease;
+  }
+  .standings-collapse > div{
+    overflow:hidden;
+  }
+  .standings-collapse.open{
+    grid-template-rows:1fr;
+    opacity:1;
+  }
+  .standings-empty{
+    border:1px dashed var(--line);
+    padding:2.4rem 1.6rem;
+    text-align:center;
+  }
+  .standings-icon{
+    display:inline-block;
+    font-family:'Archivo Black',sans-serif;
+    font-size:2.2rem;
+    color:var(--red);
+    margin-bottom:1rem;
+    line-height:1;
+  }
+  .standings-empty p{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+
+  /* ---------- Instagram CTA ---------- */
+  .insta-cta{
+    margin:5rem 5vw 4rem;
+    background:linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
+    color:var(--cream);
+    padding:3.2rem 3rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:2rem;
+  }
+  .insta-cta h2{ font-size:1.8rem; max-width:16ch; line-height:1.05;}
+  .insta-cta p{ font-family:'Source Sans 3',sans-serif; margin-top:0.6rem; opacity:0.9; font-size:0.95rem;}
+  .cta-links{
+    display:flex;
+    gap:0.8rem;
+    flex-shrink:0;
+  }
+  .cta-btn{
+    background:var(--cream);
+    color:var(--ink);
+    padding:0.85rem 1.8rem;
+    font-family:'Oswald',sans-serif;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    font-size:0.85rem;
+    white-space:nowrap;
+    transition:transform .2s ease;
+  }
+  .cta-btn:hover{ transform:scale(1.04); }
+
+  footer{
+    padding:4rem 5vw 0;
+    border-top:1px solid var(--line);
+    background:var(--ink);
+    color:var(--cream);
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr 1fr 1.25fr;
+    gap:2.5rem;
+    padding-bottom:3rem;
+  }
+  .footer-brand .logo{ color:var(--cream); }
+  .footer-brand p{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.88rem;
+    line-height:1.6;
+    color:rgba(244,239,227,0.7);
+    margin:1rem 0 1.3rem;
+    max-width:38ch;
+  }
+  .footer-social{
+    display:flex;
+    gap:1.2rem;
+  }
+  .footer-social a{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--cream);
+    border-bottom:1px solid var(--cream);
+    padding-bottom:2px;
+  }
+  .footer-col h4{
+    font-family:'Oswald',sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--court);
+    margin-bottom:1rem;
+  }
+  .footer-col a{
+    display:block;
+    font-family:'Source Sans 3',sans-serif;
+    font-size:0.9rem;
+    color:rgba(244,239,227,0.85);
+    margin-bottom:0.7rem;
+  }
+  .footer-col a:hover{ color:var(--cream); text-decoration:underline; }
+  .footer-note{
+    font-size:0.82rem;
+    line-height:1.55;
+    color:rgba(244,239,227,0.7);
+  }
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.6rem 0;
+    border-top:1px solid rgba(244,239,227,0.12);
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.05em;
+    color:rgba(244,239,227,0.55);
+  }
+
+  @media (max-width:1100px) and (min-width:861px){
+    .trophy-grid{ grid-template-columns:repeat(3, 1fr); }
+  }
+
+  @media (max-width:860px){
+    .nav-toggle{ display:flex; }
+    .social-links{ display:none; }
+    #mainNav{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      position:fixed;
+      top:0; right:0;
+      height:100vh;
+      width:72vw;
+      max-width:320px;
+      background:var(--cream);
+      padding:6rem 2rem 2rem;
+      gap:1.6rem;
+      font-size:1.1rem;
+      transform:translateX(100%);
+      transition:transform .3s ease;
+      z-index:200;
+      border-left:3px solid var(--red);
+    }
+    #mainNav.open{ transform:translateX(0); }
+    #mainNav > a,
+    .nav-dropdown-toggle{
+      width:100%;
+      font-size:1.05rem;
+      text-align:left;
+    }
+    .nav-dropdown-toggle{
+      justify-content:space-between;
+    }
+    .nav-dropdown-menu{
+      position:static;
+      min-width:0;
+      max-height:0;
+      overflow:hidden;
+      padding:0 0.8rem;
+      border:0;
+      box-shadow:none;
+      background:var(--cream-dim);
+      opacity:1;
+      visibility:visible;
+      transform:none;
+      pointer-events:none;
+      transition:max-height .25s ease, padding .25s ease, margin .25s ease;
+    }
+    .nav-dropdown.open .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu{
+      max-height:240px;
+      padding:0.55rem 0.8rem;
+      margin-top:0.7rem;
+      pointer-events:auto;
+    }
+    .nav-social-mobile{
+      display:flex;
+      flex-direction:column;
+      gap:0.9rem;
+      margin-top:1rem;
+      padding-top:1.4rem;
+      border-top:1px solid var(--line);
+    }
+    .nav-social-mobile a{
+      font-family:'Oswald',sans-serif;
+      font-size:0.85rem;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:var(--red);
+    }
+    .hero{ grid-template-columns:1fr; padding-top:3rem;}
+    .next-match-card{ margin-top:0.5rem; }
+    .article-tools{ align-items:stretch; }
+    .article-search{ flex-basis:100%; }
+    .article-filters{ width:100%; }
+    .article-filter{ flex:1 1 auto; }
+    .article-grid{ grid-template-columns:1fr; }
+    .feature-article{ display:block; }
+    .feature-article > .article-cover{
+      height:240px;
+      min-height:0;
+      margin-bottom:1.4rem;
+    }
+    .articles-sidebar{ grid-template-columns:1fr; border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:1.2rem; position:static; }
+    .sidebar-article.reading{
+      top:1rem;
+      max-height:calc(100vh - 2rem);
+      padding:1.25rem;
+    }
+    .sidebar-article.reading .article-actions{ top:-1.25rem; }
+    .insta-cta{ flex-direction:column; text-align:center; }
+    .hero-meta{ flex-wrap:wrap; row-gap:0.6rem;}
+    .games-grid{ grid-template-columns:1fr; gap:2.2rem; }
+    .tabs{ flex-direction:column; }
+    .tab-btn{ width:100%; }
+    .standings-grid{ grid-template-columns:1fr; gap:2.2rem; }
+    .roster-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
+    .trophy-grid{ grid-template-columns:1fr; }
+    .modal-infos{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+    .footer-bottom{ flex-direction:column; gap:0.5rem; align-items:flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticker-inner{ animation:none; }
+    .hero-tag::before{ animation:none; }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--red);
+    outline-offset:2px;
+  }
+
+</style>
+</head>
+<body id="top">
+
+  <div class="brand-ticker">
+    <div class="brand-ticker-inner">
+      <span>MERCATO — Mbaye Ndiaye, accord trouvé avec l'Olympiakos (400 000€)</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Nate Sestina, Yves Pons, Joel Bolomboy, Bodian Massa, Mbaye Ndiaye</span><span class="sep">•</span><span>MERCATO — Mbaye Ndiaye, accord trouvé avec l'Olympiakos (400 000€)</span><span class="sep">•</span><span>CLUB — Les frères Buss intéressés par un investissement dans l'ASVEL</span><span class="sep">•</span><span>EFFECTIF — Patty Mills, Both Gach, Nate Sestina, Yves Pons, Joel Bolomboy, Bodian Massa, Mbaye Ndiaye</span><span class="sep">•</span>
+    </div>
+  </div>
+
+  <header>
+    <a class="logo" href="#top">ACTU ASVEL</a>
+    <nav id="mainNav" aria-label="Navigation principale">
+      <a href="#top" data-nav-section="top" class="active">Accueil</a>
+      <a href="actualites.html">Actualités</a>
+      <div class="nav-dropdown" id="matchesDropdown" data-active-sections="calendrier calendrier-belite derbys">
+        <button class="nav-dropdown-toggle" id="matchesToggle" type="button" aria-expanded="false" aria-controls="matchesMenu">
+          Matchs <span class="nav-dropdown-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-dropdown-menu" id="matchesMenu">
+          <a href="#calendrier" data-nav-section="calendrier">EuroLeague</a>
+          <a href="#calendrier-belite" data-nav-section="calendrier-belite">Betclic ÉLITE</a>
+          <a href="#derbys" data-nav-section="derbys">Derbys</a>
+        </div>
+      </div>
+      <div class="nav-dropdown" id="standingsDropdown" data-active-sections="classement-euroleague classement-belite">
+        <button class="nav-dropdown-toggle" id="standingsMenuToggle" type="button" aria-expanded="false" aria-controls="standingsMenu">
+          Classements <span class="nav-dropdown-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-dropdown-menu" id="standingsMenu">
+          <a href="#classement-euroleague" data-nav-section="classement-euroleague">EuroLeague</a>
+          <a href="#classement-belite" data-nav-section="classement-belite">Betclic ÉLITE</a>
+        </div>
+      </div>
+      <a href="#effectif" data-nav-section="effectif">Effectif</a>
+      <a href="#palmares" data-nav-section="palmares">Palmarès</a>
+      <div class="nav-social-mobile">
+        <a href="#about">À propos</a>
+        <a href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+      </div>
+    </nav>
+    <div class="social-links">
+      <a class="insta-btn" href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+      <a class="insta-btn" href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="nav-backdrop" id="navBackdrop"></div>
+
+  <script>
+    (function(){
+      var toggle = document.getElementById('navToggle');
+      var nav = document.getElementById('mainNav');
+      var backdrop = document.getElementById('navBackdrop');
+      var dropdowns = Array.from(nav.querySelectorAll('.nav-dropdown'));
+      function closeDropdowns(except){
+        dropdowns.forEach(function(dropdown){
+          if(dropdown === except) return;
+          dropdown.classList.remove('open');
+          var button = dropdown.querySelector('.nav-dropdown-toggle');
+          if(button) button.setAttribute('aria-expanded', 'false');
+        });
+      }
+      function closeNav(){
+        nav.classList.remove('open');
+        backdrop.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+        closeDropdowns();
+      }
+      function toggleNav(){
+        var isOpen = nav.classList.toggle('open');
+        backdrop.classList.toggle('open', isOpen);
+        toggle.classList.toggle('open', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        document.body.classList.toggle('nav-open', isOpen);
+      }
+      toggle.addEventListener('click', toggleNav);
+      backdrop.addEventListener('click', closeNav);
+      dropdowns.forEach(function(dropdown){
+        var dropdownToggle = dropdown.querySelector('.nav-dropdown-toggle');
+        dropdownToggle.addEventListener('click', function(){
+          var willOpen = !dropdown.classList.contains('open');
+          closeDropdowns(dropdown);
+          dropdown.classList.toggle('open', willOpen);
+          dropdownToggle.setAttribute('aria-expanded', String(willOpen));
+        });
+      });
+      nav.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', closeNav);
+      });
+      document.addEventListener('keydown', function(event){
+        if(event.key === 'Escape') closeNav();
+      });
+      document.addEventListener('click', function(event){
+        if(!nav.contains(event.target)) closeDropdowns();
+      });
+      window.addEventListener('resize', function(){
+        if(window.innerWidth > 860 && nav.classList.contains('open')) closeNav();
+      });
+
+      var navLinks = Array.from(nav.querySelectorAll('[data-nav-section]'));
+      var trackedSections = navLinks.map(function(link){
+        var id = link.getAttribute('data-nav-section');
+        return { id:id, element:id === 'top' ? document.body : document.getElementById(id) };
+      }).filter(function(item){ return item.element; });
+      function updateActiveNav(){
+        var activeId = 'top';
+        var position = window.scrollY + 170;
+        var bestOffset = -1;
+        var requestedId = window.location.hash.replace('#', '');
+        trackedSections.forEach(function(item){
+          var offset = item.element.offsetTop;
+          if(item.id !== 'top' && offset <= position && offset > bestOffset){
+            activeId = item.id;
+            bestOffset = offset;
+          } else if(item.id !== 'top' && offset === bestOffset && item.id === requestedId){
+            activeId = item.id;
+          }
+        });
+        navLinks.forEach(function(link){
+          var isActive = link.getAttribute('data-nav-section') === activeId;
+          link.classList.toggle('active', isActive);
+          if(isActive) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+        dropdowns.forEach(function(dropdown){
+          var sections = (dropdown.getAttribute('data-active-sections') || '').split(/\s+/);
+          var button = dropdown.querySelector('.nav-dropdown-toggle');
+          button.classList.toggle('active', sections.indexOf(activeId) !== -1);
+        });
+      }
+      updateActiveNav();
+      window.addEventListener('scroll', updateActiveNav, { passive:true });
+      window.addEventListener('hashchange', updateActiveNav);
+    })();
+  </script>
+
+  <section class="hero">
+    <div>
+      <span class="hero-tag">Mercato</span>
+      <h1>Mbaye Ndiaye : accord trouvé avec l'Olympiakos.</h1>
+      <p>En complément des comptes Instagram et Twitter, retrouvez ici le calendrier des matchs à domicile en EuroLeague, l'effectif du club et les articles complets du fil d'actu.</p>
+      <div class="hero-meta">
+        <span>Mis à jour aujourd'hui</span>
+      </div>
+    </div>
+    <aside class="next-match-card" aria-labelledby="nextMatchTitle">
+      <div class="next-match-kicker">
+        <span id="nextMatchTitle">Prochain match</span>
+        <span class="next-match-live">EuroLeague</span>
+      </div>
+      <div class="next-match-date">Jeudi 24 septembre 2026 — 20h45</div>
+      <div class="next-match-teams">
+        <span>ASVEL</span><span class="next-match-vs">VS</span><span>Maccabi</span>
+      </div>
+      <p class="next-match-info">Match à domicile — horaire indiqué sous réserve de modification.</p>
+      <a class="next-match-link" href="#calendrier">Voir le calendrier complet →</a>
+    </aside>
+  </section>
+
+  <section class="feed" id="actu">
+    <div class="feed-head">
+      <h2>Actualités</h2>
+      <span>À la une</span>
+    </div>
+
+    <div class="article-tools" aria-label="Rechercher et filtrer les articles">
+      <label class="article-search">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" id="articleSearch" placeholder="Rechercher un joueur ou une actualité…" autocomplete="off" aria-label="Rechercher dans les actualités">
+      </label>
+      <div class="article-filters" role="group" aria-label="Filtrer par catégorie">
+        <button class="article-filter active" type="button" data-filter="all" aria-pressed="true">Tout</button>
+        <button class="article-filter" type="button" data-filter="mercato" aria-pressed="false">Mercato</button>
+        <button class="article-filter" type="button" data-filter="club" aria-pressed="false">Club</button>
+      </div>
+      <div class="article-results-count" id="articleResultsCount" aria-live="polite">4 articles disponibles</div>
+    </div>
+
+    <div class="article-no-results" id="articleNoResults">Aucun article ne correspond à cette recherche.</div>
+
+    <div class="quick-articles">
+      <a href="#article-mbaye" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Mbaye Ndiaye : accord avec l'Olympiakos</span>
+      </a>
+      <a href="#article-buss" class="quick-article-chip">
+        <span class="quick-tag">Club</span>
+        <span class="quick-title">Les frères Buss prêts à racheter l'ASVEL ?</span>
+      </a>
+      <a href="#article-bolomboy" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Joel Bolomboy rejoint l'ASVEL</span>
+      </a>
+      <a href="#article-sestina" class="quick-article-chip">
+        <span class="quick-tag">Mercato</span>
+        <span class="quick-title">Nate Sestina s'engage avec l'ASVEL</span>
+      </a>
+    </div>
+
+    <div class="articles-layout">
+
+      <article class="feature-article" id="article-mbaye" data-category="mercato">
+        <div class="article-cover article-cover-photo">
+          <img class="article-cover-img" src="images/article-mbaye-cover.jpg" alt="Mbaye Ndiaye">
+          <span class="article-cover-tag">Mercato</span>
+        </div>
+        <div class="num">Mercato</div>
+        <h3>Mbaye Ndiaye a trouvé un accord avec l'Olympiakos, l'ASVEL devrait récupérer 400 000 euros</h3>
+        <div class="byline">Par la rédaction — Actu ASVEL <span class="byline-dot">•</span> 12 août 2026 <span class="byline-dot">•</span> 3 min de lecture</div>
+        <p class="lead">EuroLeague – Selon les informations du journaliste Chema de Lucas, Mbaye Ndiaye est proche de rejoindre l'Olympiakos. L'intérieur sénégalais de 27 ans aurait trouvé un accord avec le club grec, qui devrait verser une indemnité de transfert à l'ASVEL. Celle-ci serait estimée à 400 000 euros.</p>
+
+        <div class="article-actions">
+          <a class="home-read-btn" href="articles/mbaye-ndiaye-olympiakos.html">Lire l'article complet</a>
+          <a class="all-news-link" href="actualites.html">Toutes les actualités</a>
+        </div>
+
+        <div class="article-collapsible" id="articleBody4">
+          <p class="drop-cap">Le départ de Mbaye Ndiaye se précise. D'après Chema de Lucas, le joueur de 2,04 m est sur le point de finaliser son arrivée chez le champion d'Europe en titre.</p>
+          <p>Sous contrat avec Villeurbanne jusqu'en juin 2029, Ndiaye ne quittera pas gratuitement l'ASVEL. L'Olympiakos devra payer son buyout pour obtenir sa libération. Selon les informations disponibles, cette indemnité atteindrait 400 000 euros.</p>
+
+          <h4>Un départ inattendu après sa prolongation</h4>
+          <p>Cette opération intervient un mois seulement après la prolongation du Sénégalais. Le 8 juillet, l'ASVEL avait annoncé un nouvel engagement de trois saisons, laissant penser que le joueur occuperait une place importante dans le projet villeurbannais.</p>
+          <p>La révision du budget du club a depuis profondément modifié la construction de l'effectif. Le transfert de Ndiaye permettrait à l'ASVEL d'alléger sa masse salariale tout en récupérant une indemnité importante.</p>
+
+          <h4>Une progression remarquée à Villeurbanne</h4>
+          <p>Arrivé à l'ASVEL en 2023 en provenance de l'ADA Blois, Mbaye Ndiaye s'est progressivement imposé dans la rotation. Malgré une rupture des ligaments croisés subie en décembre 2024, il est revenu à un excellent niveau lors de la saison 2025-2026.</p>
+          <blockquote class="article-pullquote">7,7 points, 4,8 rebonds et 1,3 passe décisive de moyenne en EuroLeague la saison dernière.</blockquote>
+          <p>En EuroLeague, il a enregistré 7,7 points, 4,8 rebonds et 1,3 passe décisive de moyenne. En Betclic Élite, il a compilé 9,1 points, 5,9 rebonds, 1,6 passe, 1,1 interception et 1,3 contre en 29 rencontres.</p>
+          <p>Son activité défensive, sa présence au rebond et sa capacité à évoluer sur plusieurs postes ont convaincu l'Olympiakos de miser sur lui.</p>
+
+          <h4>L'officialisation désormais attendue</h4>
+          <p>En rejoignant Le Pirée, Mbaye Ndiaye franchirait une nouvelle étape dans sa carrière en intégrant l'une des formations les plus ambitieuses du basket européen.</p>
+          <p>L'opération n'a pas encore été officialisée par les deux clubs. L'accord avec le joueur serait néanmoins trouvé et les dernières formalités doivent désormais être réglées avant l'annonce du transfert.</p>
+        </div>
+
+        <div class="meta"><span>EuroLeague</span><span>Mercato</span></div>
+      </article>
+
+      <aside class="articles-sidebar">
+        <h4 class="sidebar-title">À lire aussi</h4>
+
+        <article class="sidebar-article" id="article-buss" data-category="club">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
+          <div class="num">Club</div>
+          <h5>ASVEL : les frères Buss prêts à racheter le club de Tony Parker ?</h5>
+          <p class="sidebar-excerpt">Joey et Jesse Buss, anciens dirigeants des Lakers, pourraient investir dans l'ASVEL via Buss Sports Capital.</p>
+          <div class="sidebar-date">12 août 2026</div>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody3" aria-expanded="false" aria-controls="articleBody3">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-buss">Copier le lien</button>
+          </div>
+
+          <div class="article-collapsible" id="articleBody3">
+            <p>L'avenir de l'ASVEL pourrait-il s'écrire avec la famille Buss ? Selon The Athletic, Joey et Jesse Buss ont déposé une offre concernant la propriété d'une future franchise de NBA Europe à Lyon. Les deux frères étudieraient également des projets à Londres et Manchester.</p>
+            <p>Cette candidature ne signifie pas encore que l'ASVEL a été rachetée. Elle pourrait néanmoins conduire à une entrée dans le capital du club, voire à une reprise des parts détenues par Tony Parker.</p>
+
+            <h4>Qui sont Joey et Jesse Buss ?</h4>
+            <p>Joey et Jesse sont les deux plus jeunes fils de Jerry Buss, propriétaire historique des Lakers entre 1979 et son décès en 2013.</p>
+            <p>Ils ont travaillé pendant près de vingt ans au sein de la franchise californienne. Jesse était notamment chargé du recrutement et de la préparation de la Draft, tandis que Joey s'occupait de la recherche, du développement et des South Bay Lakers en G League.</p>
+            <p>Les deux hommes ont participé à l'identification et au développement de joueurs comme Kyle Kuzma, Alex Caruso, Austin Reaves, Jordan Clarkson et Josh Hart.</p>
+
+            <h4>Une fortune de plusieurs centaines de millions de dollars</h4>
+            <p>En 2025, la famille Buss a vendu la majorité des Lakers à Mark Walter dans le cadre d'une opération valorisant la franchise à environ 10 milliards de dollars.</p>
+            <p>D'après ESPN, chacun des six héritiers Buss aurait récupéré près de 500 millions de dollars après impôts. Joey et Jesse conserveraient également une participation minoritaire dans les Lakers.</p>
+            <p>Le montant exact de leur fortune personnelle n'est pas public, mais les deux frères disposent clairement d'une capacité financière importante. Ils ont depuis créé Buss Sports Capital, une société spécialisée dans les investissements sportifs.</p>
+
+            <h4>Pourquoi l'ASVEL les intéresse</h4>
+            <p>L'intérêt des frères Buss pour l'ASVEL avait été évoqué dès le mois de mai 2026. Leur arrivée devait participer au financement du projet particulièrement ambitieux présenté par Tony Parker.</p>
+            <p>Ce projet s'est toutefois effondré après la non-validation par la DNCCG des garanties apportées par un important partenaire asiatique. Le budget prévisionnel du club a ainsi été ramené de 59 à environ 24 millions d'euros.</p>
+            <p>Cette baisse a obligé l'ASVEL à revoir son recrutement. Sylvain Francisco a notamment quitté Villeurbanne sans avoir disputé le moindre match officiel avec le club.</p>
+            <p>L'arrivée de Buss Sports Capital pourrait permettre à l'ASVEL de retrouver une stabilité financière et de relancer ses ambitions européennes.</p>
+
+            <h4>Un projet tourné vers la NBA Europe</h4>
+            <p>La NBA et la FIBA préparent une nouvelle compétition européenne susceptible de débuter en 2027. Lyon fait partie des villes étudiées pour accueillir une franchise permanente.</p>
+            <p>Pour les frères Buss, racheter ou investir dans l'ASVEL présenterait plusieurs avantages : une marque historique, 21 titres de champion de France, un centre de formation, un marché important et l'accès à la LDLC Arena.</p>
+            <p>Tony Parker pourrait également rester impliqué dans le projet grâce à son image et à ses liens avec la NBA, même en cas de changement de propriétaire.</p>
+            <p>Pour le moment, aucun accord, montant ou pourcentage de capital n'a été communiqué. L'intérêt des frères Buss pour Lyon est bien réel, mais le rachat de l'ASVEL reste à confirmer.</p>
+          </div>
+
+          <div class="meta"><span>Club</span><span>Actu</span></div>
+        </article>
+
+        <article class="sidebar-article" id="article-bolomboy" data-category="mercato">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
+          <div class="num">Mercato</div>
+          <h5>Joel Bolomboy rejoint l'ASVEL pour deux saisons</h5>
+          <p class="sidebar-excerpt">Le pivot américano-russe de 32 ans arrive de l'Étoile Rouge de Belgrade, lié au club jusqu'en juin 2028.</p>
+          <div class="sidebar-date">7 juillet 2026</div>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody2" aria-expanded="false" aria-controls="articleBody2">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-bolomboy">Copier le lien</button>
+          </div>
+
+          <div class="article-collapsible" id="articleBody2">
+            <p>L'ASVEL tient un renfort majeur pour sa raquette. À la recherche d'un intérieur expérimenté et immédiatement opérationnel au plus haut niveau européen, le club villeurbannais a choisi de miser sur Joel Bolomboy. Le pivot de 2,04 m s'est engagé pour les deux prochaines saisons et devient l'une des recrues les plus importantes du nouveau projet lyonnais.</p>
+            <p>Après trois années passées sous les couleurs de l'Étoile Rouge de Belgrade, Bolomboy découvrira pour la première fois le championnat de France. Il apportera à l'effectif villeurbannais sa puissance physique, ses qualités de rebondeur et une solide expérience de l'EuroLeague.</p>
+
+            <h4>L'un des meilleurs rebondeurs d'EuroLeague</h4>
+            <p>Joel Bolomboy sort de plusieurs saisons convaincantes à Belgrade. Avant d'être freiné par une blessure au pied en mars 2025, il réalisait le meilleur exercice de sa carrière dans la compétition européenne.</p>
+            <p>Lors de la saison 2024-2025, le nouveau pivot de l'ASVEL affichait des moyennes de 10,2 points, 8,3 rebonds, 0,9 interception et 0,8 contre en un peu plus de 24 minutes, avec une réussite de 65,5 % aux tirs. Avec 8,3 rebonds par rencontre, il avait terminé meilleur rebondeur de l'EuroLeague, dominant également la compétition au rebond offensif avec 3,4 prises par match.</p>
+
+            <h4>Une saison marquée par son retour de blessure</h4>
+            <p>Victime d'une blessure au pied face à l'Olimpia Milan le 13 mars 2025, Joel Bolomboy avait ensuite dû subir une opération aux États-Unis, mettant un terme prématuré à sa saison alors qu'il s'était imposé comme l'un des joueurs les plus performants de l'Étoile Rouge.</p>
+            <p>De retour lors de l'exercice 2025-2026, l'intérieur a progressivement retrouvé les terrains et du rythme, avec 15 rencontres d'EuroLeague pour des moyennes de 5,5 points et 4,5 rebonds en un peu plus de 14 minutes. Des statistiques moins impressionnantes que la saison précédente, mais réalisées dans un contexte de reprise après une longue indisponibilité.</p>
+
+            <h4>Champion d'EuroLeague avec le CSKA Moscou</h4>
+            <p>Né à Donetsk, en Ukraine, Joel Bolomboy a grandi aux États-Unis et effectué son parcours universitaire à Weber State. Il a été sélectionné par le Utah Jazz à la 52e position de la Draft NBA 2016.</p>
+            <p>Après 20 apparitions en NBA avec le Jazz et les Milwaukee Bucks, il a rejoint l'Europe en 2018 en s'engageant avec le CSKA Moscou, remportant l'EuroLeague dès sa première saison en Russie en 2019. Il a ensuite porté les couleurs de l'Olympiakos, atteignant une nouvelle finale d'EuroLeague, avant de rejoindre l'Étoile Rouge de Belgrade.</p>
+
+            <h4>Un potentiel patron pour la raquette villeurbannaise</h4>
+            <p>Très mobile malgré son gabarit, Joel Bolomboy est reconnu pour son intensité et son activité près du cercle. Sa capacité à poser des écrans, à terminer les actions sur pick-and-roll et à multiplier les secondes chances devrait offrir de nouvelles solutions au jeu villeurbannais.</p>
+            <p>En s'engageant avec Joel Bolomboy jusqu'en 2028, l'ASVEL mise sur un joueur expérimenté, champion d'Europe et capable, lorsqu'il est en pleine possession de ses moyens, de s'imposer parmi les pivots les plus influents de la compétition.</p>
+          </div>
+
+          <div class="meta"><span>Betclic Élite</span><span>Mercato</span></div>
+        </article>
+
+        <article class="sidebar-article" id="article-sestina" data-category="mercato">
+          <div class="sidebar-cover sidebar-cover-mercato"></div>
+          <div class="num">Mercato</div>
+          <h5>ASVEL : Nate Sestina s'engage pour une saison à Villeurbanne</h5>
+          <p class="sidebar-excerpt">L'ailier-fort américain de 29 ans apportera son expérience du très haut niveau européen à l'effectif villeurbannais.</p>
+          <div class="sidebar-date">Juillet 2026</div>
+          <div class="article-actions">
+            <button class="article-toggle sidebar-toggle" data-target="articleBody1" aria-expanded="false" aria-controls="articleBody1">Lire l'article</button>
+            <button class="copy-link-btn sidebar-copy" data-article="article-sestina">Copier le lien</button>
+          </div>
+
+          <div class="article-collapsible" id="articleBody1">
+            <p>Annoncé dans le viseur du club depuis plusieurs semaines, Nate Sestina rejoint finalement Villeurbanne. Mesurant 2,05 m, l'Américain évolue principalement au poste 4, mais peut également dépanner au poste de pivot.</p>
+
+            <h4>Un intérieur capable d'écarter le jeu</h4>
+            <p>Nate Sestina possède un profil particulièrement intéressant sur le plan offensif. Mobile, énergique et capable de sanctionner derrière la ligne à trois points, il pourra offrir davantage d'espace aux arrières villeurbannais.</p>
+            <p>Son adresse extérieure constitue l'une de ses principales qualités. Lors de la saison 2023-2024 avec Fenerbahçe, il avait notamment inscrit près de 39 % de ses tentatives à trois points en EuroLeague. Il avait également participé au Final Four de la compétition et remporté le championnat de Turquie.</p>
+
+            <h4>Une solide expérience européenne</h4>
+            <p>Après son parcours universitaire à Bucknell puis à Kentucky, Sestina a commencé sa carrière professionnelle entre la G League, Israël et la Turquie. Il s'est véritablement révélé sous les couleurs de Türk Telekom, avec qui il a atteint la finale de l'EuroCup en 2023.</p>
+            <p>Ses performances lui ont ensuite permis de rejoindre Fenerbahçe, puis Valence et enfin l'Olimpia Milan. Il connaît donc parfaitement les exigences de l'EuroLeague et les environnements des grands clubs européens.</p>
+            <p>La saison 2025-2026 de l'Américain a toutefois été perturbée par une blessure au bras nécessitant une opération. Entre Valence et Milan, il a disputé 13 rencontres d'EuroLeague pour une moyenne de 2,8 points et 1,2 rebond en huit minutes de jeu.</p>
+          </div>
+
+          <div class="meta"><span>Betclic Élite</span><span>Mercato</span></div>
+        </article>
+      </aside>
+
+    </div>
+  </section>
+
+  <div class="article-reader-backdrop" id="articleReaderBackdrop" aria-hidden="true"></div>
+
+  <script>
+    (function(){
+      var backdrop = document.getElementById('articleReaderBackdrop');
+      function setSidebarReading(toggle, body, isOpen){
+        var article = toggle.closest('.sidebar-article');
+        body.classList.toggle('open', isOpen);
+        article.classList.toggle('reading', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.textContent = isOpen ? "Fermer l'article" : "Lire l'article";
+        backdrop.classList.toggle('open', isOpen);
+        backdrop.setAttribute('aria-hidden', String(!isOpen));
+        document.body.classList.toggle('article-reader-open', isOpen);
+        if(isOpen) setTimeout(function(){ toggle.focus(); }, 50);
+      }
+      function closeSidebarReader(){
+        var article = document.querySelector('.sidebar-article.reading');
+        if(!article) return;
+        var toggle = article.querySelector('.sidebar-toggle');
+        var body = document.getElementById(toggle.getAttribute('data-target'));
+        setSidebarReading(toggle, body, false);
+      }
+      document.querySelectorAll('.article-toggle').forEach(function(toggle){
+        var body = document.getElementById(toggle.getAttribute('data-target'));
+        var isSidebar = toggle.classList.contains('sidebar-toggle');
+        toggle.addEventListener('click', function(){
+          if(isSidebar){
+            var isOpen = !body.classList.contains('open');
+            closeSidebarReader();
+            setSidebarReading(toggle, body, isOpen);
+          } else {
+            var isOpen = body.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', String(isOpen));
+            toggle.textContent = isOpen ? "Réduire l'article" : "Lire l'article complet";
+          }
+        });
+      });
+      backdrop.addEventListener('click', closeSidebarReader);
+      document.addEventListener('keydown', function(event){
+        if(event.key === 'Escape') closeSidebarReader();
+      });
+      window.openSidebarArticle = function(bodyId){
+        var body = document.getElementById(bodyId);
+        var toggle = document.querySelector('.sidebar-toggle[data-target="' + bodyId + '"]');
+        if(body && toggle && !body.classList.contains('open')) toggle.click();
+      };
+
+      document.querySelectorAll('.quick-article-chip').forEach(function(link){
+        link.addEventListener('click', function(event){
+          var articleId = link.getAttribute('href').replace('#', '');
+          var article = document.getElementById(articleId);
+          if(!article || !article.classList.contains('sidebar-article')) return;
+          event.preventDefault();
+          history.pushState(null, '', '#' + articleId);
+          var toggle = article.querySelector('.sidebar-toggle');
+          if(toggle) window.openSidebarArticle(toggle.getAttribute('data-target'));
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    (function(){
+      var search = document.getElementById('articleSearch');
+      var filters = Array.from(document.querySelectorAll('.article-filter'));
+      var articles = Array.from(document.querySelectorAll('#actu article[data-category]'));
+      var layout = document.querySelector('.articles-layout');
+      var sidebar = document.querySelector('.articles-sidebar');
+      var count = document.getElementById('articleResultsCount');
+      var empty = document.getElementById('articleNoResults');
+      var activeFilter = 'all';
+      function normalize(value){
+        return (value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+      function applyFilters(){
+        var query = normalize(search.value.trim());
+        var visible = 0;
+        articles.forEach(function(article){
+          var categoryMatch = activeFilter === 'all' || article.getAttribute('data-category') === activeFilter;
+          var searchMatch = !query || normalize(article.textContent).indexOf(query) !== -1;
+          var show = categoryMatch && searchMatch;
+          article.classList.toggle('article-hidden', !show);
+          var shortcut = document.querySelector('.quick-article-chip[href="#' + article.id + '"]');
+          if(shortcut) shortcut.classList.toggle('article-hidden', !show);
+          if(show) visible++;
+        });
+        var feature = document.getElementById('article-mbaye');
+        var featureHidden = feature.classList.contains('article-hidden');
+        var sidebarVisible = articles.some(function(article){
+          return article.classList.contains('sidebar-article') && !article.classList.contains('article-hidden');
+        });
+        sidebar.classList.toggle('article-hidden', !sidebarVisible);
+        layout.classList.toggle('feature-hidden', featureHidden);
+        layout.classList.toggle('feature-only', !featureHidden && !sidebarVisible);
+        empty.classList.toggle('visible', visible === 0);
+        count.textContent = visible + (visible > 1 ? ' articles affichés' : ' article affiché');
+      }
+      filters.forEach(function(button){
+        button.addEventListener('click', function(){
+          activeFilter = button.getAttribute('data-filter');
+          filters.forEach(function(item){
+            var selected = item === button;
+            item.classList.toggle('active', selected);
+            item.setAttribute('aria-pressed', String(selected));
+          });
+          applyFilters();
+        });
+      });
+      search.addEventListener('input', applyFilters);
+      applyFilters();
+    })();
+  </script>
+
+
+  <section class="games" id="calendrier">
+    <div class="feed-head">
+      <h2>Calendrier</h2>
+      <span>EuroLeague — saison 2026-2027</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="home">Matchs à domicile</button>
+      <button class="tab-btn" data-tab="away">Matchs à l'extérieur</button>
+    </div>
+
+    <div class="tab-panel active" data-panel="home">
+      <div class="games-grid">
+        <div class="games-col">
+          <h3>Phase régulière — 1ère partie</h3>
+          <div class="game-row">
+            <span class="game-date">24 sept. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Maccabi Tel-Aviv</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">2 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Valencia Basket</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">13 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Étoile Rouge de Belgrade</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">28 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Partizan Belgrade</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">30 oct. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Baskonia</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Bayern Munich</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">13 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Beşiktaş</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">24 nov. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Olimpia Milan</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">17 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Dubai Basketball</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">22 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> FC Barcelone</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+        </div>
+        <div class="games-col">
+          <h3>Phase régulière — 2ème partie</h3>
+          <div class="game-row">
+            <span class="game-date">30 déc. 2026</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Olympiakos</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">12 janv. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Žalgiris Kaunas</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">29 janv. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Hapoël Tel-Aviv</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 févr. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Fenerbahçe</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">10 févr. 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Anadolu Efes</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">19 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Virtus Bologne</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">23 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Panathinaïkos</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">25 mars 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Paris Basketball</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">8 avril 2027</span>
+            <span class="game-teams">ASVEL <span class="vs">vs</span> Real Madrid</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="away">
+      <div class="games-grid">
+        <div class="games-col">
+          <h3>Phase régulière — 1ère partie</h3>
+          <div class="game-row">
+            <span class="game-date">30 sept. 2026</span>
+            <span class="game-teams">Panathinaïkos <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h15</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">7 oct. 2026</span>
+            <span class="game-teams">Paris Basketball <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">15 oct. 2026</span>
+            <span class="game-teams">Real Madrid <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">23 oct. 2026</span>
+            <span class="game-teams">Žalgiris Kaunas <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">17 nov. 2026</span>
+            <span class="game-teams">Fenerbahçe <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">20 nov. 2026</span>
+            <span class="game-teams">Anadolu Efes <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">4 déc. 2026</span>
+            <span class="game-teams">Olympiakos <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">21h15</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">10 déc. 2026</span>
+            <span class="game-teams">Hapoël Tel-Aviv <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">15 déc. 2026</span>
+            <span class="game-teams">Virtus Bologne <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+        </div>
+        <div class="games-col">
+          <h3>Phase régulière — 2ème partie</h3>
+          <div class="game-row">
+            <span class="game-date">8 janv. 2027</span>
+            <span class="game-teams">Étoile Rouge de Belgrade <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">14 janv. 2027</span>
+            <span class="game-teams">Olimpia Milan <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">22 janv. 2027</span>
+            <span class="game-teams">Valencia Basket <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">3 févr. 2027</span>
+            <span class="game-teams">FC Barcelone <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">5 mars 2027</span>
+            <span class="game-teams">Bayern Munich <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">9 mars 2027</span>
+            <span class="game-teams">Beşiktaş <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">11 mars 2027</span>
+            <span class="game-teams">Maccabi Tel-Aviv <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h05</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">2 avril 2027</span>
+            <span class="game-teams">Partizan Belgrade <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h45</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">6 avril 2027</span>
+            <span class="game-teams">Baskonia <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h30</span>
+          </div>
+          <div class="game-row">
+            <span class="game-date">16 avril 2027</span>
+            <span class="game-teams">Dubai Basketball <span class="vs">vs</span> ASVEL</span>
+            <span class="game-result tbd">20h00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.tabs').forEach(function(tabGroup){
+        var section = tabGroup.closest('section');
+        var buttons = tabGroup.querySelectorAll('.tab-btn');
+        var panels = section.querySelectorAll('.tab-panel');
+        buttons.forEach(function(btn){
+          btn.addEventListener('click', function(){
+            buttons.forEach(function(b){ b.classList.remove('active'); });
+            panels.forEach(function(p){ p.classList.remove('active'); });
+            btn.classList.add('active');
+            var target = section.querySelector('.tab-panel[data-panel="' + btn.getAttribute('data-tab') + '"]');
+            if(target) target.classList.add('active');
+          });
+        });
+      });
+
+      // Copier le lien unique de chaque article
+      document.querySelectorAll('.copy-link-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var id = btn.getAttribute('data-article');
+          var url = window.location.origin + window.location.pathname + '#' + id;
+          var originalText = btn.textContent;
+          function showCopied(){
+            btn.textContent = 'Lien copié !';
+            btn.classList.add('copied');
+            setTimeout(function(){
+              btn.textContent = originalText;
+              btn.classList.remove('copied');
+            }, 2000);
+          }
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(url).then(showCopied).catch(function(){
+              window.prompt('Copie ce lien :', url);
+            });
+          } else {
+            window.prompt('Copie ce lien :', url);
+          }
+        });
+      });
+
+      // Ouvrir automatiquement l'article visé (au chargement ET à chaque clic sur une ancre)
+      var articleMap = { 'article-mbaye': 'articleBody4', 'article-buss': 'articleBody3', 'article-bolomboy': 'articleBody2', 'article-sestina': 'articleBody1' };
+      function openArticleFromHash(hash){
+        if(!articleMap[hash]) return;
+        var body = document.getElementById(articleMap[hash]);
+        var toggle = document.querySelector('.article-toggle[data-target="' + articleMap[hash] + '"]');
+        if(body && toggle && !body.classList.contains('open')){
+          if(toggle.classList.contains('sidebar-toggle') && window.openSidebarArticle){
+            window.openSidebarArticle(articleMap[hash]);
+          } else {
+            body.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.textContent = "Réduire l'article";
+          }
+        }
+      }
+      function openStandingsFromHash(hash){
+        var map = {
+          'classement-euroleague': 'euroleagueStandings',
+          'classement-belite': 'beliteStandings'
+        };
+        if(!map[hash]) return;
+        var panel = document.getElementById(map[hash]);
+        var toggle = document.querySelector('.standings-toggle[aria-controls="' + map[hash] + '"]');
+        if(panel && toggle && !panel.classList.contains('open')){
+          panel.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
+          var label = toggle.querySelector('.standings-toggle-text');
+          if(label) label.textContent = 'Masquer le classement';
+        }
+      }
+      var initialHash = window.location.hash.replace('#', '');
+      if(initialHash){
+        openArticleFromHash(initialHash);
+        openStandingsFromHash(initialHash);
+        if(!document.getElementById(initialHash)?.classList.contains('sidebar-article')){
+          setTimeout(function(){
+            var el = document.getElementById(initialHash);
+            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
+      window.addEventListener('hashchange', function(){
+        var h = window.location.hash.replace('#', '');
+        openArticleFromHash(h);
+        openStandingsFromHash(h);
+      });
+    });
+  </script>
+
+  <section class="games" id="calendrier-belite">
+    <div class="feed-head">
+      <h2>Calendrier</h2>
+      <span>Betclic Élite — saison 2026-2027</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="belite-home">Matchs à domicile</button>
+      <button class="tab-btn" data-tab="belite-away">Matchs à l'extérieur</button>
+    </div>
+
+    <div class="tab-panel active" data-panel="belite-home">
+      <div class="standings-empty">
+        <span class="standings-icon">—</span>
+        <p>Le calendrier de Betclic Élite n'a pas encore été publié. Les matchs à domicile apparaîtront ici dès sa sortie.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="belite-away">
+      <div class="standings-empty">
+        <span class="standings-icon">—</span>
+        <p>Le calendrier de Betclic Élite n'a pas encore été publié. Les matchs à l'extérieur apparaîtront ici dès sa sortie.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="games" id="derbys">
+    <div class="feed-head">
+      <h2>Derbys</h2>
+      <span>Betclic Élite</span>
+    </div>
+    <div class="games-grid">
+      <div class="games-col">
+        <h3>Domicile — Astroballe</h3>
+        <div class="game-row">
+          <span class="game-date">10 oct. 2026</span>
+          <span class="game-teams">ASVEL <span class="vs">vs</span> Chorale de Roanne</span>
+          <span class="game-result tbd">Astroballe</span>
+        </div>
+        <div class="game-row">
+          <span class="game-date">31 oct. 2026</span>
+          <span class="game-teams">ASVEL <span class="vs">vs</span> JL Bourg</span>
+          <span class="game-result tbd">Astroballe</span>
+        </div>
+      </div>
+      <div class="games-col">
+        <h3>Extérieur</h3>
+        <div class="game-row">
+          <span class="game-date">6 mars 2027</span>
+          <span class="game-teams">JL Bourg <span class="vs">vs</span> ASVEL</span>
+          <span class="game-result tbd">Ekinox</span>
+        </div>
+        <div class="game-row">
+          <span class="game-date">17 avril 2027</span>
+          <span class="game-teams">Chorale de Roanne <span class="vs">vs</span> ASVEL</span>
+          <span class="game-result tbd">Roanne</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="games standings" id="classement">
+    <div class="feed-head">
+      <h2>Classement</h2>
+      <span>Betclic Élite &amp; EuroLeague</span>
+    </div>
+    <div class="standings-grid">
+      <div class="standings-col" id="classement-euroleague">
+        <button class="standings-toggle" type="button" aria-expanded="false" aria-controls="euroleagueStandings" data-closed-label="Afficher les 20 équipes">
+          <span class="standings-toggle-title">EuroLeague</span>
+          <span class="standings-toggle-action"><span class="standings-toggle-text">Afficher les 20 équipes</span><span class="standings-toggle-icon" aria-hidden="true">+</span></span>
+        </button>
+        <div class="standings-collapse" id="euroleagueStandings">
+          <div>
+            <div class="standings-empty">
+              <span class="standings-icon">—</span>
+              <p>Aucun match n'a encore été joué cette saison. Le classement sera mis à jour dès le coup d'envoi, le 24 septembre 2026.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="standings-col" id="classement-belite">
+        <button class="standings-toggle" type="button" aria-expanded="false" aria-controls="beliteStandings" data-closed-label="Afficher les 16 équipes">
+          <span class="standings-toggle-title">Betclic ÉLITE</span>
+          <span class="standings-toggle-action"><span class="standings-toggle-text">Afficher les 16 équipes</span><span class="standings-toggle-icon" aria-hidden="true">+</span></span>
+        </button>
+        <div class="standings-collapse" id="beliteStandings">
+          <div>
+            <div class="standings-empty">
+              <span class="standings-icon">—</span>
+              <p>Le calendrier de Betclic Élite n'est pas encore sorti. Le classement sera ajouté dès sa publication.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      document.querySelectorAll('.standings-toggle').forEach(function(toggle){
+        var panel = document.getElementById(toggle.getAttribute('aria-controls'));
+        var label = toggle.querySelector('.standings-toggle-text');
+        var closedLabel = toggle.getAttribute('data-closed-label') || 'Afficher le classement';
+        if(!panel) return;
+        toggle.addEventListener('click', function(){
+          var isOpen = panel.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          if(label) label.textContent = isOpen ? 'Masquer le classement' : closedLabel;
+        });
+      });
+    })();
+  </script>
+
+  <section class="roster" id="effectif">
+    <div class="feed-head">
+      <h2>Effectif</h2>
+      <span>Saison 2026-2027</span>
+    </div>
+    <div class="roster-grid">
+      <div class="player" tabindex="0" role="button" data-name="Patty Mills" data-num="8" data-pos="Meneur" data-nationalite="Australien" data-naissance="11 août 1988" data-taille="1m83" data-clubs="Portland Trail Blazers (États-Unis, 2009-2011);Melbourne Tigers (Australie, 2011);Xinjiang Flying Tigers (Chine, 2011-2012);San Antonio Spurs (États-Unis, 2011-2021);Brooklyn Nets (États-Unis, 2021-2023);Atlanta Hawks (États-Unis, 2023-2024);Miami Heat (États-Unis, 2024);Utah Jazz (États-Unis, 2024-2025);Los Angeles Clippers (États-Unis, 2025);CB Canarias (Espagne, 2026)" data-palmares="Champion NBA (2014) avec les San Antonio Spurs;Champion d'Océanie (2007, 2011, 2013, 2015) avec l'Australie;Médaillé de bronze aux Jeux olympiques de Tokyo 2020 avec l'Australie;Finaliste NBA (2013) avec San Antonio;NBA Sportsmanship Award (2022);MVP du championnat d'Océanie (2013);Membre du cinq majeur des Jeux olympiques de Tokyo 2020;Meilleur marqueur des Jeux olympiques de Londres 2012 (21,2 points de moyenne);Vainqueur de la Gaze Medal (2008, 2010, 2021);Vainqueur du Don Award (2021)">
+        <div class="player-media">
+          <img class="player-photo" src="images/patty-mills.png" alt="Patty Mills">
+          <span class="jersey-num">8</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Meneur</div>
+          <h3>Patty Mills</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Both Gach" data-num="14" data-pos="Ailier" data-nationalite="Sud-Soudanais" data-naissance="4 février 1999" data-taille="2m01" data-clubs="Sigal Prishtina (Kosovo, 2022-2023);BC Nokia (Finlande, 2023-2024);Darüşşafaka (Turquie, 2024-2025);JL Bourg Basket (France, 2025-2026)" data-palmares="Champion de Finlande (2024);MVP étranger du championnat de Finlande (2024);MVP des Finales du championnat de Finlande (2024);Vainqueur de l'Eurocup (2026)">
+        <div class="player-media">
+          <img class="player-photo" src="images/both-gach.png" alt="Both Gach">
+          <span class="jersey-num">14</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Ailier</div>
+          <h3>Both Gach</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Joel Bolomboy" data-num="21" data-pos="Pivot" data-nationalite="Américain - Ukrainien - Russe" data-naissance="28 janvier 1994" data-taille="2m06" data-clubs="Utah Jazz (États-Unis, 2016-2017);Salt Lake City Stars (États-Unis, 2017);Milwaukee Bucks (États-Unis, 2017-2018);Wisconsin Herd (États-Unis, 2018);CSKA Moscou (Russie, 2018-2022);Olympiacos (Grèce, 2022-2023);Crvena Zvezda Belgrade (Serbie, 2023-2026)" data-palmares="Big Sky Player of the Year (2016);First-team All-Big Sky (2016);Big Sky Defensive Player of the Year (2014, 2016);Vainqueur EuroLeague (2019);Champion League VTB (2019, 2021);Vainqueur Super Coupe grecque (2022);Vainqueur Championnat grec et Coupe de Grèce (2023);Vainqueur Coupe de Serbie (2024, 2025);Champion ABA League (2024);Champion de Serbie (2024)">
+        <div class="player-media">
+          <img class="player-photo" src="images/joel-bolomboy.png" alt="Joel Bolomboy">
+          <span class="jersey-num">21</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Pivot</div>
+          <h3>Joel Bolomboy</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Mbaye Ndiaye" data-num="24" data-pos="Ailier / Ailier fort" data-nationalite="Sénégalais" data-naissance="4 janvier 1999" data-taille="2m03" data-clubs="JL Bourg (France, 2017-2020);ADA Blois (France, 2020-2023)">
+        <div class="player-media">
+          <img class="player-photo" src="images/mbaye-ndiaye.jpg" alt="Mbaye Ndiaye">
+          <span class="jersey-num">24</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Ailier / Ailier fort</div>
+          <h3>Mbaye Ndiaye</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Bodian Massa" data-num="25" data-pos="Pivot" data-nationalite="Français" data-naissance="21 octobre 1997" data-taille="2m10" data-clubs="Fos Provence Basket (France, 2016-2022);SIG Strasbourg (France, 2022-2023);JL Bourg (France, 2023-2024);Manisa Basket (Espagne, 2024-2025)">
+        <div class="player-media">
+          <img class="player-photo" src="images/bodian-massa.jpg" alt="Bodian Massa">
+          <span class="jersey-num">25</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Pivot</div>
+          <h3>Bodian Massa</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Yves Pons" data-num="35" data-pos="Ailier fort" data-nationalite="Français" data-naissance="7 mai 1999" data-taille="1m97" data-clubs="Memphis Grizzlies (NBA, 2021-2022);Memphis Hustle (G-League, 2021-2022);LDLC ASVEL (France, 2022-2023);Bàsquet Girona (Espagne, 2023-2025);MoraBanc Andorra (Andorre, 2025-2026)" data-palmares="Vainqueur de la Leaders Cup (2023)">
+        <div class="player-media">
+          <img class="player-photo" src="images/yves-pons.png" alt="Yves Pons">
+          <span class="jersey-num">35</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Ailier fort</div>
+          <h3>Yves Pons</h3>
+        </div>
+      </div>
+      <div class="player" tabindex="0" role="button" data-name="Nate Sestina" data-num="77" data-pos="Ailier fort / Pivot" data-nationalite="Américain - Macédonien" data-naissance="12 mai 1997" data-taille="2m06" data-bio="Ailier-fort arrivé pour la saison 2026-2027, en provenance de l'Olimpia Milan. Passé par Bucknell, Kentucky, la G League, Israël et la Turquie, il s'est révélé sous les couleurs de Türk Telekom (finale d'EuroCup 2023) avant de rejoindre Fenerbahçe (39% à 3pts en EuroLeague 2023-2024, Final Four et titre de Turquie), puis Valence et Milan. Profil mobile et adressant à 3 points, capable d'écarter le jeu depuis le poste 4." data-palmares="Vainqueur Coupe et Championnat de Turquie (2024);Vainqueur Coupe et Championnat d'Italie (2026)">
+        <div class="player-media">
+          <img class="player-photo" src="images/nate-sestina.png" alt="Nate Sestina">
+          <span class="jersey-num">77</span>
+        </div>
+        <div class="player-info">
+          <div class="pos">Ailier fort / Pivot</div>
+          <h3>Nate Sestina</h3>
+        </div>
+      </div>
+    
+    </div>
+  </section>
+
+  <div class="player-modal" id="playerModal" aria-hidden="true">
+    <div class="player-modal-backdrop" data-close="1"></div>
+    <div class="player-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="player-modal-close" data-close="1" aria-label="Fermer">✕</button>
+      <img class="modal-photo" id="modalPhoto" alt="" style="display:none;">
+      <span class="jersey-num" id="modalNum"></span>
+      <div class="pos" id="modalPos"></div>
+      <h3 id="modalName"></h3>
+      <div class="modal-infos" id="infosSection">
+        <div class="modal-info"><span class="modal-info-label">Nationalité</span><span id="modalNationalite"></span></div>
+        <div class="modal-info"><span class="modal-info-label">Date de naissance</span><span id="modalNaissance"></span></div>
+        <div class="modal-info"><span class="modal-info-label">Taille</span><span id="modalTaille"></span></div>
+      </div>
+      <p id="modalBio"></p>
+      <div class="modal-section" id="clubsSection">
+        <h4>Anciens clubs</h4>
+        <ul id="modalClubs"></ul>
+      </div>
+      <div class="modal-section" id="palmaresSection">
+        <h4>Palmarès</h4>
+        <ul id="modalPalmares"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var modal = document.getElementById('playerModal');
+      var players = document.querySelectorAll('.player');
+
+      function fillList(ulId, sectionId, raw){
+        var ul = document.getElementById(ulId);
+        var section = document.getElementById(sectionId);
+        ul.innerHTML = '';
+        if(!raw){
+          section.style.display = 'none';
+          return;
+        }
+        section.style.display = 'block';
+        raw.split(';').forEach(function(item){
+          var li = document.createElement('li');
+          li.textContent = item.trim();
+          ul.appendChild(li);
+        });
+      }
+
+      function fillInfo(spanId, raw){
+        var span = document.getElementById(spanId);
+        span.textContent = raw || '—';
+      }
+
+      function openModal(el){
+        document.getElementById('modalNum').textContent = el.getAttribute('data-num');
+        document.getElementById('modalPos').textContent = el.getAttribute('data-pos');
+        document.getElementById('modalName').textContent = el.getAttribute('data-name');
+        var cardPhoto = el.querySelector('.player-photo');
+        var photo = cardPhoto ? cardPhoto.getAttribute('src') : null;
+        var photoEl = document.getElementById('modalPhoto');
+        var card = document.querySelector('.player-modal-card');
+        if(photo){
+          photoEl.src = photo;
+          photoEl.alt = el.getAttribute('data-name');
+          photoEl.style.display = 'block';
+          card.classList.add('has-photo');
+        } else {
+          photoEl.style.display = 'none';
+          photoEl.removeAttribute('src');
+          card.classList.remove('has-photo');
+        }
+        var nat = el.getAttribute('data-nationalite');
+        var naiss = el.getAttribute('data-naissance');
+        var taille = el.getAttribute('data-taille');
+        var infosSection = document.getElementById('infosSection');
+        if(nat || naiss || taille){
+          infosSection.style.display = 'grid';
+          fillInfo('modalNationalite', nat);
+          fillInfo('modalNaissance', naiss);
+          fillInfo('modalTaille', taille);
+        } else {
+          infosSection.style.display = 'none';
+        }
+        var bio = el.getAttribute('data-bio') || '';
+        var bioEl = document.getElementById('modalBio');
+        bioEl.textContent = bio;
+        bioEl.style.display = bio ? 'block' : 'none';
+        fillList('modalClubs', 'clubsSection', el.getAttribute('data-clubs'));
+        fillList('modalPalmares', 'palmaresSection', el.getAttribute('data-palmares'));
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      players.forEach(function(p){
+        p.addEventListener('click', function(){ openModal(p); });
+        p.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(p); }
+        });
+      });
+      modal.querySelectorAll('[data-close]').forEach(function(el){
+        el.addEventListener('click', closeModal);
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeModal();
+      });
+    })();
+  </script>
+
+  <section class="palmares-club" id="palmares">
+    <div class="feed-head">
+      <h2>Palmarès</h2>
+      <span>Le club en chiffres</span>
+    </div>
+    <div class="trophy-grid">
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Champion de France" data-trophy-key="championnat" data-trophy-years="1949, 1950, 1952, 1955, 1956, 1957, 1964, 1966, 1968, 1969, 1971, 1972, 1975, 1977, 1981, 2002, 2009, 2016, 2019, 2021, 2022">
+        <span class="trophy-num">21x</span>
+        <div class="trophy-label">Champion de France</div>
+        <div class="trophy-years">1949, 1950, 1952, 1955, 1956, 1957, 1964, 1966, 1968, 1969, 1971, 1972, 1975, 1977, 1981, 2002, 2009, 2016, 2019, 2021, 2022</div>
+      </div>
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Coupe de France" data-trophy-key="coupe" data-trophy-years="1953, 1957, 1965, 1967, 1996, 1997, 2001, 2008, 2019, 2021">
+        <span class="trophy-num">10x</span>
+        <div class="trophy-label">Coupe de France</div>
+        <div class="trophy-years">1953, 1957, 1965, 1967, 1996, 1997, 2001, 2008, 2019, 2021</div>
+      </div>
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Coupe de la Fédération" data-trophy-years="1984">
+        <span class="trophy-num">1x</span>
+        <div class="trophy-label">Coupe de la Fédération</div>
+        <div class="trophy-years">1984</div>
+      </div>
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Semaine des As" data-trophy-years="2010">
+        <span class="trophy-num">1x</span>
+        <div class="trophy-label">Semaine des As</div>
+        <div class="trophy-years">2010</div>
+      </div>
+      <div class="trophy-card" tabindex="0" role="button" data-trophy-title="Leaders Cup" data-trophy-key="leaderscup" data-trophy-years="2023">
+        <span class="trophy-num">1x</span>
+        <div class="trophy-label">Leaders Cup</div>
+        <div class="trophy-years">2023</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trophy-modal" id="trophyModal" aria-hidden="true">
+    <div class="trophy-modal-backdrop" data-close-trophy="1"></div>
+    <div class="trophy-modal-card" role="dialog" aria-modal="true" aria-labelledby="trophyModalTitle">
+      <button class="player-modal-close" data-close-trophy="1" aria-label="Fermer">✕</button>
+      <h3 id="trophyModalTitle"></h3>
+      <p class="trophy-modal-hint" id="trophyModalHint"></p>
+      <div class="trophy-modal-years" id="trophyModalYears"></div>
+      <div class="trophy-detail" id="trophyDetail" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var modal = document.getElementById('trophyModal');
+      var titleEl = document.getElementById('trophyModalTitle');
+      var yearsEl = document.getElementById('trophyModalYears');
+      var hintEl = document.getElementById('trophyModalHint');
+      var detailEl = document.getElementById('trophyDetail');
+      var trophyDetails = {
+        championnat: {
+          '1949': {
+            result: 'Victoire contre l’UA Marseille',
+            games: ['ASVEL 30–29 UA Marseille'],
+            note: 'Finale disputée en un match.'
+          },
+          '1950': {
+            result: 'Victoire contre l’AS Monaco',
+            games: ['ASVEL 52–40 AS Monaco'],
+            note: 'Finale disputée en un match.'
+          },
+          '1952': {
+            result: 'Victoire contre l’AS Montferrand',
+            games: ['ASVEL 48–43 AS Montferrand'],
+            note: 'Finale disputée en un match.'
+          },
+          '1955': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a été sacrée selon le format du championnat de l’époque. Aucun match de finale unique n’a été organisé.'
+          },
+          '1956': {
+            result: 'Victoire contre le Racing Club de France',
+            games: ['ASVEL 61–41 Racing CF'],
+            note: 'Finale disputée en un match.'
+          },
+          '1957': {
+            result: 'Victoire contre le Paris UC',
+            games: ['ASVEL 55–52 Paris UC'],
+            note: 'Finale disputée en un match.'
+          },
+          '1964': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1966': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1968': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1969': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1971': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1972': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1975': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1977': {
+            result: 'Titre attribué sans finale',
+            games: [],
+            note: 'L’ASVEL a terminé championne selon le classement du championnat. Aucune finale n’était organisée.'
+          },
+          '1981': {
+            result: 'Victoire contre Le Mans',
+            games: ['ASVEL 85–70 Le Mans'],
+            note: 'Finale disputée le 25 avril 1981 au stade Pierre-de-Coubertin à Paris.'
+          },
+          '2002': {
+            result: 'Victoire 2–0 contre Pau-Orthez',
+            games: ['Match 1 : Pau-Orthez 68–77 ASVEL', 'Match 2 : ASVEL 65–64 Pau-Orthez'],
+            note: 'L’ASVEL remporte la série en deux matchs.'
+          },
+          '2009': {
+            result: 'Victoire contre Orléans',
+            games: ['ASVEL 55–41 Entente Orléanaise'],
+            note: 'Finale disputée en un match.'
+          },
+          '2016': {
+            result: 'Victoire 3–2 contre Strasbourg',
+            games: [
+              'Match 1 : Strasbourg 80–73 ASVEL',
+              'Match 2 : Strasbourg 73–61 ASVEL',
+              'Match 3 : ASVEL 90–69 Strasbourg',
+              'Match 4 : ASVEL 60–59 Strasbourg',
+              'Match 5 : Strasbourg 77–80 ASVEL'
+            ],
+            note: 'Menée 0–2, l’ASVEL renverse la série et décroche son 18e titre.'
+          },
+          '2019': {
+            result: 'Victoire 3–2 contre Monaco',
+            games: [
+              'Match 1 : ASVEL 81–71 Monaco',
+              'Match 2 : ASVEL 73–67 Monaco',
+              'Match 3 : Monaco 97–62 ASVEL',
+              'Match 4 : Monaco 89–81 ASVEL',
+              'Match 5 : ASVEL 66–55 Monaco'
+            ],
+            note: 'L’ASVEL remporte le match décisif à l’Astroballe et son 19e titre.'
+          },
+          '2021': {
+            result: 'Victoire contre Dijon',
+            games: ['ASVEL 87–74 JDA Dijon'],
+            note: 'Finale sèche disputée à Rouen dans le format exceptionnel adopté après la crise sanitaire.'
+          },
+          '2022': {
+            result: 'Victoire 3–2 contre Monaco',
+            games: [
+              'Match 1 : ASVEL 74–82 Monaco',
+              'Match 2 : ASVEL 91–54 Monaco',
+              'Match 3 : Monaco 83–80 ASVEL',
+              'Match 4 : Monaco 68–85 ASVEL',
+              'Match 5 : ASVEL 84–82 Monaco (après prolongation)'
+            ],
+            note: 'L’ASVEL remporte son 21e titre au terme d’un match 5 décisif.'
+          }
+        },
+        coupe: {
+          '1953': {
+            result: 'Victoire contre Mulhouse',
+            games: ['ASVEL 43–41 Mulhouse'],
+            note: 'Finale disputée en un match au Vélodrome d’Hiver de Paris.'
+          },
+          '1957': {
+            result: 'Victoire contre le Paris UC',
+            games: ['ASVEL 61–55 Paris UC'],
+            note: 'Finale disputée en un match à Tours.'
+          },
+          '1965': {
+            result: 'Victoire contre l’Alsace de Bagnolet',
+            games: ['ASVEL 59–55 Alsace Bagnolet'],
+            note: 'Finale disputée en un match à Mulhouse.'
+          },
+          '1967': {
+            result: 'Victoire contre Denain-Voltaire',
+            games: ['ASVEL 88–82 Denain-Voltaire'],
+            note: 'Finale disputée en un match à Cholet.'
+          },
+          '1996': {
+            result: 'Victoire contre Levallois',
+            games: ['ASVEL 72–69 Levallois SCB'],
+            note: 'Finale disputée en un match à Marseille.'
+          },
+          '1997': {
+            result: 'Victoire contre Nancy',
+            games: ['ASVEL 67–58 SLUC Nancy'],
+            note: 'Finale disputée au stade Pierre-de-Coubertin à Paris.'
+          },
+          '2001': {
+            result: 'Victoire contre Pau-Orthez',
+            games: ['ASVEL 99–74 Pau-Orthez'],
+            note: 'Finale disputée au palais omnisports de Paris-Bercy.'
+          },
+          '2008': {
+            result: 'Victoire contre Cholet',
+            games: ['ASVEL 86–76 Cholet Basket'],
+            note: 'Finale disputée au palais omnisports de Paris-Bercy.'
+          },
+          '2019': {
+            result: 'Victoire contre Le Mans',
+            games: ['ASVEL 70–61 Le Mans'],
+            note: 'Finale disputée à l’AccorHotels Arena de Paris. Théo Maledon a été élu MVP.'
+          },
+          '2021': {
+            result: 'Victoire contre Dijon',
+            games: ['ASVEL 77–61 JDA Dijon'],
+            note: 'Finale disputée à l’Accor Arena de Paris. Moustapha Fall a été élu MVP.'
+          }
+        },
+        leaderscup: {
+          '2023': {
+            result: 'Victoire contre la JL Bourg',
+            games: ['ASVEL 83–74 JL Bourg'],
+            note: 'Finale disputée le 19 février 2023 à l’Arena Saint-Étienne Métropole de Saint-Chamond. Nando De Colo a été élu MVP de la compétition.'
+          }
+        }
+      };
+
+      function showTrophyDetail(year, detail, button){
+        yearsEl.querySelectorAll('button.trophy-year-pill').forEach(function(pill){
+          var selected = pill === button;
+          pill.classList.toggle('active', selected);
+          pill.setAttribute('aria-expanded', selected ? 'true' : 'false');
+        });
+        detailEl.innerHTML = '';
+        var heading = document.createElement('h4');
+        heading.textContent = titleEl.textContent + ' ' + year;
+        detailEl.appendChild(heading);
+        var result = document.createElement('div');
+        result.className = 'trophy-detail-result';
+        result.textContent = detail.result;
+        detailEl.appendChild(result);
+        if(detail.games && detail.games.length){
+          var list = document.createElement('ul');
+          list.className = 'trophy-detail-games';
+          detail.games.forEach(function(game){
+            var item = document.createElement('li');
+            item.textContent = game;
+            list.appendChild(item);
+          });
+          detailEl.appendChild(list);
+        }
+        if(detail.note){
+          var note = document.createElement('p');
+          note.className = 'trophy-detail-note';
+          note.textContent = detail.note;
+          detailEl.appendChild(note);
+        }
+        detailEl.classList.add('open');
+      }
+
+      function openTrophyModal(card){
+        titleEl.textContent = card.getAttribute('data-trophy-title');
+        var years = card.getAttribute('data-trophy-years').split(',').map(function(y){ return y.trim(); });
+        var trophyKey = card.getAttribute('data-trophy-key');
+        var details = trophyKey ? trophyDetails[trophyKey] : null;
+        yearsEl.innerHTML = '';
+        detailEl.innerHTML = '';
+        detailEl.classList.remove('open');
+        hintEl.textContent = details ? 'Cliquez sur une année pour découvrir le score de la finale.' : 'Années des titres remportés par le club.';
+        years.forEach(function(y){
+          if(details && details[y]){
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'trophy-year-pill';
+            button.textContent = y;
+            button.setAttribute('aria-label', 'Voir le détail du titre de ' + y);
+            button.setAttribute('aria-expanded', 'false');
+            button.addEventListener('click', function(){ showTrophyDetail(y, details[y], button); });
+            yearsEl.appendChild(button);
+          } else {
+            var span = document.createElement('span');
+            span.className = 'trophy-year-pill';
+            span.textContent = y;
+            yearsEl.appendChild(span);
+          }
+        });
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      function closeTrophyModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      document.querySelectorAll('.trophy-card').forEach(function(card){
+        card.addEventListener('click', function(){ openTrophyModal(card); });
+        card.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openTrophyModal(card); }
+        });
+      });
+      modal.querySelectorAll('[data-close-trophy]').forEach(function(el){
+        el.addEventListener('click', closeTrophyModal);
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeTrophyModal();
+      });
+    })();
+  </script>
+
+
+  <div class="insta-cta">
+    <div>
+      <h2>Tout le contenu court, c'est sur Instagram et Twitter.</h2>
+      <p>Les stories, les résultats en direct et les coulisses en photo — suis les comptes pour ne rien rater entre deux mises à jour du site.</p>
+    </div>
+    <div class="cta-links">
+      <a class="cta-btn" href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+      <a class="cta-btn" href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+    </div>
+  </div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Retour en haut">↑</button>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('backToTop');
+      var header = document.querySelector('header');
+      window.addEventListener('scroll', function(){
+        btn.classList.toggle('visible', window.scrollY > 600);
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      });
+      btn.addEventListener('click', function(){
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+
+  <script>
+    (function(){
+      document.querySelectorAll('img').forEach(function(img, index){
+        img.decoding = 'async';
+        if(index > 0) img.loading = 'lazy';
+        function showFallback(){
+          img.hidden = true;
+          var parent = img.parentElement;
+          if(parent) parent.classList.add('image-missing');
+        }
+        img.addEventListener('error', showFallback);
+        if(img.complete && img.naturalWidth === 0) showFallback();
+      });
+    })();
+  </script>
+
+  <footer id="about">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <div class="logo">ACTU ASVEL</div>
+        <p>Le site qui accompagne le compte Instagram et Twitter Actu ASVEL : articles, calendrier, effectif et palmarès du club, loin des contraintes du format post.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/asvel_news" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://x.com/asvel_actu" target="_blank" rel="noopener">Twitter</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Le site</h4>
+        <a href="actualites.html">Actualités</a>
+        <a href="#calendrier">Calendrier EuroLeague</a>
+        <a href="#calendrier-belite">Calendrier Betclic Élite</a>
+        <a href="#derbys">Derbys</a>
+      </div>
+      <div class="footer-col">
+        <h4>Le club</h4>
+        <a href="#classement-euroleague">Classement EuroLeague</a>
+        <a href="#classement-belite">Classement Betclic ÉLITE</a>
+        <a href="#effectif">Effectif</a>
+        <a href="#palmares">Palmarès</a>
+      </div>
+      <div class="footer-col">
+        <h4>À propos</h4>
+        <p class="footer-note">Média indépendant consacré à l’actualité de l’ASVEL. Les informations de mercato non officielles sont présentées avec leur source et restent conditionnelles jusqu’à l’annonce des clubs.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Actu ASVEL — projet de fan, non affilié au club</span>
+      <span>© 2026</span>
+    </div>
+  </footer>
+
+</body>
+</html>

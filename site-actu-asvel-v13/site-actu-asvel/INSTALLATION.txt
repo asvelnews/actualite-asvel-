@@ -1,0 +1,23 @@
+MISE À JOUR DU SITE ACTU ASVEL
+
+1. Sur GitHub, ouvrez le dépôt du site.
+2. Remplacez l'ancien index.html par le nouveau index.html.
+3. Ajoutez actualites.html et article.css à la racine du dépôt.
+4. Ajoutez le dossier articles avec ses quatre fichiers HTML.
+5. Conservez le dossier images déjà présent sur GitHub.
+6. Ne supprimez pas le fichier CNAME utilisé par le domaine actu-asvel.fr.
+7. Validez les changements avec le bouton « Commit changes ».
+
+Structure attendue :
+
+index.html
+actualites.html
+article.css
+articles/
+  mbaye-ndiaye-olympiakos.html
+  freres-buss-asvel.html
+  joel-bolomboy-asvel.html
+  nate-sestina-asvel.html
+images/
+CNAME
+
