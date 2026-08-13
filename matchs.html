@@ -63,7 +63,7 @@ document.querySelectorAll('[data-comp]').forEach(function(b){b.onclick=function(
 var views=document.querySelectorAll('.view'),viewButtons=document.querySelectorAll('.view-btn');function switchView(id){views.forEach(function(v){v.classList.toggle('active',v.id===id)});viewButtons.forEach(function(b){b.classList.toggle('active',b.dataset.view===id)})}viewButtons.forEach(function(b){b.onclick=function(){switchView(b.dataset.view);history.replaceState(null,'',b.dataset.view==='standingsView'?'#classement':'#calendrier')}});
 document.querySelectorAll('.standing-head').forEach(function(b){b.onclick=function(){b.parentElement.classList.toggle('open')}});
 var euroTeams=['Anadolu Efes','ASVEL','Baskonia','Bayern Munich','Beşiktaş','Dubai Basketball','Étoile Rouge','FC Barcelone','Fenerbahçe','Hapoël Tel-Aviv','Maccabi Tel-Aviv','Olimpia Milan','Olympiacos','Panathinaïkos','Paris Basketball','Partizan Belgrade','Real Madrid','Valencia Basket','Virtus Bologne','Žalgiris Kaunas'];
-var eliteTeams=['ASVEL','AS Monaco','Boulazac','Chalon-sur-Saône','Cholet Basket','Dijon','Gravelines-Dunkerque','JL Bourg','Le Mans','Le Portel','Limoges CSP','Nanterre 92','Paris Basketball','Roanne','Saint-Quentin','Strasbourg'];
+var eliteTeams=['ASVEL','AS Monaco','Boulazac','Chalon-sur-Saône','Cholet Basket','Dijon','Élan Béarnais Pau-Lacq-Orthez','Gravelines-Dunkerque','JL Bourg','Le Mans','Limoges CSP','Nancy','Nanterre 92','Paris Basketball','Roanne','Strasbourg'];
 function initials(name){return name.replace(/AS |FC |JL /g,'').split(/[ -]/).filter(Boolean).slice(0,2).map(function(x){return x.charAt(0)}).join('').toUpperCase()}
 function fillStanding(cardId,teams){var card=document.getElementById(cardId),waiting=card.querySelector('.waiting');var html='<div class="preseason-note">Présentation provisoire d’avant-saison, dans l’attente de la validation définitive des participants et du premier match.</div><div class="standing-list">';teams.forEach(function(team){html+='<div class="standing-row '+(team==='ASVEL'?'asvel':'')+'"><span class="rank">—</span><span class="club"><span class="club-mark">'+initials(team)+'</span>'+team+'</span><span>0</span><span>0</span><span>0</span></div>'});html+='</div>';waiting.outerHTML=html}
 fillStanding('classement-euroleague',euroTeams);fillStanding('classement-belite',eliteTeams);document.getElementById('classement-euroleague').classList.add('open');
@@ -74,3 +74,4 @@ function countdown(){var target=new Date('2026-09-24T20:45:00+02:00').getTime(),
 </script>
 </body>
 </html>
+
