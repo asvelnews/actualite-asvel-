@@ -14,7 +14,6 @@ html{background:var(--club-black);scroll-padding-top:88px}
 body{background:var(--club-ivory)!important;color:var(--club-black);font-family:'Source Sans 3',Arial,sans-serif!important}
 ::selection{background:var(--club-gold);color:#000}
 :focus-visible{outline:3px solid var(--club-gold);outline-offset:3px}
-.maintenance,.maintenance-overlay{display:none!important}
 
 /* En-tête et identité */
 body>header,.site-header{
@@ -347,4 +346,30 @@ body.has-scrolled>header,.site-header{box-shadow:0 12px 32px rgba(0,0,0,.24)!imp
   .article-cover{height:230px!important}
   .article-content{border-left:0!important;border-right:0!important}
   .back-to-top{right:.75rem;bottom:.75rem}
+}
+
+/* Calendrier avec les emblèmes officiels des clubs */
+body .game{background:var(--club-paper)!important;color:var(--club-black)!important;border:1px solid var(--club-line)!important;border-top:5px solid var(--club-gold)!important;box-shadow:0 12px 34px rgba(21,18,11,.08)!important}
+body .game.derby{border-top-color:#bd3338!important}
+body .game:before{display:none!important}
+body .game-card-head{background:#0b0b0b!important;border-bottom:0!important;color:#fff!important}
+body .game-comp{color:#fff!important}
+body .venue-pill{background:var(--club-gold)!important;color:#080808!important}
+body .game-matchup{min-height:175px;padding:1.4rem 1rem!important;background:linear-gradient(135deg,#fff 0%,#f5f0e4 100%)!important}
+body .game-club-mark,body .game-club.asvel .game-club-mark{width:76px!important;height:76px!important;display:grid!important;place-items:center!important;margin:0 auto .8rem!important;padding:.25rem!important;background:transparent!important;border:0!important;border-radius:0!important;color:transparent!important}
+body .game-club-mark img{display:block;width:100%;height:100%;object-fit:contain;filter:none!important}
+body .game-club-name{display:block;color:#111!important;font-family:'Oswald',sans-serif!important;font-size:.88rem!important;font-weight:700!important;line-height:1.12!important;text-transform:uppercase;text-wrap:balance}
+body .game-vs{color:#8d8062!important;font-size:.6rem!important}
+body .game-card-foot{border-top:1px solid var(--club-line)!important;background:#fff!important;color:#111!important}
+body .game-time{padding:.55rem .7rem!important;background:#080808!important;color:#fff!important;border-radius:0!important;font-size:.82rem!important}
+body .game.derby .game-time{background:#bd3338!important;color:#fff!important}
+body .date-box .day{font-size:1.25rem!important}
+body .team-mark,body .team.asvel .team-mark{width:104px!important;height:104px!important;padding:.35rem!important;background:#fff!important;border:1px solid #302b22!important;border-radius:0!important}
+body .team-mark img{display:block;width:100%;height:100%;object-fit:contain;filter:none!important}
+body .next-match .team-name{color:#fff!important}
+@media(max-width:600px){
+  body .game-matchup{min-height:160px!important;padding:1.15rem .6rem!important}
+  body .game-club-mark,body .game-club.asvel .game-club-mark{width:62px!important;height:62px!important}
+  body .game-club-name{font-size:.73rem!important}
+  body .team-mark,body .team.asvel .team-mark{width:82px!important;height:82px!important}
 }
