@@ -23,7 +23,6 @@
     @media(max-width:620px){.movement-grid{grid-template-columns:1fr}.stats{gap:.4rem}.stat{padding:.8rem .6rem}.stat strong{font-size:1.65rem}.tools{align-items:stretch}.filter{flex:1 1 45%}.search{flex-basis:100%}.hero h1{font-size:3rem}.movement{min-height:195px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
-  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
   <header><a class="logo" href="index.html">ACTU ASVEL</a><nav id="nav" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="actualites.html">Actualités</a><a class="active" href="mercato.html">Mercato</a><a href="matchs.html#calendrier">Matchs</a><a href="matchs.html#classement">Classements</a><a href="effectif.html">Effectif</a><a href="palmares.html">Palmarès</a></nav><button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button></header>
@@ -59,8 +58,8 @@
   </div><p class="note"><strong>À noter :</strong> un joueur peut apparaître dans plusieurs catégories lorsqu’il est arrivé pendant l’été avant de repartir. Nick Weiler-Babb et Armoni Brooks figurent ainsi dans les départs et dans les prêts.</p></main>
   <footer><div><strong>ACTU ASVEL</strong><p>Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club.</p></div></footer>
   <script>(function(){var menu=document.getElementById('nav'),toggle=document.getElementById('menuToggle');toggle.addEventListener('click',function(){var open=menu.classList.toggle('open');toggle.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open))});menu.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){menu.classList.remove('open');toggle.classList.remove('open');toggle.setAttribute('aria-expanded','false')})});var filters=[].slice.call(document.querySelectorAll('.filter')),cards=[].slice.call(document.querySelectorAll('.movement')),search=document.getElementById('search'),count=document.getElementById('count'),empty=document.getElementById('empty'),active='all';function normalize(value){return value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}function update(){var query=normalize(search.value.trim()),total=0;cards.forEach(function(card){var visible=(active==='all'||card.dataset.type===active)&&(!query||normalize(card.dataset.name).includes(query));card.classList.toggle('hidden',!visible);if(visible)total++});count.textContent=total+(total>1?' mouvements affichés':' mouvement affiché');empty.classList.toggle('show',total===0)}filters.forEach(function(button){button.addEventListener('click',function(){active=button.dataset.filter;filters.forEach(function(item){item.classList.toggle('active',item===button)});update()})});search.addEventListener('input',update);update()})();</script>
-<!-- Cloudflare Web Analytics -->
 <script src="site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
 <!-- End Cloudflare Web Analytics -->
 </body>

@@ -4,45 +4,122 @@
   var header = document.querySelector('body > header, .site-header');
   var nav = header && header.querySelector('nav, .site-nav, .nav');
   var toggle = header && header.querySelector('.menu-toggle');
-  var injectedToggle = false;
 
-  if (header && nav && !toggle) {
-    injectedToggle = true;
-    toggle = document.createElement('button');
-    toggle.className = 'menu-toggle';
-    toggle.type = 'button';
+  if (header && nav) {
+    var inArticle = location.pathname.indexOf('/articles/') !== -1;
+    var root = inArticle ? '../' : '';
+    var items = [
+      ['Accueil', root + 'index.html', 'home'],
+      ['Actualités', root + 'actualites.html', 'news'],
+      ['Mercato', root + 'mercato.html', 'mercato'],
+      ['Matchs', root + 'matchs.html#calendrier', 'matches'],
+      ['Classements', root + 'matchs.html#classement', 'standings'],
+      ['Effectif', root + 'effectif.html', 'roster'],
+      ['Palmarès', root + 'palmares.html', 'honours']
+    ];
+
+    header.classList.add('global-site-header');
+    nav.classList.add('global-site-nav');
+    nav.id = 'site-navigation';
+    nav.setAttribute('aria-label', 'Navigation principale');
+    nav.innerHTML = items.map(function (item) {
+      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + item[0] + '</a>';
+    }).join('');
+
+    if (!toggle) {
+      toggle = document.createElement('button');
+      toggle.className = 'menu-toggle';
+      toggle.type = 'button';
+      toggle.innerHTML = '<span></span><span></span><span></span>';
+      header.appendChild(toggle);
+    } else {
+      var cleanToggle = toggle.cloneNode(true);
+      toggle.parentNode.replaceChild(cleanToggle, toggle);
+      toggle = cleanToggle;
+    }
+
+    toggle.id = 'globalMenuToggle';
+    toggle.classList.add('global-menu-toggle');
+    toggle.setAttribute('aria-controls', nav.id);
+    toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', 'Ouvrir le menu');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.innerHTML = '<span></span><span></span><span></span>';
-    header.appendChild(toggle);
-  }
 
-  function closeMenu() {
-    if (!nav || !toggle) return;
-    nav.classList.remove('open');
-    toggle.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('menu-open');
-  }
+    var backdrop = document.createElement('button');
+    backdrop.type = 'button';
+    backdrop.className = 'mobile-nav-backdrop';
+    backdrop.setAttribute('aria-label', 'Fermer le menu');
+    backdrop.setAttribute('tabindex', '-1');
+    document.body.appendChild(backdrop);
 
-  if (nav && toggle && injectedToggle) {
-    toggle.dataset.enhanced = 'true';
+    function currentSection() {
+      var page = location.pathname.split('/').pop() || 'index.html';
+      if (inArticle || page === 'actualites.html') return 'news';
+      if (page === 'mercato.html') return 'mercato';
+      if (page === 'effectif.html') return 'roster';
+      if (page === 'palmares.html') return 'honours';
+      if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
+      return 'home';
+    }
+
+    function markCurrentSection() {
+      var section = currentSection();
+      nav.querySelectorAll('a').forEach(function (link) {
+        var active = link.dataset.menuPage === section;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    function syncMenuPosition() {
+      var bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+      document.documentElement.style.setProperty('--mobile-nav-top', bottom + 'px');
+    }
+
+    function closeMenu(restoreFocus) {
+      nav.classList.remove('open');
+      toggle.classList.remove('open');
+      backdrop.classList.remove('visible');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Ouvrir le menu');
+      document.body.classList.remove('menu-open');
+      if (restoreFocus) toggle.focus();
+    }
+
+    function openMenu() {
+      syncMenuPosition();
+      nav.classList.add('open');
+      toggle.classList.add('open');
+      backdrop.classList.add('visible');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Fermer le menu');
+      document.body.classList.add('menu-open');
+      window.setTimeout(function () {
+        var firstLink = nav.querySelector('a');
+        if (firstLink) firstLink.focus();
+      }, 60);
+    }
+
     toggle.addEventListener('click', function () {
-      var open = !nav.classList.contains('open');
-      nav.classList.toggle('open', open);
-      toggle.classList.toggle('open', open);
-      toggle.setAttribute('aria-expanded', String(open));
-      document.body.classList.toggle('menu-open', open);
+      if (nav.classList.contains('open')) closeMenu(false);
+      else openMenu();
     });
+    backdrop.addEventListener('click', function () { closeMenu(true); });
     nav.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', closeMenu);
+      link.addEventListener('click', function () { closeMenu(false); });
     });
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') closeMenu();
+      if (event.key === 'Escape' && nav.classList.contains('open')) closeMenu(true);
     });
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 820) closeMenu();
+      if (window.innerWidth > 980) closeMenu(false);
+      else if (nav.classList.contains('open')) syncMenuPosition();
     });
+    window.addEventListener('scroll', function () {
+      if (nav.classList.contains('open')) syncMenuPosition();
+    }, { passive: true });
+    window.addEventListener('hashchange', markCurrentSection);
+    markCurrentSection();
   }
 
   document.querySelectorAll('img').forEach(function (image, index) {
