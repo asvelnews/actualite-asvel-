@@ -177,9 +177,9 @@ body .hero:after{background:linear-gradient(90deg,rgba(0,0,0,.98) 0%,rgba(0,0,0,
 .stat{border-color:#3a3426!important;background:#11100d!important}
 .stat strong{color:var(--club-gold-light)!important}
 .movement{border-top:4px solid #252525!important}
-.movement[data-type="arrival"]{border-top-color:#4f8b65!important}
-.movement[data-type="departure"]{border-top-color:#b84141!important}
-.movement[data-type="loan"]{border-top-color:#4f719e!important}
+.movement[data-type="arrival"]{border-top-color:var(--club-gold)!important}
+.movement[data-type="departure"]{border-top-color:#050505!important}
+.movement[data-type="loan"]{border-top-color:var(--club-gold-light)!important}
 .movement:before{display:none!important}
 .movement-photo{filter:saturate(.76);transition:filter .2s ease,transform .25s ease}
 .movement:hover .movement-photo{filter:saturate(.95);transform:scale(1.015)}
