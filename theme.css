@@ -92,7 +92,7 @@ main,.page,.content,.article-main,.news-main{position:relative}
 .panel.dark,.panel.dark h3,.trophy:first-child,.trophy:first-child h2{color:#fff!important}
 .latest-card:before{background:var(--club-gold)!important}
 .latest-grid{grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr)!important;grid-auto-rows:minmax(185px,auto)!important}
-.latest-card:first-child{grid-row:span 2;min-height:420px!important;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.96) 5%,rgba(0,0,0,.35) 72%),url('images/myles-cale-asvel.jpg') center 20%/cover!important;color:#fff!important;border-color:#171717!important}
+.latest-card:first-child{grid-row:span 2;min-height:420px!important;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.96) 5%,rgba(0,0,0,.35) 72%),url('images/jae-crowder-asvel.jpg') center 20%/cover!important;color:#fff!important;border-color:#171717!important}
 .latest-card:first-child .latest-meta{color:var(--club-gold-light)!important}
 .latest-card:first-child p{color:#ddd!important}
 .latest-card:first-child h3{font-size:clamp(1.8rem,3.5vw,3rem)!important;max-width:620px}
