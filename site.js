@@ -15,6 +15,8 @@
       ['Matchs', root + 'matchs.html#calendrier', 'matches'],
       ['Classements', root + 'matchs.html#classement', 'standings'],
       ['Effectif', root + 'effectif.html', 'roster'],
+      ['ASVEL Filles', root + 'filles.html', 'filles'],
+      ['Espoirs', root + 'espoirs.html', 'espoirs'],
       ['Palmarès', root + 'palmares.html', 'honours']
     ];
 
@@ -56,6 +58,8 @@
       if (inArticle || page === 'actualites.html') return 'news';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
+      if (page === 'filles.html') return 'filles';
+      if (page === 'espoirs.html') return 'espoirs';
       if (page === 'palmares.html') return 'honours';
       if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
       return 'home';
@@ -155,4 +159,61 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  /* --- Animations d'apparition au défilement --- */
+  var revealTargets = document.querySelectorAll(
+    '.metric, .player, .news-card, .player-card, .staff-card, article.article, .latest-card, ' +
+    '.movement, .article-content > h2, .article-content > h3, .article-content > p, .article-content > blockquote, ' +
+    '.trophy, .comparison-card'
+  );
+  if (revealTargets.length && 'IntersectionObserver' in window) {
+    revealTargets.forEach(function (el) { el.classList.add('reveal-on-scroll'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach(function (el) { io.observe(el); });
+    /* Filet de sécurité : si un élément reste caché trop longtemps (contenu ajouté dynamiquement après coup), on le révèle quand même */
+    window.setTimeout(function () {
+      document.querySelectorAll('.reveal-on-scroll:not(.revealed)').forEach(function (el) {
+        el.classList.add('revealed');
+      });
+    }, 2500);
+  } else {
+    revealTargets.forEach(function (el) { el.classList.add('revealed'); });
+  }
+
+  /* --- Compteurs animés pour les chiffres clés --- */
+  var counters = document.querySelectorAll('.metric strong, .stat strong');
+  if (counters.length && 'IntersectionObserver' in window) {
+    var counterIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        counterIo.unobserve(el);
+        var raw = el.textContent.trim();
+        var match = raw.match(/^(\d+)/);
+        if (!match) return;
+        var target = parseInt(match[1], 10);
+        var suffix = raw.slice(match[1].length);
+        var start = 0;
+        var duration = 900;
+        var startTime = null;
+        function tick(ts) {
+          if (!startTime) startTime = ts;
+          var progress = Math.min(1, (ts - startTime) / duration);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = raw;
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { counterIo.observe(el); });
+  }
 })();

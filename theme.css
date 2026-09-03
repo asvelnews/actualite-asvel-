@@ -92,7 +92,7 @@ main,.page,.content,.article-main,.news-main{position:relative}
 .panel.dark,.panel.dark h3,.trophy:first-child,.trophy:first-child h2{color:#fff!important}
 .latest-card:before{background:var(--club-gold)!important}
 .latest-grid{grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr)!important;grid-auto-rows:minmax(185px,auto)!important}
-.latest-card:first-child{grid-row:span 2;min-height:420px!important;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.96) 5%,rgba(0,0,0,.35) 72%),url('images/jae-crowder-asvel.jpg') center 20%/cover!important;color:#fff!important;border-color:#171717!important}
+.latest-card:first-child{grid-row:span 2;min-height:420px!important;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.96) 5%,rgba(0,0,0,.35) 72%),url('images/tremont-waters-asvel.jpg') center 20%/cover!important;color:#fff!important;border-color:#171717!important}
 .latest-card:first-child .latest-meta{color:var(--club-gold-light)!important}
 .latest-card:first-child p{color:#ddd!important}
 .latest-card:first-child h3{font-size:clamp(1.8rem,3.5vw,3rem)!important;max-width:620px}
@@ -449,3 +449,24 @@ body .next-match .team-name{color:#fff!important}
   .global-site-nav,.site-header .global-site-nav,body>header .global-site-nav{left:.55rem!important;right:.55rem!important;width:auto!important;max-height:calc(100dvh - var(--mobile-nav-top,64px) - .55rem)!important}
   .global-site-nav a,.site-header .global-site-nav a,body>header .global-site-nav a{min-height:50px!important;font-size:.78rem!important}
 }
+
+/* --- Animations d'apparition au défilement --- */
+.reveal-on-scroll{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1)}
+.reveal-on-scroll.revealed{opacity:1;transform:translateY(0)}
+.metric.reveal-on-scroll,.player.reveal-on-scroll,.news-card.reveal-on-scroll,.player-card.reveal-on-scroll,.staff-card.reveal-on-scroll,article.article.reveal-on-scroll,.latest-card.reveal-on-scroll,.movement.reveal-on-scroll,.trophy.reveal-on-scroll{transform:translateY(28px) scale(.98)}
+.metric.reveal-on-scroll.revealed,.player.reveal-on-scroll.revealed,.news-card.reveal-on-scroll.revealed,.player-card.reveal-on-scroll.revealed,.staff-card.reveal-on-scroll.revealed,article.article.reveal-on-scroll.revealed,.latest-card.reveal-on-scroll.revealed,.movement.reveal-on-scroll.revealed,.trophy.reveal-on-scroll.revealed{transform:translateY(0) scale(1)}
+@media(prefers-reduced-motion:reduce){.reveal-on-scroll{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* --- Micro-interactions au survol --- */
+.player,.news-card,.player-card,.movement,article.article,.latest-card,.metric{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease}
+.player:hover,.movement:hover,.latest-card:hover{transform:translateY(-4px)}
+.news-card:hover,.player-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.14)}
+a.latest-card:hover,a.movement-link:hover{filter:brightness(1.02)}
+.btn,button.filter,button.view-btn,button.comp-btn,.action-btn{transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.btn:hover,.action-btn:hover{transform:translateY(-2px)}
+
+/* --- Transition douce lors du changement d'onglet (vues, filtres compétition) --- */
+.view{transition:opacity .35s ease}
+.view:not(.active){opacity:0}
+.view.active{opacity:1;animation:viewFadeIn .4s ease}
+@keyframes viewFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
