@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Actu ASVEL — Site en maintenance</title>
-  <meta name="description" content="Le site Actu ASVEL est momentanément en maintenance. Retour samedi 12 septembre 2026.">
+  <title>Page introuvable — Actu ASVEL</title>
+  <meta name="description" content="La page demandée n’existe pas ou a été déplacée. Retour à l’accueil d’Actu ASVEL.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#050505">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -69,34 +70,37 @@
       color:#b9b6ae;
       font-size:1rem;line-height:1.65;
     }
-    .status{
-      margin-top:2rem;
+    a.home{
       display:inline-flex;
       align-items:center;
-      gap:.65rem;
-      color:#8f8b82;
+      gap:.55rem;
+      margin-top:2rem;
+      padding:.9rem 1.7rem;
+      background:#c9a44d;
+      color:#0b0b09;
       font-family:'Oswald',Arial,sans-serif;
-      font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      text-decoration:none;
+      transition:background .2s ease,transform .2s ease;
     }
-    .dot{width:9px;height:9px;border-radius:50%;background:#c9a44d;animation:pulse 1.6s ease-in-out infinite}
-    @keyframes pulse{0%,100%{opacity:.28;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+    a.home:hover{background:#e2c675;transform:translateY(-2px)}
     footer{
       position:fixed;left:0;right:0;bottom:0;z-index:1;
       padding:1.1rem 1.4rem;text-align:center;
       color:#6f6b63;font-size:.78rem;line-height:1.5;
     }
     footer strong{font-family:'Archivo Black',Arial,sans-serif;color:#e2c675;font-size:.82rem}
-    @media(prefers-reduced-motion:reduce){.dot{animation:none}}
+    @media(prefers-reduced-motion:reduce){a.home{transition:none}}
   </style>
 </head>
 <body>
   <div class="halo" aria-hidden="true"></div>
   <main class="wrap">
     <span class="brand">ACTU ASVEL</span>
-    <span class="badge">Mode maintenance</span>
-    <h1>Retour samedi 12 septembre</h1>
-    <p class="lead">Le site Actu ASVEL est momentanément en maintenance pendant les améliorations. Retour prévu samedi 12 septembre 2026.</p>
-    <span class="status"><span class="dot" aria-hidden="true"></span>Retour samedi 12 septembre 2026</span>
+    <span class="badge">Erreur 404</span>
+    <h1>Page introuvable</h1>
+    <p class="lead">La page que vous cherchez n’existe pas ou a été déplacée.</p>
+    <a class="home" href="index.html">Retour à l’accueil</a>
   </main>
   <footer><strong>ACTU ASVEL</strong> — Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club. · © 2026</footer>
 </body>
