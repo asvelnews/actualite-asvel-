@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <meta http-equiv="refresh" content="0; url=maintenance.html">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Actu ASVEL — Actualités, mercato et résultats</title>
@@ -33,18 +35,62 @@
 @media(max-width:820px){.latest-grid,.quick-grid{grid-template-columns:1fr}.latest-card{min-height:210px}.latest-heading{align-items:flex-start;flex-direction:column}.hero-inner{padding:3.6rem 0}.hero{min-height:520px}.actions .btn{flex:1 1 210px}.ticker-track{animation-duration:38s}}
 @media(max-width:480px){main{width:min(100% - 1.5rem,1180px);padding-top:2rem}.hero h1{font-size:clamp(2.35rem,12vw,3.4rem)}.hero p{font-size:.92rem}.countdown-panel{min-height:350px;padding:1.25rem}.countdown-grid{grid-template-columns:repeat(2,1fr)}.countdown-unit strong{font-size:1.55rem}.panel-link{left:1.25rem}.quick-card{min-height:155px}.latest-section{margin-top:2.5rem}}
 </style>
+<style>
+    /* Dernier résultat — accueil */
+    .last-result-section{margin-top:3rem}
+    .last-result-section .section-head{margin-bottom:1.1rem}
+    .result-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-top:6px solid var(--accent);box-shadow:0 18px 50px rgba(23,20,13,.09)}
+    .result-tag{display:flex;align-items:center;gap:.6rem;padding:1rem 1.4rem;border-bottom:1px solid var(--line);font-family:'Oswald',Arial,sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--grey)}
+    .result-tag:before{content:'';width:11px;height:11px;flex:0 0 11px;background:var(--accent)}
+    .result-main{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.9rem 1.2rem;padding:2rem 1.5rem}
+    .result-team{min-width:0}
+    .result-team:first-child{text-align:right}
+    .result-team:last-child{text-align:left}
+    .result-team .role{display:block;font-family:'Oswald',Arial,sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--grey)}
+    .result-team.win .role{color:var(--accent)}
+    .result-team .name{display:block;margin-top:.35rem;font-family:'Archivo Black',Arial,sans-serif;font-size:clamp(1.05rem,3.2vw,1.8rem);line-height:1.05;text-transform:uppercase;letter-spacing:-.03em}
+    .result-team.win .name{color:var(--accent)}
+    .result-team .result-city{display:block;margin-top:.3rem;font-family:'Oswald',Arial,sans-serif;font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+    .result-score{text-align:center}
+    .result-score strong{display:block;font-family:'Archivo Black',Arial,sans-serif;font-size:clamp(2.6rem,6vw,3.8rem);line-height:1;letter-spacing:-.05em}
+    .result-score span{display:inline-block;margin-top:.45rem;padding:.32rem .7rem;background:#050505;color:var(--accent);font-family:'Oswald',Arial,sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .result-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem 1.1rem;padding:1rem 1.4rem;border-top:1px solid var(--line);font-family:'Oswald',Arial,sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--grey)}
+    .result-meta .pill{background:var(--accent);color:#050505;padding:.45rem .8rem;margin-left:auto;font-weight:700;letter-spacing:.09em}
+    .last-result-section .section-head>a{font-family:'Oswald',Arial,sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid;padding-bottom:.2rem;transition:color .2s}
+    .last-result-section .section-head>a:hover{color:var(--accent)}
+    @media(max-width:820px){.result-main{gap:.7rem;padding:1.5rem 1rem}.result-team .name{font-size:clamp(.92rem,3.4vw,1.25rem)}}
+    @media(max-width:560px){
+      .result-main{grid-template-columns:1fr;gap:1rem;padding:1.4rem 1rem}
+      .result-team:first-child,.result-team:last-child{text-align:center}
+      .result-score strong{font-size:2.5rem}
+      .result-meta{justify-content:center;text-align:center}
+      .result-meta .pill{margin-left:0}
+      .result-tag{padding:.85rem 1rem}
+    }
+</style>
 </head>
 <body>
   <div class="ticker" aria-label="Dernières informations"><div class="ticker-track"><div class="ticker-group"><a href="articles/histoire-asvel-1948-aujourdhui.html"><b>À la une</b> — ASVEL : de 1948 à aujourd’hui, l’histoire d’un géant du basket français</a><a href="articles/vincent-collet-hesitation-asvel.html"><b>Club</b> — Vincent Collet a hésité à rester à l’ASVEL cet été</a><a href="articles/tony-parker-salaire-sacrifice-asvel.html"><b>Club</b> — Tony Parker a sacrifié une grande partie de son salaire</a><a href="articles/effectif-complet-recap-asvel.html"><b>Club</b> — L’effectif villeurbannais est au complet pour 2026-2027</a><a href="matchs.html#calendrier"><b>EuroLeague</b> — Premier match : ASVEL–Maccabi, le 24 septembre à 20h45</a><a href="matchs.html#calendrier"><b>Betclic Élite</b> — Premier match : Cholet–ASVEL, le 27 septembre à 19h00</a></div><div class="ticker-group" aria-hidden="true"><a href="articles/histoire-asvel-1948-aujourdhui.html" tabindex="-1"><b>À la une</b> — ASVEL : de 1948 à aujourd’hui, l’histoire d’un géant du basket français</a><a href="articles/vincent-collet-hesitation-asvel.html" tabindex="-1"><b>Club</b> — Vincent Collet a hésité à rester à l’ASVEL cet été</a><a href="articles/tony-parker-salaire-sacrifice-asvel.html" tabindex="-1"><b>Club</b> — Tony Parker a sacrifié une grande partie de son salaire</a><a href="articles/effectif-complet-recap-asvel.html" tabindex="-1"><b>Club</b> — L’effectif villeurbannais est au complet pour 2026-2027</a><a href="matchs.html#calendrier" tabindex="-1"><b>EuroLeague</b> — Premier match : ASVEL–Maccabi, le 24 septembre à 20h45</a><a href="matchs.html#calendrier" tabindex="-1"><b>Betclic Élite</b> — Premier match : Cholet–ASVEL, le 27 septembre à 19h00</a></div></div></div>
   <header><a class="logo" href="index.html">ACTU ASVEL</a><nav id="nav"><a class="active" href="index.html">Accueil</a><a href="actualites.html">Actualités</a><a href="mercato.html">Mercato</a><a href="matchs.html#calendrier">Matchs</a><a href="matchs.html#classement">Classements</a><a href="effectif.html">Effectif</a><a href="filles.html">ASVEL Filles</a><a href="espoirs.html">Espoirs</a><a href="palmares.html">Palmarès</a></nav><button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button></header>
   <section class="hero"><img class="hero-image" src="images/histoire-asvel-1948.jpg" alt="LDLC ASVEL depuis 1948" onerror="this.style.display='none'"><div class="hero-inner"><span class="label">À la une · Club</span><h1>ASVEL : de 1948 à aujourd’hui, l’histoire d’un géant du basket français</h1><p>Retour sur près de huit décennies d’histoire d’un club fort de 21 titres de champion de France, entre légendes, crises et renaissances.</p><div class="actions"><a class="btn primary" href="articles/histoire-asvel-1948-aujourdhui.html">Lire l’article</a><a class="btn" href="#rendez-vous">Voir les comptes à rebours</a><button class="btn share-home" type="button">Partager l’article</button><a class="btn" href="actualites.html">Toutes les actualités</a></div></div></section>
   <main>
-    <div class="section-head" id="rendez-vous"><div><h2>Comptes à rebours</h2><p>Le premier rendez-vous d’EuroLeague et le lancement de la saison de Betclic ÉLITE.</p></div></div>
+    <div class="section-head" id="rendez-vous"><div><h2>Prochains matchs</h2><p>Le premier rendez-vous d’EuroLeague et le lancement de la saison de Betclic ÉLITE.</p></div></div>
     <div class="dashboard"><article class="panel dark countdown-panel"><span class="panel-tag">Premier match · EuroLeague</span><h3 class="countdown-title">ASVEL <span style="color:#777">vs</span> Maccabi</h3><p class="countdown-date">Jeudi 24 septembre 2026 · 20h45 · Lyon</p><div class="countdown-grid" id="euroCountdown" aria-label="Compte à rebours avant le premier match d’EuroLeague"><div class="countdown-unit"><strong id="euroDays">—</strong><span>Jours</span></div><div class="countdown-unit"><strong id="euroHours">—</strong><span>Heures</span></div><div class="countdown-unit"><strong id="euroMinutes">—</strong><span>Minutes</span></div><div class="countdown-unit"><strong id="euroSeconds">—</strong><span>Secondes</span></div></div><span class="countdown-status" id="euroStatus">Compte à rebours en direct</span><a class="panel-link" href="matchs.html#calendrier">Voir le calendrier →</a></article><article class="panel countdown-panel light"><span class="panel-tag">Reprise · Betclic ÉLITE</span><h3 class="countdown-title">Cholet <span style="color:#777">vs</span> ASVEL</h3><p class="countdown-date">Dimanche 27 septembre 2026 · 19h00 · à l'extérieur</p><div class="countdown-grid" id="betclicCountdown" aria-label="Compte à rebours avant le premier match de Betclic ÉLITE"><div class="countdown-unit"><strong id="betclicDays">—</strong><span>Jours</span></div><div class="countdown-unit"><strong id="betclicHours">—</strong><span>Heures</span></div><div class="countdown-unit"><strong id="betclicMinutes">—</strong><span>Minutes</span></div><div class="countdown-unit"><strong id="betclicSeconds">—</strong><span>Secondes</span></div></div><span class="countdown-status" id="betclicStatus">Compte à rebours en direct</span><a class="panel-link" href="matchs.html#calendrier">Suivre les mises à jour →</a></article></div>
+    <section class="last-result-section" aria-labelledby="last-result-title">
+      <div class="section-head"><div><h2 id="last-result-title">Dernier résultat</h2><p>Le dernier match disputé par l’ASVEL avant la reprise officielle.</p></div><a href="matchs.html#calendrier">Tout le calendrier →</a></div>
+      <article class="result-card">
+        <div class="result-tag">Match amical · Préparation 2026</div>
+        <div class="result-main">
+          <div class="result-team win"><span class="role">Vainqueur</span><span class="name">LDLC ASVEL</span><span class="result-city">Villeurbanne</span></div>
+          <div class="result-score"><strong>71–69</strong><span>Victoire</span></div>
+          <div class="result-team"><span class="role">Adversaire</span><span class="name">Saint-Chamond</span><span class="result-city">SCABB</span></div>
+        </div>
+        <div class="result-meta"><span>Vendredi 28 août 2026</span><span>Match amical</span><span class="pill">Victoire ASVEL</span></div>
+      </article>
+    </section>
     <section class="latest-section" aria-labelledby="latest-title"><div class="latest-heading"><h2 id="latest-title">Dernières actualités</h2><a href="actualites.html">Voir tous les articles →</a></div><div class="latest-grid"><a class="latest-card" href="articles/histoire-asvel-1948-aujourdhui.html"><span class="latest-meta">Club · 31 août 2026</span><h3>ASVEL : de 1948 à aujourd’hui</h3><p>Retour sur près de huit décennies d’histoire d’un club fort de 21 titres de champion de France.</p><span class="latest-read">Lire l’article <span>→</span></span></a><a class="latest-card" href="articles/vincent-collet-hesitation-asvel.html"><span class="latest-meta">Club · 29 août 2026</span><h3>Vincent Collet a hésité à rester à l’ASVEL</h3><p>De retour sur le banc face à Saint-Chamond, l’assistant revient sur un été compliqué.</p><span class="latest-read">Lire l’article <span>→</span></span></a><a class="latest-card" href="articles/tony-parker-salaire-sacrifice-asvel.html"><span class="latest-meta">Club · 22 août 2026</span><h3>Tony Parker a sacrifié son salaire pour l’ASVEL</h3><p>Le président-entraîneur aurait divisé sa rémunération par cinq pour permettre au club de recruter.</p><span class="latest-read">Lire l’article <span>→</span></span></a></div></section>
     <div class="quick-grid"><a class="quick-card" href="mercato.html"><div><strong>Mercato</strong><p>Les arrivées, les départs et les prêts de l’intersaison 2026.</p></div><span class="arrow">→</span></a><a class="quick-card" href="matchs.html#classement"><div><strong>Classements</strong><p>EuroLeague et Betclic ÉLITE dans un espace rétractable.</p></div><span class="arrow">→</span></a><a class="quick-card" href="effectif.html"><div><strong>Effectif</strong><p>Les joueurs classés par poste et leurs fiches détaillées.</p></div><span class="arrow">→</span></a><a class="quick-card" href="palmares.html"><div><strong>Palmarès</strong><p>Les titres, les années et les scores des finales.</p></div><span class="arrow">→</span></a></div>
-    <p class="update">Dernière mise à jour : 19 août 2026</p>
-  </main>
+    </main>
   <footer><div><strong>ACTU ASVEL</strong><p>Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club.</p></div></footer>
   <script>(function(){var b=document.getElementById('menuToggle'),n=document.getElementById('nav');b.addEventListener('click',function(){var o=n.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o))});n.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){n.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false')})});var s=document.querySelector('.share-home');function message(t){var old=s.textContent;s.textContent=t;setTimeout(function(){s.textContent=old},1800)}async function copier(url){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url)}else{var x=document.createElement('textarea');x.value=url;x.style.position='fixed';x.style.opacity='0';document.body.appendChild(x);x.focus();x.select();document.execCommand('copy');x.remove()}message('Lien copié !')}catch(e){window.prompt('Copiez ce lien :',url)}}if(s)s.addEventListener('click',async function(){var data={title:'ASVEL : de 1948 à aujourd’hui, l’histoire d’un géant du basket français',text:'Retour sur près de huit décennies d’histoire d’un club fort de 21 titres de champion de France.',url:new URL('articles/histoire-asvel-1948-aujourdhui.html',location.href).href};if(navigator.share){try{await navigator.share(data)}catch(e){if(e.name!=='AbortError')await copier(data.url)}}else{await copier(data.url)}})
 })();</script>
