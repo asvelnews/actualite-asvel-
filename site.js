@@ -15,6 +15,9 @@
       ['Matchs', root + 'matchs.html#calendrier', 'matches'],
       ['Classements', root + 'matchs.html#classement', 'standings'],
       ['Effectif', root + 'effectif.html', 'roster'],
+      ['Stats', root + 'statistiques.html', 'stats'],
+      ['ASVEL Filles', root + 'filles.html', 'women'],
+      ['Espoirs', root + 'espoirs.html', 'academy'],
       ['Palmarès', root + 'palmares.html', 'honours']
     ];
 
@@ -56,6 +59,9 @@
       if (inArticle || page === 'actualites.html') return 'news';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
+      if (page === 'statistiques.html') return 'stats';
+      if (page === 'filles.html') return 'women';
+      if (page === 'espoirs.html') return 'academy';
       if (page === 'palmares.html') return 'honours';
       if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
       return 'home';
