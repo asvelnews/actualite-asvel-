@@ -1,8 +1,26 @@
 /* ============================================================
-   theme.css — Composants globaux injectés par site.js
-   Ce fichier ne contient QUE des styles absents des pages inline.
-   Aucun conflit de cascade avec le <style> local de chaque page.
+   theme.css — Palette centrale + composants globaux
+   La palette ci-dessous est la SOURCE UNIQUE de toutes les
+   variables. Les pages définissent leur propre <style> inline
+   mais ne déclarent plus leur :root local : elles héritent
+   de ce bloc, ce qui garantit une identité NOIR & OR uniforme.
    ============================================================ */
+
+:root{
+  --black:#050505;
+  --black2:#121212;
+  --white:#fff;
+  --off:#f3f3f3;
+  --soft:#f1f1f1;
+  --paper:#fffef9;
+  --line:#dedede;
+  --grey:#747474;
+  --muted:#747474;
+  --gold:#c9a44d;
+  --gold-light:#e2c675;
+  --club-gold:#c9a44d;
+  --club-gold-light:#e2c675;
+}
 
 /* --- Mobile nav backdrop --- */
 .mobile-nav-backdrop {
@@ -65,7 +83,7 @@ body.menu-open {
   z-index: 100;
   height: 3px;
   width: 100%;
-  background: var(--red, #e1262f);
+  background: var(--gold, #c9a44d);
   transform-origin: left;
   transform: scaleX(0);
   pointer-events: none;
@@ -109,6 +127,7 @@ footer {
   gap: 1.2rem;
 }
 footer a {
+  margin-left: auto;
   display: inline-block;
   color: var(--gold, #c9a44d);
   font-family: 'Oswald', sans-serif;
