@@ -2,10 +2,7 @@
   'use strict';
 
   var header = document.querySelector('body > header, .site-header');
-  var nav = header && header.querySelector('nav, .site-nav, .nav');
-  var toggle = header && header.querySelector('.menu-toggle');
-
-  if (header && nav) {
+  if (header) {
     var inArticle = location.pathname.indexOf('/articles/') !== -1;
     var root = inArticle ? '../' : '';
     var items = [
@@ -21,31 +18,42 @@
     ];
 
     header.classList.add('global-site-header');
-    nav.classList.add('global-site-nav');
+
+    var logo = header.querySelector('.logo');
+    if (!logo) {
+      logo = document.createElement('a');
+      logo.className = 'logo';
+      header.insertBefore(logo, header.firstChild);
+    }
+    logo.href = root + 'index.html';
+    logo.textContent = 'ACTU ASVEL';
+
+    var oldNav = header.querySelector('nav, .site-nav, .nav');
+    var nav = document.createElement('nav');
     nav.id = 'site-navigation';
+    nav.className = 'global-site-nav';
     nav.setAttribute('aria-label', 'Navigation principale');
     nav.innerHTML = items.map(function (item) {
       return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + item[0] + '</a>';
     }).join('');
 
-    if (!toggle) {
-      toggle = document.createElement('button');
-      toggle.className = 'menu-toggle';
-      toggle.type = 'button';
-      toggle.innerHTML = '<span></span><span></span><span></span>';
-      header.appendChild(toggle);
-    } else {
-      var cleanToggle = toggle.cloneNode(true);
-      toggle.parentNode.replaceChild(cleanToggle, toggle);
-      toggle = cleanToggle;
-    }
+    if (oldNav) oldNav.replaceWith(nav);
+    else header.appendChild(nav);
 
+    var oldToggle = header.querySelector('.menu-toggle, .global-menu-toggle');
+    if (oldToggle) oldToggle.remove();
+
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
     toggle.id = 'globalMenuToggle';
-    toggle.classList.add('global-menu-toggle');
+    toggle.className = 'menu-toggle global-menu-toggle';
     toggle.setAttribute('aria-controls', nav.id);
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', 'Ouvrir le menu');
+    toggle.innerHTML = '<span></span><span></span><span></span>';
+    header.appendChild(toggle);
 
+    document.querySelectorAll('.mobile-nav-backdrop').forEach(function (el) { el.remove(); });
     var backdrop = document.createElement('button');
     backdrop.type = 'button';
     backdrop.className = 'mobile-nav-backdrop';
@@ -61,7 +69,9 @@
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
       if (page === 'a-propos.html') return 'about';
-      if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
+      if (page === 'matchs.html') {
+        return location.hash === '#classement' ? 'standings' : 'matches';
+      }
       return 'home';
     }
 
@@ -80,49 +90,44 @@
       document.documentElement.style.setProperty('--mobile-nav-top', bottom + 'px');
     }
 
-    function closeMenu(restoreFocus) {
-      nav.classList.remove('open');
-      toggle.classList.remove('open');
-      backdrop.classList.remove('visible');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Ouvrir le menu');
-      document.body.classList.remove('menu-open');
-      if (restoreFocus) toggle.focus();
-    }
-
-    function openMenu() {
-      syncMenuPosition();
-      nav.classList.add('open');
-      toggle.classList.add('open');
-      backdrop.classList.add('visible');
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', 'Fermer le menu');
-      document.body.classList.add('menu-open');
-      window.setTimeout(function () {
-        var firstLink = nav.querySelector('a');
-        if (firstLink) firstLink.focus();
-      }, 60);
+    function setMenu(open, restoreFocus) {
+      nav.classList.toggle('open', open);
+      toggle.classList.toggle('open', open);
+      backdrop.classList.toggle('visible', open);
+      document.body.classList.toggle('menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      if (open) syncMenuPosition();
+      if (!open && restoreFocus) toggle.focus();
     }
 
     toggle.addEventListener('click', function () {
-      if (nav.classList.contains('open')) closeMenu(false);
-      else openMenu();
+      setMenu(!nav.classList.contains('open'), false);
     });
-    backdrop.addEventListener('click', function () { closeMenu(true); });
-    nav.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () { closeMenu(false); });
+
+    backdrop.addEventListener('click', function () { setMenu(false, true); });
+
+    nav.addEventListener('click', function (event) {
+      var link = event.target.closest('a');
+      if (!link) return;
+      if (window.innerWidth <= 980) setMenu(false, false);
     });
+
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && nav.classList.contains('open')) closeMenu(true);
+      if (event.key === 'Escape' && nav.classList.contains('open')) setMenu(false, true);
     });
+
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 980) closeMenu(false);
-      else if (nav.classList.contains('open')) syncMenuPosition();
+      syncMenuPosition();
+      if (window.innerWidth > 980 && nav.classList.contains('open')) setMenu(false, false);
     });
-    window.addEventListener('scroll', function () {
-      if (nav.classList.contains('open')) syncMenuPosition();
-    }, { passive: true });
-    window.addEventListener('hashchange', markCurrentSection);
+
+    window.addEventListener('hashchange', function () {
+      markCurrentSection();
+      if (window.innerWidth <= 980) setMenu(false, false);
+    });
+
+    syncMenuPosition();
     markCurrentSection();
   }
 
@@ -160,7 +165,6 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* --- Animations d'apparition au défilement --- */
   var revealTargets = document.querySelectorAll(
     '.metric, .player, .news-card, .player-card, .staff-card, article.article, .latest-card, ' +
     '.movement, .article-content > h2, .article-content > h3, .article-content > p, .article-content > blockquote, ' +
@@ -177,7 +181,6 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     revealTargets.forEach(function (el) { io.observe(el); });
-    /* Filet de sécurité : si un élément reste caché trop longtemps (contenu ajouté dynamiquement après coup), on le révèle quand même */
     window.setTimeout(function () {
       document.querySelectorAll('.reveal-on-scroll:not(.revealed)').forEach(function (el) {
         el.classList.add('revealed');
@@ -187,7 +190,6 @@
     revealTargets.forEach(function (el) { el.classList.add('revealed'); });
   }
 
-  /* --- Compteurs animés pour les chiffres clés --- */
   var counters = document.querySelectorAll('.metric strong, .stat strong');
   if (counters.length && 'IntersectionObserver' in window) {
     var counterIo = new IntersectionObserver(function (entries) {
@@ -200,15 +202,14 @@
         if (!match) return;
         var target = parseInt(match[1], 10);
         var suffix = raw.slice(match[1].length);
-        var start = 0;
         var duration = 900;
         var startTime = null;
         function tick(ts) {
           if (!startTime) startTime = ts;
-          var progress = Math.min(1, (ts - startTime) / duration);
-          var eased = 1 - Math.pow(1 - progress, 3);
+          var p = Math.min(1, (ts - startTime) / duration);
+          var eased = 1 - Math.pow(1 - p, 3);
           el.textContent = Math.round(eased * target) + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
+          if (p < 1) requestAnimationFrame(tick);
           else el.textContent = raw;
         }
         requestAnimationFrame(tick);
