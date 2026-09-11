@@ -16,7 +16,8 @@
       ['Classements', root + 'matchs.html#classement', 'standings'],
       ['Effectif', root + 'effectif.html', 'roster'],
       ['Stats', root + 'statistiques.html', 'stats'],
-      ['Palmarès', root + 'palmares.html', 'honours']
+      ['Palmarès', root + 'palmares.html', 'honours'],
+      ['À propos', root + 'a-propos.html', 'about']
     ];
 
     header.classList.add('global-site-header');
@@ -59,6 +60,7 @@
       if (page === 'effectif.html') return 'roster';
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
+      if (page === 'a-propos.html') return 'about';
       if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
       return 'home';
     }
