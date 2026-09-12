@@ -8,13 +8,16 @@
   <link rel="alternate" type="application/rss+xml" title="Actu ASVEL — Flux RSS" href="rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css?v=20260911-menu-v2">
+  <link rel="stylesheet" href="theme.css?v=20260912-theme-v3">
   <style>
-        *{box-sizing:border-box}body{margin:0;background:var(--off);color:var(--black);font-family:'Source Sans 3',Arial,sans-serif}a{color:inherit;text-decoration:none}
+        *{box-sizing:border-box}body{margin:0;background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif}a{color:inherit;text-decoration:none}
     @media(min-width:981px){nav{display:flex;gap:1rem;flex-wrap:wrap;font-family:'Oswald',sans-serif;font-size:.74rem;text-transform:uppercase}}
     .hero{padding:5rem 5vw 4rem;background:#050505;color:#fff;border-bottom:4px solid var(--gold)}.hero>div,.page,footer>div{width:min(1180px,100%);margin:auto}.eyebrow{color:#e2c675;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.13em;font-size:.7rem}h1{margin:.8rem 0 0;font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,7vw,6rem);line-height:.92;text-transform:uppercase;letter-spacing:-.05em}.hero p{max-width:680px;color:#c9c6bd;line-height:1.6}
     .page{padding:3rem 1.2rem 5rem}.unavailable{max-width:720px;padding:3rem 1.6rem;margin:0 auto;text-align:center;background:var(--paper);border:1px solid var(--line)}.badge{display:inline-block;padding:.35rem .8rem;border:1px solid var(--gold);color:var(--black);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.68rem}.unavailable h2{margin:1.2rem 0 .6rem;font-family:'Archivo Black',sans-serif;font-size:clamp(1.9rem,4vw,3rem);line-height:1.05;text-transform:uppercase}.unavailable p{margin:.6rem auto;max-width:560px;color:#555;line-height:1.65;font-size:1.02rem}.unavailable .actions{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}.actions a{padding:.7rem 1.2rem;border:1px solid var(--gold);font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:.74rem}.actions a.primary{background:var(--gold);color:#050505}.actions a:hover{background:var(--gold);color:#050505}
           </style>
+<style>
+.stats-app[hidden]{display:none}.stats-shell{max-width:1000px;margin:0 auto}.stats-head{margin-bottom:1.3rem}.stats-head h2{font-family:'Archivo Black',sans-serif;font-size:clamp(1.7rem,4vw,2.6rem);line-height:1;text-transform:uppercase;letter-spacing:-.04em}.stats-head p{margin-top:.45rem;color:var(--muted);font-size:.86rem;line-height:1.5}.stats-toggle{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem}.stats-tab{min-height:52px;padding:.9rem 1rem;border:1px solid var(--gold);background:var(--paper);color:var(--text);font-family:'Oswald',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}.stats-tab:hover{background:var(--gold);color:#050505}.stats-tab.active{background:var(--gold);color:#050505}.stats-comp{display:none}.stats-comp.active{display:block}.stats-table-scroll{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}.stats-table-scroll table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:620px}.stats-table-scroll th,.stats-table-scroll td{padding:.72rem .85rem;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}.stats-table-scroll th{position:sticky;top:64px;z-index:1;background:var(--surface-2);color:var(--text-muted);font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase}.stats-table-scroll tr:hover{background:var(--off)}.stats-table-scroll .mono{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--black);color:var(--gold-light);font-family:'Archivo Black',sans-serif;font-size:.5rem;text-transform:uppercase;margin-right:.55rem;vertical-align:middle}.stats-updated{margin-top:1rem;color:var(--muted);font-size:.72rem;text-align:right}.stats-empty{padding:2rem;text-align:center;color:var(--muted);font-size:.82rem;line-height:1.6}.stats-empty strong{display:block;margin-bottom:.35rem;color:var(--text-soft);font-family:'Archivo Black',sans-serif;font-size:1.1rem;text-transform:uppercase}
+</style>
 </head>
 <body>
 <header><a class="logo" href="index.html">ACTU ASVEL</a><nav id="nav"><a href="index.html">Accueil</a><a href="actualites.html">Actualités</a><a href="mercato.html">Mercato</a><a href="matchs.html#calendrier">Matchs</a><a href="matchs.html#classement">Classements</a><a href="effectif.html">Effectif</a><a class="active" href="statistiques.html">Stats</a><a href="palmares.html">Palmarès</a><a href="a-propos.html">À propos</a></nav><button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button></header>
@@ -27,7 +30,38 @@
 <p>Aucune statistique n’est inventée : tant que les données réelles ne sont pas disponibles, la page reste fermée.</p>
 <div class="actions"><a class="primary" href="index.html">Retour à l’accueil</a><a href="effectif.html">Voir l’effectif</a></div>
 </section>
+<section class="stats-app" id="statsApp" hidden aria-labelledby="stats-title">
+  <div class="stats-shell">
+    <div class="stats-head"><h2 id="stats-title">Statistiques de la saison</h2><p>Statistiques par compétition. Tableaux vides — aucune donnée n’est inventée.</p></div>
+    <div class="stats-toggle" role="tablist" aria-label="Choisir la compétition">
+      <button class="stats-tab active" type="button" role="tab" aria-selected="true" data-stats-comp="euroleague">EuroLeague</button>
+      <button class="stats-tab" type="button" role="tab" aria-selected="false" data-stats-comp="belite">Betclic ÉLITE</button>
+    </div>
+    <div class="stats-comp active" id="stats-euroleague">
+      <div class="stats-table-scroll"><table aria-hidden="true"><thead><tr><th>Joueur</th><th>Poste</th><th>MJ</th><th>Pts</th><th>Reb</th><th>Pd</th><th>Éval</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="stats-comp" id="stats-belite">
+      <div class="stats-table-scroll"><table aria-hidden="true"><thead><tr><th>Joueur</th><th>Poste</th><th>MJ</th><th>Pts</th><th>Reb</th><th>Pd</th><th>Éval</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <p class="stats-empty"><strong>Tableaux en attente</strong>Les lignes seront renseignées depuis les données officielles dès leur publication.</p>
+    <p class="stats-updated">Dernière mise à jour : à venir</p>
+  </div>
+</section>
 </main>
 <footer><div><strong>ACTU ASVEL</strong><p>Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club.</p></div></footer>
-<script src="site.js?v=20260911-menu-v2" defer></script>
+<script src="site.js?v=20260912-theme-v3" defer></script>
+<script>
+(function(){
+var app=document.getElementById('statsApp');if(!app)return;
+var comps=app.querySelectorAll('.stats-comp');
+app.querySelectorAll('.stats-tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    app.querySelectorAll('.stats-tab').forEach(function(t){t.classList.remove('active');t.setAttribute('aria-selected','false')});
+    comps.forEach(function(c){c.classList.remove('active')});
+    tab.classList.add('active');tab.setAttribute('aria-selected','true');
+    document.getElementById('stats-'+tab.dataset.statsComp).classList.add('active');
+  });
+});
+})();
+</script>
 </body></html>
