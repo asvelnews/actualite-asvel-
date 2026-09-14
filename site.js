@@ -1,6 +1,40 @@
 (function () {
   'use strict';
 
+  /* ---- Thème clair / sombre : bootstrap avant tout rendu ---- */
+  var THEME_KEY = 'asvel-theme';
+
+  function readStorage(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function writeStorage(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* stockage indisponible */ }
+  }
+  function applyTheme(theme, persist) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (persist) writeStorage(THEME_KEY, theme);
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = theme === 'light' ? '☀' : '☾';
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f1e8' : '#050505');
+  }
+  function toggleTheme() {
+    var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(next, true);
+  }
+  var savedTheme = readStorage(THEME_KEY);
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    applyTheme(savedTheme, false);
+  } else if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: light)');
+    var followSystem = function () {
+      if (!readStorage(THEME_KEY)) applyTheme(mq.matches ? 'light' : 'dark', false);
+    };
+    followSystem();
+    if (mq.addEventListener) mq.addEventListener('change', followSystem);
+    else if (mq.addListener) mq.addListener(followSystem);
+  }
+
   var header = document.querySelector('body > header, .site-header');
   if (header) {
     var inArticle = location.pathname.indexOf('/articles/') !== -1;
@@ -14,6 +48,7 @@
       ['Effectif', root + 'effectif.html', 'roster'],
       ['Stats', root + 'statistiques.html', 'stats'],
       ['Palmarès', root + 'palmares.html', 'honours'],
+      ['Accès', root + 'acces.html', 'access'],
       ['À propos', root + 'a-propos.html', 'about']
     ];
 
@@ -52,6 +87,15 @@
     toggle.innerHTML = '<span></span><span></span><span></span>';
     header.appendChild(toggle);
 
+    var themeBtn = document.createElement('button');
+    themeBtn.type = 'button';
+    themeBtn.className = 'theme-toggle';
+    themeBtn.id = 'themeToggle';
+    themeBtn.setAttribute('aria-label', 'Basculer entre le thème clair et sombre');
+    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀' : '☾';
+    header.insertBefore(themeBtn, toggle);
+    themeBtn.addEventListener('click', toggleTheme);
+
     document.querySelectorAll('.mobile-nav-drawer,.mobile-nav-backdrop').forEach(function (el) { el.remove(); });
 
     var drawer = document.createElement('nav');
@@ -78,6 +122,7 @@
       if (page === 'effectif.html') return 'roster';
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
+      if (page === 'acces.html') return 'access';
       if (page === 'a-propos.html') return 'about';
       if (page === 'matchs.html') return location.hash === '#classement' ? 'standings' : 'matches';
       return 'home';
@@ -169,4 +214,57 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  /* ---- Monogrammes : images manquantes → placeholder noir/or ---- */
+  function initials(text, fallback) {
+    var words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return fallback || 'ASVEL';
+    var out = words.map(function (w) { return w.charAt(0); }).slice(0, 2).join('').toUpperCase();
+    return out || fallback || 'ASVEL';
+  }
+  document.addEventListener('error', function (event) {
+    var target = event.target;
+    if (!target || target.tagName !== 'IMG') return;
+    if (target.matches('.hero-image')) { target.style.display = 'none'; return; }
+    if (target.closest('.initials')) {
+      var box = target.closest('.initials');
+      if (!box.textContent.trim()) {
+        var monogram = document.createElement('span');
+        monogram.className = 'media-fallback';
+        monogram.setAttribute('aria-hidden', 'true');
+        monogram.textContent = initials(target.getAttribute('alt') || '', 'ASVEL');
+        box.appendChild(monogram);
+      }
+      target.style.display = 'none';
+      return;
+    }
+    if (target.closest('.club-mark')) { target.style.display = 'none'; return; }
+    if (target.closest('.movement-photo')) {
+      var div = document.createElement('div');
+      div.className = 'movement-photo media-fallback';
+      div.textContent = initials(target.getAttribute('alt') || '', 'ASVEL');
+      if (target.parentNode) target.parentNode.replaceChild(div, target);
+      return;
+    }
+    target.style.display = 'none';
+  }, true);
+
+  /* ---- Reveal au défilement (désactivé si réduction de mouvement) ---- */
+  var revealTargets = document.querySelectorAll('.reveal-on-scroll');
+  if (revealTargets.length) {
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if ('IntersectionObserver' in window && !reduced) {
+      var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealTargets.forEach(function (el) { revealObserver.observe(el); });
+    } else {
+      revealTargets.forEach(function (el) { el.classList.add('revealed'); });
+    }
+  }
 })();
