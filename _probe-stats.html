@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -280,6 +280,19 @@ app.querySelectorAll('tr[data-player]').forEach(function(tr){
 });
 modal.querySelectorAll('[data-close-player]').forEach(function(el){el.addEventListener('click',closePlayer)});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closePlayer()});
+})();
+</script>
+<script>
+(function(){
+  setTimeout(function(){
+    var fr=document.querySelector('[data-stats-group="france"]');
+    if(!fr)return;
+    fr.click();
+    setTimeout(function(){
+      var bt=document.querySelector('[data-stats-comp="belite"]');
+      if(bt)bt.click();
+    },80);
+  },120);
 })();
 </script>
 </body></html>
