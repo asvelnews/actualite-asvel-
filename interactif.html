@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pronos &amp; Cinq — Actu ASVEL</title>
+  <meta name="description" content="Vos pronostics et votre cinq majeur : pronostiquez le vainqueur des matchs de l'ASVEL et composez votre équipe de départ idéale. Sauvegardé sur votre appareil.">
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="Actu ASVEL — Flux RSS" href="rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css?v=20260915-theme-v4">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
+    .hero{position:relative;isolation:isolate;overflow:hidden;padding:5rem 5vw 3.8rem;background:#050505;color:#fff}.hero:after{content:'VS';position:absolute;z-index:-1;right:4vw;bottom:-4.2rem;color:#121212;font-family:'Archivo Black',sans-serif;font-size:clamp(9rem,22vw,22rem);line-height:1}.hero-inner,.page{width:min(1180px,100%);margin:auto}.eyebrow{display:flex;align-items:center;gap:.65rem;color:#bbb;font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.eyebrow:before{content:'';width:34px;height:3px;background:var(--gold)}.hero h1{max-width:850px;margin-top:.85rem;font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,7vw,5.6rem);line-height:.9;letter-spacing:-.055em;text-transform:uppercase}.hero p{max-width:650px;margin-top:1.3rem;color:#c7c7c7;line-height:1.6}
+    .page{padding:2.5rem 1.2rem 5rem}
+    .local-note{display:flex;align-items:center;gap:.6rem;margin-bottom:2rem;padding:.7rem 1rem;border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:.78rem;line-height:1.4}.local-note:before{content:'';flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+    .section-block{margin:3.2rem 0 0}.section-block h2{font-family:'Archivo Black',sans-serif;font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.045em;text-transform:uppercase}.section-block h2:after{content:'';display:block;width:56px;height:5px;margin-top:.6rem;border-radius:99px;background:var(--gold)}.section-block>p{max-width:620px;margin-top:.8rem;color:var(--muted);font-size:.86rem;line-height:1.55}
+
+    /* ---- Comp-switch (EuroLeague / Betclic) ---- */
+    .comp-switch{display:grid;grid-template-columns:1fr 1fr;margin:1.4rem 0 1rem;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.06)}.comp-btn{min-height:54px;border:0;background:var(--paper);font-family:'Oswald',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.comp-btn.active{background:#000;color:#fff}.comp-btn span{display:block;margin-top:.25rem;color:var(--muted);font-weight:400;font-size:.6rem;letter-spacing:.08em}.comp-btn.active span{color:#bbb}
+    @media(max-width:560px){.comp-switch{grid-template-columns:1fr}}
+
+    /* ---- Bandeau "mes pronostics" ---- */
+    .prono-summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 0 1rem;padding:.7rem 1rem;background:#050505;color:#fff;border-radius:10px}.prono-summary strong{font-family:'Archivo Black',sans-serif;font-size:.82rem;letter-spacing:.02em;text-transform:uppercase}.prono-summary strong span{color:#c2b98a;font-weight:400;font-family:'Oswald',sans-serif;font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;margin-left:.3rem}.prono-reset{border:0;background:transparent;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:underline;cursor:pointer}.prono-reset:hover{color:#fff}.prono-summary[hidden]{display:none!important}
+
+    /* ---- Liste des matchs à pronostiquer ---- */
+    .prono-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.prono-match{display:flex;flex-direction:column;border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;overflow:hidden}.prono-match-main{display:flex;align-items:center;gap:.9rem;padding:.85rem 1rem}.pm-cal{flex:0 0 52px;text-align:center;border-right:1px solid var(--line);padding-right:.8rem}.pm-day{display:block;font-family:'Archivo Black',sans-serif;font-size:1.35rem;line-height:1}.pm-month{display:block;margin-top:.15rem;font-family:'Oswald',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.pm-comp{font-family:'Oswald',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}.pm-teams{display:block;margin-top:.3rem;font-family:'Oswald',sans-serif;font-size:.9rem;font-weight:600;line-height:1.15;text-transform:uppercase;overflow-wrap:anywhere}.pm-teams em{color:var(--gold);font-style:normal}.pm-meta{margin-top:.3rem;color:var(--muted);font-size:.68rem}.prono-empty{padding:2.5rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.85rem}
+    @media(max-width:880px){.prono-list{grid-template-columns:1fr}}
+    @media(max-width:560px){.prono-list{grid-template-columns:1fr}}
+
+    /* ---- Pills de pronostic (partagé avec matchs.html) ---- */
+    .prono-bar{border-top:1px solid var(--line);padding:.6rem .9rem .75rem}.prono-label{display:flex;align-items:center;gap:.4rem;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.56rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}.prono-label:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold)}.prono-options{display:flex;gap:.4rem;margin-top:.45rem}.prono{flex:1;min-height:36px;padding:.5rem .6rem;border:1px solid var(--line);background:var(--paper);font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:.18s}.prono:hover{border-color:var(--gold)}.prono.active{background:#000;border-color:#000;color:#fff}.prono.active[data-pick="asvel"]{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}.prono.active[data-pick="opp"]{background:#111;border-color:#111;color:#fff}.prono.clear{flex:0 0 auto;min-width:38px;color:var(--muted)}.prono.clear:hover{background:#000;color:#fff}
+    @media(max-width:560px){.prono-options{display:grid;grid-template-columns:1fr 1fr auto}}
+
+    /* ---- Compo : barre des 5 postes ---- */
+    .cinq-bar{margin-top:1.4rem;padding:1.3rem;background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px}.cinq-head{display:flex;align-items:end;justify-content:space-between;gap:1rem;flex-wrap:wrap}.cinq-head h3{font-family:'Archivo Black',sans-serif;font-size:clamp(1.2rem,3vw,1.7rem);letter-spacing:-.04em;text-transform:uppercase}.cinq-head p{max-width:480px;margin-top:.3rem;color:var(--muted);font-size:.78rem;line-height:1.45}.cinq-count{font-family:'Oswald',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}.cinq-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.55rem;margin-top:1rem}.cinq-slot{position:relative;min-height:112px;display:flex;flex-direction:column;justify-content:space-between;padding:.75rem .7rem .7rem;border:1px solid var(--line);background:var(--off);border-radius:8px;transition:.2s}.cinq-slot .slot-pos{font-family:'Oswald',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.cinq-slot .slot-name{display:block;margin-top:.45rem;font-family:'Archivo Black',sans-serif;font-size:.92rem;line-height:1.1;text-transform:uppercase;color:var(--text);overflow-wrap:anywhere}.cinq-slot.empty .slot-name{color:var(--muted);opacity:.75}.cinq-slot.filled{background:var(--paper);border-color:var(--gold)}.cinq-slot.filled .slot-pos{color:var(--gold)}.slot-remove{position:absolute;right:.4rem;top:.4rem;width:26px;height:26px;border:1px solid var(--line);background:var(--paper);color:var(--muted);cursor:pointer;font-size:.72rem;line-height:1;border-radius:50%}.slot-remove:hover{background:#000;color:#fff;border-color:#000}.cinq-actions{margin-top:.85rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+    .filter{border:1px solid var(--black);background:var(--paper);padding:.58rem .85rem;cursor:pointer;font-family:'Oswald',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;transition:.2s;border-radius:6px}.filter:hover,.filter.active{background:var(--black);color:var(--white)}#compoToggle.active{border-color:var(--gold)}.compo-hint{margin-left:auto;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.64rem;letter-spacing:.05em;text-transform:uppercase}.compo-hint strong{color:var(--gold);font-weight:700}.cinq-status{margin-top:.8rem;font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);min-height:1em}
+    @media(max-width:820px){.cinq-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.cinq-slot:last-child{grid-column:1/-1}}
+    @media(max-width:520px){.cinq-slots{grid-template-columns:1fr 1fr}.cinq-slot{min-height:104px}.cinq-head{align-items:flex-start;flex-direction:column}.compo-hint{margin-left:0}}
+
+    /* ---- Compo : grille des joueurs compacte ---- */
+    .roster{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin-top:1.2rem}.player{position:relative;display:flex;align-items:center;gap:.75rem;padding:.8rem .85rem;border:1px solid var(--line);background:var(--paper);color:var(--text);text-align:left;border-radius:10px;transition:transform .2s,box-shadow .2s,border-color .2s}.player:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.08)}.player .p-mono{flex:0 0 46px;height:46px;display:grid;place-items:center;border-radius:50%;background:#111;color:var(--gold);font-family:'Archivo Black',sans-serif;font-size:.82rem}.player .p-copy{min-width:0}.player .p-pos{display:block;font-family:'Oswald',sans-serif;font-size:.56rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}.player .p-copy strong{display:block;margin-top:.15rem;font-family:'Archivo Black',sans-serif;font-size:.9rem;line-height:1.08;text-transform:uppercase;overflow-wrap:anywhere}.compo-mode .player.selected{outline:3px solid var(--gold);outline-offset:-3px}.compo-mode .player.ineligible{opacity:.4;pointer-events:none}.compo-badge{position:absolute;z-index:2;right:.55rem;top:.55rem;padding:.26rem .42rem;background:var(--gold);color:var(--on-gold);font-family:'Oswald',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:99px;display:none}.compo-mode .player.selected .compo-badge{display:inline-block}
+    @media(max-width:900px){.roster{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.roster{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">ACTU ASVEL</a>
+    <nav id="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="actualites.html">Actualités</a>
+      <a href="mercato.html">Mercato</a>
+      <a href="matchs.html#calendrier">Matchs</a>
+      <a href="matchs.html#classement">Classements</a>
+      <a href="effectif.html">Effectif</a>
+      <a class="active" href="interactif.html">Pronos &amp; Cinq</a>
+      <a href="statistiques.html">Stats</a>
+      <a href="palmares.html">Palmarès</a>
+      <a href="acces.html">Accès</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">LDLC ASVEL</div>
+      <h1>Pronos &amp; Cinq</h1>
+      <p>Donnez votre pronostic sur les matchs à venir et composez votre cinq majeur. Un espace personnel, gratuit, sauvegardé uniquement sur votre appareil.</p>
+    </div>
+  </section>
+
+  <main class="page">
+    <div class="local-note">Vos pronostics et votre composition sont enregistrés dans votre navigateur (<strong>localStorage</strong>) : ils restent privés et sont partagés entre cette page, la page Matchs et la page Effectif.</div>
+
+    <section class="section-block" id="pronostics" aria-labelledby="prono-title">
+      <h2 id="prono-title">Pronostics</h2>
+      <p>Vainqueur ou perdant pour chaque match. Cliquez sur <strong>ASVEL</strong> ou sur l'adversaire pour voter ; re-cliquez sur ✕ pour retirer votre pronostic.</p>
+
+      <div class="comp-switch" role="tablist" aria-label="Choisir la compétition">
+        <button class="comp-btn active" type="button" data-league="euroleague">EuroLeague <span>38 matchs</span></button>
+        <button class="comp-btn" type="button" data-league="belite">Betclic ÉLITE <span>30 matchs</span></button>
+      </div>
+
+      <div class="prono-summary" id="pronoSummary" hidden><strong>Mes pronostics <span id="pronoCount">0 match</span></strong><button class="prono-reset" id="pronoReset" type="button">Effacer mes pronostics</button></div>
+      <div class="prono-list" id="pronoList"></div>
+      <div class="prono-empty" id="pronoEmpty" hidden>Aucun match dans cette compétition.</div>
+    </section>
+
+    <section class="section-block" id="composition" aria-labelledby="compo-title">
+      <h2 id="compo-title">Cinq majeur</h2>
+      <p>Composez votre équipe de départ idéale : cinq postes à remplir (Meneur, Arrière, Ailier, Ailier fort, Pivot). Activez le mode compo puis cliquez sur les joueurs.</p>
+
+      <div class="cinq-bar" aria-labelledby="cinq-title">
+        <div class="cinq-head"><div><h3 id="cinq-title">Votre cinq majeur</h3><p>Un seul joueur par poste ; les joueurs polyvalents peuvent occuper plusieurs postes.</p></div><span class="cinq-count" id="cinqCount">0/5 rempli</span></div>
+        <div class="cinq-slots" id="cinqSlots"></div>
+        <div class="cinq-actions"><button class="filter" id="compoToggle" type="button" aria-pressed="false">Mode compo</button><button class="filter" id="compoClear" type="button">Effacer la compo</button><span class="compo-hint" id="compoHint">Cliquez sur <strong>Mode compo</strong> puis sur un joueur pour l’ajouter.</span></div>
+        <div class="cinq-status" id="cinqStatus" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="roster" id="roster"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>ACTU ASVEL</strong>
+      <p>Média indépendant consacré à l'actualité de l'ASVEL, non affilié au club.</p>
+    </div>
+    <a href="https://www.instagram.com/ASVEL_NEWS" target="_blank" rel="noopener">Instagram @ASVEL_NEWS</a>
+  </footer>
+
+  <script>
+  (function(){
+    /* ======= PRONOSTICS (données partagées : clé asvel-pronos, identique à matchs.html) ======= */
+    var games=[
+    ['2026-09-24','20h45','Maccabi Tel-Aviv','home','euroleague','LDLC Arena'],['2026-09-30','21h15','Panathinaïkos','away','euroleague'],['2026-10-02','20h00','Valencia Basket','home','euroleague','LDLC Arena'],['2026-10-07','20h45','Paris Basketball','away','euroleague'],['2026-10-13','20h00','Étoile Rouge de Belgrade','home','euroleague'],['2026-10-15','21h00','Real Madrid','away','euroleague'],['2026-10-23','20h00','Žalgiris Kaunas','away','euroleague'],['2026-10-28','20h00','Partizan Belgrade','home','euroleague','LDLC Arena'],['2026-10-30','20h00','Baskonia','home','euroleague','LDLC Arena'],['2026-11-05','20h00','Bayern Munich','home','euroleague','LDLC Arena'],['2026-11-13','20h30','Beşiktaş','home','euroleague','LDLC Arena'],['2026-11-17','20h45','Fenerbahçe','away','euroleague'],['2026-11-20','20h30','Anadolu Efes','away','euroleague'],['2026-11-24','20h45','Olimpia Milan','home','euroleague','LDLC Arena'],['2026-12-04','21h15','Olympiakos','away','euroleague'],['2026-12-10','20h00','Hapoël Tel-Aviv','away','euroleague'],['2026-12-15','20h30','Virtus Bologne','away','euroleague'],['2026-12-17','20h00','Dubai Basketball','home','euroleague'],['2026-12-22','20h00','FC Barcelone','home','euroleague','LDLC Arena'],['2026-12-30','20h00','Olympiakos','home','euroleague','LDLC Arena'],['2027-01-08','20h00','Étoile Rouge de Belgrade','away','euroleague'],['2027-01-12','20h00','Žalgiris Kaunas','home','euroleague','LDLC Arena'],['2027-01-14','20h30','Olimpia Milan','away','euroleague'],['2027-01-22','20h30','Valencia Basket','away','euroleague'],['2027-01-29','20h00','Hapoël Tel-Aviv','home','euroleague'],['2027-02-03','20h30','FC Barcelone','away','euroleague'],['2027-02-05','20h00','Fenerbahçe','home','euroleague'],['2027-02-10','20h00','Anadolu Efes','home','euroleague','LDLC Arena'],['2027-03-05','20h30','Bayern Munich','away','euroleague'],['2027-03-09','20h00','Beşiktaş','away','euroleague'],['2027-03-11','20h05','Maccabi Tel-Aviv','away','euroleague'],['2027-03-19','20h00','Virtus Bologne','home','euroleague'],['2027-03-23','20h00','Panathinaïkos','home','euroleague','LDLC Arena'],['2027-03-25','20h00','Paris Basketball','home','euroleague','LDLC Arena'],['2027-04-02','20h45','Partizan Belgrade','away','euroleague'],['2027-04-06','20h30','Baskonia','away','euroleague'],['2027-04-08','20h00','Real Madrid','home','euroleague','LDLC Arena'],['2027-04-16','20h00','Dubai Basketball','away','euroleague'],
+    ['2026-10-10','À venir','Chorale de Roanne','home','derby','Astroballe'],['2026-11-22','À venir','JL Bourg','home','derby','Astroballe'],['2027-01-31','À venir','JL Bourg','away','derby','Ekinox'],['2027-04-18','À venir','Chorale de Roanne','away','derby','Roanne'],
+    ['2026-09-26','À venir','Cholet Basket','away','belite'],['2027-03-27','À venir','Cholet Basket','home','belite'],['2026-10-04','À venir','Gravelines-Dunkerque','away','belite'],['2027-04-10','À venir','Gravelines-Dunkerque','home','belite'],['2026-10-17','À venir','Limoges','away','belite'],['2027-04-27','À venir','Limoges','home','belite'],['2026-10-25','À venir','Nancy','home','belite'],['2027-05-01','À venir','Nancy','away','belite'],['2026-11-01','À venir','Saint-Quentin','away','belite'],['2027-05-09','À venir','Saint-Quentin','home','belite'],['2026-11-07','À venir','Élan Béarnais Pau-Lacq-Orthez','home','belite'],['2027-03-21','À venir','Élan Béarnais Pau-Lacq-Orthez','away','belite'],['2026-11-15','À venir','Le Mans','away','belite'],['2027-03-13','À venir','Le Mans','home','belite'],['2026-12-06','À venir','Strasbourg','away','belite'],['2027-01-24','À venir','Strasbourg','home','belite'],['2026-12-13','À venir','Paris Basketball','home','belite'],['2027-01-16','À venir','Paris Basketball','away','belite'],['2026-12-19','À venir','Nanterre 92','home','belite'],['2027-03-06','À venir','Nanterre 92','away','belite'],['2026-12-27','À venir','Dijon','home','belite'],['2027-04-04','À venir','Dijon','away','belite'],['2027-01-10','À venir','Boulazac','away','belite'],['2027-02-13','À venir','Boulazac','home','belite'],['2027-02-07','À venir','Chalon-sur-Saône','home','belite'],['2026-12-23','Date à définir','Chalon-sur-Saône','away','belite']];
+
+    var months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+    var PRONO_KEY='asvel-pronos';
+    var activeComp='euroleague';
+    var listEl=document.getElementById('pronoList'),emptyEl=document.getElementById('pronoEmpty');
+
+    function readPronos(){try{var raw=localStorage.getItem(PRONO_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
+    function writePronos(obj){try{localStorage.setItem(PRONO_KEY,JSON.stringify(obj))}catch(e){}}
+    function matchKey(g){return g[0]+'|'+g[2]+'|'+g[3]}
+    function shortName(name,w){w=w||16;return name.length>w?name.slice(0,w-1).trim()+'…':name}
+    var pronos=readPronos();
+
+    function refreshPronoBar(){
+      var total=0;for(var k in pronos){if(pronos[k])total++}
+      var summary=document.getElementById('pronoSummary');
+      if(summary){summary.hidden=(total===0);summary.querySelector('#pronoCount').textContent=total+(total>1?' matchs pronostiqués':' match pronostiqué')}
+    }
+
+    function renderPronoBar(article,g,home){
+      var key=matchKey(g),pick=pronos[key]||'';
+      var bar=document.createElement('div');bar.className='prono-bar';
+      bar.innerHTML='<div class="prono-label">Votre pronostic</div><div class="prono-options">'+
+        '<button class="prono'+(pick==='asvel'?' active':'')+'" type="button" data-pick="asvel" aria-pressed="'+(pick==='asvel')+'" aria-label="Pronostiquer la victoire de l&#39;ASVEL">ASVEL</button>'+
+        '<button class="prono'+(pick==='opp'?' active':'')+'" type="button" data-pick="opp" aria-pressed="'+(pick==='opp')+'" aria-label="Pronostiquer la victoire de '+home+'">'+shortName(home)+'</button>'+
+        (pick?'<button class="prono clear" type="button" data-pick="" aria-label="Retirer ce pronostic" title="Retirer ce pronostic">✕</button>':'')+
+        '</div>';
+      bar.addEventListener('click',function(ev){
+        ev.stopPropagation();
+        var btn=ev.target.closest('.prono');if(!btn)return;
+        var next=btn.getAttribute('data-pick');
+        if(next)pronos[key]=next;else delete pronos[key];
+        writePronos(pronos);
+        var container=bar.querySelector('.prono-options');
+        container.querySelectorAll('.prono:not(.clear)').forEach(function(b){var active=(b.getAttribute('data-pick')===next&&!!next);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+        var clr=bar.querySelector('.prono.clear');
+        if(next&&!clr)container.insertAdjacentHTML('beforeend','<button class="prono clear" type="button" data-pick="" aria-label="Retirer ce pronostic" title="Retirer ce pronostic">✕</button>');
+        else if(!next&&clr)clr.remove();
+        refreshPronoBar();
+      });
+      article.appendChild(bar);
+    }
+
+    function render(){
+      var list=games.filter(function(g){var matchComp=activeComp==='belite'?(g[4]==='belite'||g[4]==='derby'):g[4]===activeComp;return matchComp});
+      list.sort(function(a,b){return a[0]<b[0]?-1:a[0]>b[0]?1:0});
+      listEl.innerHTML='';
+      list.forEach(function(g){
+        var d=new Date(g[0]+'T12:00:00'),home=g[3]==='home';
+        var competition=g[4]==='derby'?'Derby · Betclic ÉLITE':(g[4]==='belite'?'Betclic ÉLITE':'EuroLeague');
+        var article=document.createElement('article');article.className='prono-match';
+        article.innerHTML='<div class="prono-match-main"><div class="pm-cal"><span class="pm-day">'+String(d.getDate()).padStart(2,'0')+'</span><span class="pm-month">'+months[d.getMonth()]+'</span></div><div><div class="pm-comp">'+competition+'</div><strong class="pm-teams">'+(home?'LDLC ASVEL <em>—</em> ':'')+g[2]+(home?'':' <em>—</em> LDLC ASVEL')+'</strong><span class="pm-meta">'+(home?'Domicile':'Extérieur')+' · '+g[1]+'</span></div></div>';
+        renderPronoBar(article,g,g[2]);
+        listEl.appendChild(article);
+      });
+      emptyEl.hidden=list.length>0;
+    }
+
+    document.querySelectorAll('[data-league]').forEach(function(b){b.addEventListener('click',function(){activeComp=b.dataset.league;document.querySelectorAll('[data-league]').forEach(function(x){x.classList.toggle('active',x===b)});render()})});
+
+    var pronoReset=document.getElementById('pronoReset');
+    if(pronoReset)pronoReset.addEventListener('click',function(){
+      var has=Object.keys(pronos).some(function(k){return pronos[k]});
+      if(!has)return;
+      if(!window.confirm('Effacer tous vos pronostics ?'))return;
+      pronos={};writePronos(pronos);render();refreshPronoBar();
+    });
+
+    refreshPronoBar();
+    render();
+
+    /* ======= COMPOSITION CINQ MAJEUR (données partagées : clé asvel-cinq, identique à effectif.html) ======= */
+    var PLAYERS=[
+    {g:'meneur',n:'Patty Mills',num:'8',pos:'Meneur',mono:'PM'},
+    {g:'ailier',n:'Both Gach',num:'14',pos:'Ailier',mono:'BG'},
+    {g:'ailier-fort',n:'Joel Bolomboy',num:'21',pos:'Ailier fort',mono:'JB'},
+    {g:'pivot',n:'Bodian Massa',num:'10',pos:'Pivot',mono:'BM'},
+    {g:'ailier-fort',n:'Yves Pons',num:'35',pos:'Ailier fort',mono:'YP'},
+    {g:'ailier-fort pivot',n:'Nate Sestina',num:'77',pos:'Ailier fort / Pivot',mono:'NS'},
+    {g:'arriere',n:'Edwin Jackson',num:'11',pos:'Arrière',mono:'EJ'},
+    {g:'meneur',n:'Marc-Owen Fodzo Dada',num:'1',pos:'Meneur',mono:'FD'},
+    {g:'arriere ailier',n:'Myles Cale',num:'0',pos:'Arrière / Ailier',mono:'MC'},
+    {g:'ailier ailier-fort',n:'Jae Crowder',num:'99',pos:'Ailier / Ailier fort',mono:'JC'},
+    {g:'ailier arriere',n:'David Lighty',num:'23',pos:'Ailier / Arrière',mono:'DL'},
+    {g:'arriere meneur',n:'Hugo Besson',num:'25',pos:'Arrière / Meneur',mono:'HB'},
+    {g:'pivot',n:'Mathis Dossou-Yovo',num:'12',pos:'Pivot',mono:'MDY'},
+    {g:'meneur',n:'Tremont Waters',num:'51',pos:'Meneur',mono:'TW'},
+    {g:'meneur',n:'TyTy Washington',num:'3',pos:'Meneur',mono:'TyW'}];
+
+    var CINQ_KEY='asvel-cinq';
+    var SLOTS=[{key:'meneur',label:'Meneur'},{key:'arriere',label:'Arrière'},{key:'ailier',label:'Ailier'},{key:'ailier-fort',label:'Ailier fort'},{key:'pivot',label:'Pivot'}];
+    var roster=document.getElementById('roster');
+    var slotsBox=document.getElementById('cinqSlots');
+    var countEl=document.getElementById('cinqCount');
+    var statusEl=document.getElementById('cinqStatus');
+    var resetBtn=document.getElementById('compoClear');
+    var toggleBtn=document.getElementById('compoToggle');
+    var compoMode=false;
+    var cinq=readCinq();
+
+    function readCinq(){try{var raw=localStorage.getItem(CINQ_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
+    function writeCinq(obj){try{localStorage.setItem(CINQ_KEY,JSON.stringify(obj))}catch(e){}}
+    function eligibleSlots(player){var groups=(player.dataset.group||'').split(' ');return SLOTS.filter(function(s){return groups.indexOf(s.key)>-1})}
+    function slotOfPlayer(name){for(var i=0;i<SLOTS.length;i++)if(cinq[SLOTS[i].key]===name)return SLOTS[i].key;return null}
+    function setStatus(msg){if(statusEl)statusEl.textContent=msg||''}
+
+    roster.innerHTML=PLAYERS.map(function(p){
+      return '<button class="player" type="button" data-group="'+p.g+'" data-name="'+p.n+'" data-num="'+p.num+'" data-pos="'+p.pos+'"><span class="p-mono" aria-hidden="true">'+p.mono+'</span><span class="p-copy"><span class="p-pos">'+p.pos+'</span><strong>'+p.n+'</strong></span></button>';
+    }).join('');
+    var players=[].slice.call(roster.querySelectorAll('.player'));
+
+    function renderCinq(){
+      players.forEach(function(p){
+        var name=p.dataset.name;
+        var inCinq=slotOfPlayer(name)!==null;
+        p.classList.toggle('selected',inCinq);
+        var badge=p.querySelector('.compo-badge');
+        if(!badge){badge=document.createElement('span');badge.className='compo-badge';badge.textContent='Dans le cinq';p.appendChild(badge)}
+        var eligible=eligibleSlots(p).some(function(s){return !cinq[s.key]});
+        p.classList.toggle('ineligible',compoMode&&!inCinq&&!eligible);
+      });
+      slotsBox.innerHTML='';
+      var filled=0;
+      SLOTS.forEach(function(s){
+        var name=cinq[s.key]||null;
+        if(name)filled++;
+        var slot=document.createElement('div');slot.className='cinq-slot'+(name?' filled':' empty');slot.dataset.slot=s.key;
+        slot.innerHTML='<span class="slot-pos">'+s.label+'</span><span class="slot-name">'+(name||'À choisir')+'</span>'+(name?'<button class="slot-remove" type="button" aria-label="Retirer '+name+' du cinq majeur">✕</button>':'');
+        slotsBox.appendChild(slot);
+      });
+      slotsBox.querySelectorAll('.slot-remove').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          var key=btn.closest('.cinq-slot').dataset.slot;
+          delete cinq[key];writeCinq(cinq);renderCinq();
+          setStatus('Joueur retiré du cinq majeur.');
+        });
+      });
+      countEl.textContent=filled+'/5 rempli';
+      var hint=document.getElementById('compoHint');
+      if(hint)hint.innerHTML=compoMode?'Cliquez sur un joueur pour l&#39;ajouter, sur un joueur du cinq pour le retirer.':'Cliquez sur <strong>Mode compo</strong> puis sur un joueur pour l’ajouter.';
+      setStatus(compoMode?'Mode compo actif : cliquez sur les joueurs pour composer votre cinq.':'');
+    }
+
+    renderCinq();
+    if(toggleBtn)toggleBtn.addEventListener('click',function(){
+      compoMode=!compoMode;
+      document.body.classList.toggle('compo-mode',compoMode);
+      roster.classList.toggle('compo-mode',compoMode);
+      toggleBtn.classList.toggle('active',compoMode);
+      toggleBtn.setAttribute('aria-pressed',String(compoMode));
+      toggleBtn.textContent=compoMode?'Quitter la compo':'Mode compo';
+      renderCinq();
+    });
+    if(resetBtn)resetBtn.addEventListener('click',function(){
+      var any=SLOTS.some(function(s){return cinq[s.key]});
+      if(!any)return;
+      if(!window.confirm('Effacer votre cinq majeur ?'))return;
+      cinq={};writeCinq(cinq);renderCinq();
+      setStatus('Composition effacée.');
+    });
+    if(roster)roster.addEventListener('click',function(e){
+      if(!compoMode)return;
+      var card=e.target.closest('.player');if(!card)return;
+      e.preventDefault();e.stopPropagation();
+      var name=card.dataset.name,current=slotOfPlayer(name);
+      if(current){delete cinq[current];writeCinq(cinq);renderCinq();setStatus(name+' retiré du cinq majeur.');return}
+      var free=eligibleSlots(card).find(function(s){return !cinq[s.key]});
+      if(!free){setStatus('Aucun poste libre compatible pour '+name+'.');return}
+      cinq[free.key]=name;writeCinq(cinq);renderCinq();
+      setStatus(name+' sélectionné au poste de '+free.label.toLowerCase()+'.');
+    },true);
+  })();
+  </script>
+  <script src="site.js?v=20260915-interactif" defer></script>
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

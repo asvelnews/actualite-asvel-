@@ -46,6 +46,7 @@
       ['Matchs', root + 'matchs.html#calendrier', 'matches'],
       ['Classements', root + 'matchs.html#classement', 'standings'],
       ['Effectif', root + 'effectif.html', 'roster'],
+      ['Pronos & Cinq', root + 'interactif.html', 'interactive'],
       ['Stats', root + 'statistiques.html', 'stats'],
       ['Palmarès', root + 'palmares.html', 'honours'],
       ['Accès', root + 'acces.html', 'access'],
@@ -120,6 +121,7 @@
       if (inArticle || page === 'actualites.html') return 'news';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
+      if (page === 'interactif.html') return 'interactive';
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
       if (page === 'acces.html') return 'access';
