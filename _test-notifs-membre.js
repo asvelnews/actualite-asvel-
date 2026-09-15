@@ -6,6 +6,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { chromium } = require('playwright');
 
 const ROOT = __dirname;
@@ -56,9 +57,11 @@ function waitFor(fn, timeout) {
 }
 
 async function attachErrors(page, box) {
-  page.on('pageerror', function (e) { box.push('pageerror: ' + e.message); });
+  page.on('pageerror', function (e) { box.push('pageerror: ' + e.message + ' @ ' + (e.stack ? e.stack.split('\n')[1] : '?')); });
   page.on('console', function (m) {
-    if (m.type() === 'error') box.push('console.error: ' + m.text());
+    if (m.type() !== 'error') return;
+    if (/Failed to load resource/.test(m.text())) return; /* bruit réseau (fonts/beacon externes) hors ligne — pas une erreur JS */
+    box.push('console.error: ' + m.text());
   });
 }
 
@@ -170,13 +173,25 @@ async function main() {
 
   console.log('\n=== Partie B — Notifications ===');
   {
-    const page = await visitor.newPage(); await attachErrors(page, []);
+    const errs = []; const page = await visitor.newPage(); await attachErrors(page, errs);
     await page.goto(BASE + '/index.html', { waitUntil: 'load' });
     const bell = await waitFor(function () { return page.evaluate(function () { return !!document.getElementById('notifsBell'); }); });
     check('index : cloche présente dans le header', bell);
-    /* Panneau + contenu */
+    /* Panneau + contenu : vérifier d'abord que le panneau existe, puis déboguer */
+    await page.waitForTimeout(300);
+    const panelDiag = await page.evaluate(function () {
+      var p = document.getElementById('notifsPanel');
+      return { exists: !!p, hidden: p ? p.hidden : null, body: p ? p.parentNode === document.body : null };
+    });
+    console.log('    [diag] panneau avant clic:', JSON.stringify(panelDiag));
     await page.click('#notifsBell');
-    await waitFor(function () { return page.evaluate(function () { return document.getElementById('notifsPanel') && !document.getElementById('notifsPanel').hidden; }); });
+    const afterClick = await page.evaluate(function () {
+      var p = document.getElementById('notifsPanel');
+      return { exists: !!p, hidden: p ? p.hidden : null, ariaHidden: p ? p.getAttribute('aria-hidden') : null };
+    });
+    console.log('    [diag] panneau après clic:', JSON.stringify(afterClick));
+    if (errs.length) console.log('    [diag] erreurs JS:', errs.join(' | '));
+    await waitFor(function () { return page.evaluate(function () { var p = document.getElementById('notifsPanel'); return p && !p.hidden; }); });
     await waitFor(function () { return page.evaluate(function () { return document.querySelectorAll('#notifsList .notifs-item').length >= 3; }); });
     const groups = await page.evaluate(function () {
       var hs = Array.prototype.map.call(document.querySelectorAll('#notifsList .notifs-group h3'), function (h) { return h.textContent; });
@@ -267,8 +282,28 @@ async function main() {
     await page.close();
   }
   {
-    const page = await member.newPage(); await attachErrors(page, []);
+    const emErrs = []; const page = await member.newPage(); await attachErrors(page, emErrs);
     await page.goto(BASE + '/espace-membre.html', { waitUntil: 'load' });
+    await page.waitForTimeout(200);
+    if (emErrs.length) console.log('    [diag] erreurs espace-membre:', emErrs.join(' | '));
+    const emDiag = await page.evaluate(function () {
+      var session = null; try { session = localStorage.getItem('asvel-session'); } catch(e) {}
+      var accounts = null; try { accounts = localStorage.getItem('asvel-accounts'); } catch(e) {}
+      var cinq = null; try { cinq = localStorage.getItem('asvel-cinq'); } catch(e) {}
+      var activity = null; try { activity = localStorage.getItem('asvel-activity-testmembre'); } catch(e) {}
+      return {
+        session: session,
+        accountsLen: accounts ? JSON.parse(accounts).length : 0,
+        cinq: cinq,
+        activity: activity,
+        guestHidden: document.getElementById('memberGuest') ? document.getElementById('memberGuest').hidden : null,
+        panelHidden: document.getElementById('memberPanel') ? document.getElementById('memberPanel').hidden : null,
+        pseudo: document.getElementById('emPseudo') ? document.getElementById('emPseudo').textContent : null,
+        emCinqHTML: document.getElementById('emCinq') ? document.getElementById('emCinq').innerHTML.substring(0, 200) : null,
+        emRankHTML: document.getElementById('emRank') ? document.getElementById('emRank').innerHTML.substring(0, 200) : null
+      };
+    });
+    console.log('    [diag] espace-membre:', JSON.stringify(emDiag));
     const ok = await page.evaluate(function () {
       var guest = document.getElementById('memberGuest');
       var panel = document.getElementById('memberPanel');
@@ -283,8 +318,19 @@ async function main() {
     await page.close();
   }
   {
-    const page = await visitor.newPage(); await attachErrors(page, []);
+    const visErrs = []; const page = await visitor.newPage(); await attachErrors(page, visErrs);
     await page.goto(BASE + '/espace-membre.html', { waitUntil: 'load' });
+    await page.waitForTimeout(200);
+    if (visErrs.length) console.log('    [diag] erreurs espace-membre visiteur:', visErrs.join(' | '));
+    const visDiag = await page.evaluate(function () {
+      var session = null; try { session = localStorage.getItem('asvel-session'); } catch(e) {}
+      return {
+        session: session,
+        guestHidden: document.getElementById('memberGuest') ? document.getElementById('memberGuest').hidden : null,
+        panelHidden: document.getElementById('memberPanel') ? document.getElementById('memberPanel').hidden : null
+      };
+    });
+    console.log('    [diag] espace-membre visiteur:', JSON.stringify(visDiag));
     const ok = await page.evaluate(function () {
       return !document.getElementById('memberGuest').hidden && document.getElementById('memberPanel').hidden;
     });
@@ -307,6 +353,80 @@ async function main() {
       return found;
     });
     check('tribune : style du badge Membre présent (.member-tag)', hasBadgeCss);
+    await page.close();
+  }
+
+  console.log('\n=== Partie D — Mot de passe oublié (réinitialisation locale) ===');
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const sha = crypto.createHash('sha256').update('mdptest01').digest('hex');
+    await ctx.addInitScript(function (arg) {
+      localStorage.setItem('asvel-accounts', JSON.stringify([{ pseudo: 'Oubli', norm: 'oubli', hash: arg.sha, createdAt: 1757001600000 }]));
+    }, { sha });
+    const box = [];
+    const page = await ctx.newPage(); await attachErrors(page, box);
+    await page.goto(BASE + '/compte.html', { waitUntil: 'load' });
+    await waitFor(function () { return page.evaluate(function () { return !document.getElementById('stateSignedOut').hidden; }); });
+    await page.click('#forgotOpen');
+    const boxOpen = await page.evaluate(function () { return !document.getElementById('forgotBox').hidden; });
+    check('oublié : la zone s’ouvre au clic', boxOpen);
+    await page.fill('#fbPseudo', 'Inconnu');
+    await page.click('#forgotSearch');
+    const unknownMsg = await page.evaluate(function () {
+      var m = document.getElementById('forgotMsg');
+      return !m.hidden && m.textContent.indexOf('CET appareil') !== -1;
+    });
+    check('oublié : pseudo inconnu → message honnête', unknownMsg);
+    await page.fill('#fbPseudo', 'Oubli');
+    await page.click('#forgotSearch');
+    const resetShown = await page.evaluate(function () { return !document.getElementById('forgotResetBox').hidden; });
+    check('oublié : pseudo trouvé → réinitialisation proposée', resetShown);
+    await page.fill('#fbNew', '123');
+    await page.fill('#fbNew2', '123');
+    await page.click('#forgotReset');
+    const tooShort = await page.evaluate(function () {
+      var m = document.getElementById('forgotMsg');
+      return !m.hidden && m.className === 'auth-error';
+    });
+    check('oublié : mot de passe trop court bloqué', tooShort);
+    await page.fill('#fbNew', 'retest1234');
+    await page.fill('#fbNew2', 'retest1234');
+    await page.click('#forgotReset');
+    const resetOk = await page.evaluate(function () {
+      var m = document.getElementById('forgotMsg');
+      return !m.hidden && m.className === 'forgot-ok';
+    });
+    check('oublié : mot de passe réinitialisé ✓', resetOk);
+    await page.fill('#inPseudo', 'Oubli');
+    await page.fill('#inPassword', 'retest1234');
+    await page.click('#inSubmit');
+    await waitFor(function () { return page.evaluate(function () { return !document.getElementById('stateSignedIn').hidden; }); });
+    const loggedIn = await page.evaluate(function () {
+      return document.getElementById('accPseudo') && document.getElementById('accPseudo').textContent === 'Oubli';
+    });
+    check('oublié : connexion réussie avec le nouveau mot de passe', loggedIn);
+    check('oublié : aucune erreur JS', box.length === 0, box.join(' | '));
+    await page.close(); await ctx.close();
+  }
+
+  console.log('\n=== Partie E — Partage par lien (compo + avis) ===');
+  {
+    const page = await member.newPage(); await attachErrors(page, []);
+    const compo = encodeURIComponent(JSON.stringify({ PG: 'Nando De Colo', SG: 'Théo Maledon', SF: 'Émile Baudry', PF: 'Rudy Gobert', C: 'Ricky Brown' }));
+    const avis = encodeURIComponent('Gobert au pivot, la défense sera la clé de ce match');
+    await page.goto(BASE + '/interactif.html?compo=' + compo + '&avis=' + avis, { waitUntil: 'load' });
+    await waitFor(function () { return page.evaluate(function () { return !document.getElementById('shareBanner').hidden; }); });
+    const avisShown = await page.evaluate(function () {
+      var sa = document.getElementById('shareAvis'), st = document.getElementById('shareAvisText');
+      return sa && st && !sa.hidden && st.textContent.indexOf('Gobert') !== -1;
+    });
+    check('partage : l’avis s’affiche dans le banner reçu', avisShown);
+    await page.click('#shareImport');
+    await waitFor(function () { return page.evaluate(function () { return document.getElementById('shareBanner').hidden; }); });
+    const imported = await page.evaluate(function () {
+      try { var c = JSON.parse(localStorage.getItem('asvel-cinq') || '{}'); return c.C === 'Ricky Brown'; } catch (e) { return false; }
+    });
+    check('partage : import de la compo reçue (C = Ricky Brown)', imported);
     await page.close();
   }
 

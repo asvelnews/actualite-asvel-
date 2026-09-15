@@ -30,6 +30,12 @@
     .auth-card button[type=submit]:disabled{opacity:.55;cursor:default}
     .auth-error{color:#c0392b;font-size:.8rem;line-height:1.4}
     .account-card{display:flex;flex-direction:column;gap:1.1rem;background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:2rem 2.2rem}
+    .forgot-link{display:inline-block;margin-top:.9rem;padding:0;border:none;background:none;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-decoration:underline;cursor:pointer}
+    .forgot-note{margin-bottom:.2rem;color:var(--muted);font-size:.78rem;line-height:1.5}
+    .forgot-box{margin-top:.9rem;padding:1rem 1.1rem;border:1px solid var(--line);border-left:3px solid var(--gold);background:var(--off);border-radius:8px;display:grid;gap:.7rem}
+    .forgot-box button.mini{min-height:40px;padding:.55rem .9rem;border:1px solid var(--gold);background:transparent;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:background .2s,color .2s}
+    .forgot-box button.mini:hover{background:var(--gold);color:#050505}
+    .forgot-ok{color:#15803d;font-size:.8rem;line-height:1.4}
     .account-main{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap}
     .acc-avatar{width:64px;height:64px;border-radius:50%;background:#111;color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:1.5rem;flex:none}
     .acc-pseudo{font-family:'Archivo Black',sans-serif;font-size:clamp(1.4rem,3.5vw,2rem);text-transform:uppercase;letter-spacing:-.02em}
@@ -108,6 +114,21 @@
             <p id="inError" class="auth-error" hidden></p>
             <button type="submit" id="inSubmit">Se connecter</button>
           </form>
+          <button type="button" id="forgotOpen" class="forgot-link">Mot de passe oublié ?</button>
+          <div class="forgot-box" id="forgotBox" hidden>
+            <p class="forgot-note"><strong>Réinitialisation locale.</strong> Sans serveur, votre compte n’existe que sur cet appareil et ce navigateur : pas de récupération possible depuis une autre machine.</p>
+            <label for="fbPseudo">Quel est votre pseudo ?</label>
+            <input id="fbPseudo" name="fbpseudo" type="text" maxlength="24" autocomplete="nickname" autocapitalize="off" spellcheck="false">
+            <p id="forgotMsg" class="auth-error" hidden></p>
+            <button type="button" id="forgotSearch" class="mini">Rechercher sur cet appareil</button>
+            <div id="forgotResetBox" hidden>
+              <label for="fbNew">Nouveau mot de passe</label>
+              <input id="fbNew" name="fbnew" type="password" minlength="8" autocomplete="new-password">
+              <label for="fbNew2">Confirmer le nouveau mot de passe</label>
+              <input id="fbNew2" name="fbnew2" type="password" minlength="8" autocomplete="new-password">
+              <button type="button" id="forgotReset" class="mini">Réinitialiser le mot de passe</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -198,7 +219,7 @@
       var participation = Math.round(((Math.min(pc, 38) / 38) + (c5 / 5) + (cB / 7) + (cR / 3)) / 4 * 100);
       el('mpJauge').textContent = participation + ' %';
     }
-    function showErr(el, msg) { if (el) { el.textContent = msg; el.hidden = false; } }
+    function showErr(el, msg) { if (el) { el.className = 'auth-error'; el.textContent = msg; el.hidden = false; } }
     function monogram(pseudo) {
       var words = String(pseudo || '').trim().split(/\s+/).filter(Boolean);
       if (!words.length) return '?';
@@ -305,6 +326,54 @@
       renderSignedOut();
     }
 
+    /* ---- Mot de passe oublié : réinitialisation locale ----
+       Pas de serveur ni d'email : le compte n'existe que dans le localStorage de
+       CE navigateur. Si le pseudo est présent ici, on peut re-haché un nouveau
+       mot de passe. Sinon, rien à récupérer (message honnête). */
+    var forgotNorm = null;
+    function forgotToggle() {
+      var box = document.getElementById('forgotBox');
+      if (box) box.hidden = !box.hidden;
+    }
+    function forgotSearch() {
+      var msg = document.getElementById('forgotMsg');
+      var pseudo = formPseudo(document.getElementById('fbPseudo').value);
+      if (!pseudo) { showErr(msg, 'Indiquez votre pseudo.'); return; }
+      var acc = findAccount(normalizePseudo(pseudo));
+      if (!acc) {
+        forgotNorm = null;
+        hide('forgotResetBox');
+        showErr(msg, 'Aucun compte « ' + pseudo + ' » sur CET appareil / CE navigateur. Sans serveur, pas de base centrale : utilisez le navigateur employé à l’inscription. Sinon, recréez simplement un compte (le classement reste local).');
+        return;
+      }
+      msg.hidden = true;
+      forgotNorm = acc.norm;
+      show('forgotResetBox');
+    }
+    function forgotReset() {
+      var msg = document.getElementById('forgotMsg');
+      if (!forgotNorm) return;
+      var pwd = document.getElementById('fbNew').value;
+      var pwd2 = document.getElementById('fbNew2').value;
+      if (pwd.length < 8) { showErr(msg, 'Nouveau mot de passe trop court : 8 caractères minimum.'); return; }
+      if (pwd !== pwd2) { showErr(msg, 'Les deux mots de passe ne correspondent pas.'); return; }
+      hashPassword(pwd, function (hash) {
+        var list = readAccounts();
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].norm === forgotNorm) { list[i].hash = hash; break; }
+        }
+        writeAccounts(list);
+        var msg2 = document.getElementById('forgotMsg');
+        msg2.className = 'forgot-ok';
+        msg2.hidden = false;
+        msg2.textContent = '✓ Mot de passe réinitialisé. Connectez-vous maintenant avec le nouveau mot de passe.';
+        hide('forgotResetBox');
+        document.getElementById('fbNew').value = '';
+        document.getElementById('fbNew2').value = '';
+        forgotNorm = null;
+      });
+    }
+
     /* ---- Init : restaure la session ---- */
     function init() {
       var norm = readStorage(KEY_SESSION);
@@ -319,6 +388,9 @@
     document.getElementById('signupForm').addEventListener('submit', signUp);
     document.getElementById('loginForm').addEventListener('submit', signIn);
     document.getElementById('accLogout').addEventListener('click', signOut);
+    document.getElementById('forgotOpen').addEventListener('click', forgotToggle);
+    document.getElementById('forgotSearch').addEventListener('click', forgotSearch);
+    document.getElementById('forgotReset').addEventListener('click', forgotReset);
     init();
   })();
   </script>

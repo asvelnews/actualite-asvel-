@@ -56,14 +56,16 @@
     .jauge{display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;margin:0 0 1rem;padding:1rem 1.1rem;background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px}.jauge-item{min-width:130px}.jauge-label{font-family:'Oswald',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.jauge-value{font-family:'Archivo Black',sans-serif;font-size:1.5rem;margin-top:.15rem;line-height:1}.jauge-value span{color:var(--gold)}.jauge-bar{flex:1;min-width:180px;height:10px;border-radius:99px;background:var(--off);overflow:hidden}.jauge-fill{height:100%;border-radius:99px;background:var(--gold);width:0;transition:width .4s ease}.jauge .filter{margin-left:auto}
     @media(max-width:640px){.jauge{flex-direction:column;align-items:stretch;gap:.85rem}.jauge .filter{margin-left:0}}
     /* ---- Bannière de partage reçu ---- */
-    .share-banner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:0 0 1rem;padding:.8rem 1rem;border:1px solid var(--gold);background:var(--paper);border-radius:12px}.share-banner p{font-size:.84rem;line-height:1.5}.share-banner p b{font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--gold)}.share-actions{display:flex;gap:.5rem;flex-wrap:wrap}.share-banner[hidden]{display:none}
+    .share-banner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:0 0 1rem;padding:.8rem 1rem;border:1px solid var(--gold);background:var(--paper);border-radius:12px}.share-banner p{font-size:.84rem;line-height:1.5}.share-banner p b{font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--gold)}.share-actions{display:flex;gap:.5rem;flex-wrap:wrap}.share-banner[hidden]{display:none}.share-avis{flex-basis:100%;margin-top:.25rem;padding-top:.55rem;border-top:1px dashed var(--line);color:var(--text);font-style:italic}.share-avis[hidden]{display:none}
+    .avis-label{display:block;margin-top:.55rem;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .avis-input{width:100%;margin-top:.3rem;padding:.6rem .75rem;background:var(--off);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:inherit;font-size:.92rem;transition:border-color .2s}.avis-input:focus{outline:none;border-color:var(--gold)}
     /* ---- Astuces supporters ---- */
     .tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:1.4rem}.tip{display:flex;gap:.8rem;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:.9rem 1rem}.tip-ico{flex:0 0 34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#111;color:var(--gold);font-size:1rem}.tip strong{display:block;font-family:'Oswald',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.tip p{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:.25rem}
     @media(max-width:720px){.tips{grid-template-columns:1fr}}
     /* ---- Tribune des supporters ---- */
     .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.comments-gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin-top:1.4rem;padding:1.4rem 1.4rem 1.5rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}.comments-gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}.comments-gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}.comments-gate[hidden]{display:none}.composer input[readonly]{cursor:default;opacity:.85}.comment-pseudo.from-member{color:var(--gold)}.member-tag{display:inline-flex;align-items:center;padding:.16rem .5rem;border:1px solid rgba(201,164,77,.55);border-radius:20px;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
     /* ---- Partage compo/pronos affiché directement dans un message ---- */
-    .comment-share{display:flex;flex-direction:column;margin-top:.65rem;padding:.15rem 0 0;font-size:.8rem}.comment-share-row{display:flex;gap:.5rem;align-items:baseline;padding:.3rem .7rem;border-left:3px solid var(--gold);background:var(--off);border-radius:6px}.comment-share-row+.comment-share-row{margin-top:.35rem}.comment-share-row .cs-ic{flex:none;font-size:.9rem}.comment-share-row b{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-light);margin-right:.4rem}.comment-share-row a{color:var(--gold-light);text-decoration:underline;font-weight:600}
+    .comment-share{display:flex;flex-direction:column;margin-top:.65rem;padding:.15rem 0 0;font-size:.8rem}.comment-share-row{display:flex;gap:.5rem;align-items:baseline;padding:.3rem .7rem;border-left:3px solid var(--gold);background:var(--off);border-radius:6px}.comment-share-row+.comment-share-row{margin-top:.35rem}.comment-share-row .cs-ic{flex:none;font-size:.9rem}.comment-share-row b{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-light);margin-right:.4rem}.comment-share-row a{color:var(--gold-light);text-decoration:underline;font-weight:600}.cs-avis{display:inline;font-style:italic}
     /* ---- Bannière prochain match + compte à rebours ---- */
     .next-match{display:flex;align-items:center;gap:1rem;margin-top:1.6rem;padding:1.1rem 1.2rem;border-radius:12px;background:linear-gradient(92deg,#b8860b,#f0c04a);color:#181510;box-shadow:0 10px 24px rgba(0,0,0,.20)}.next-ico{font-size:2rem;flex:none;line-height:1}.next-body{display:flex;flex-direction:column;gap:.15rem;min-width:0}.next-eyebrow{font-family:'Oswald',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5a4500}.next-teams{font-family:'Archivo Black',sans-serif;font-size:clamp(1.05rem,3.2vw,1.45rem);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.next-meta{font-size:.8rem;color:#4a3800;line-height:1.4}.next-count{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.03em;color:#181510;margin-top:.15rem}.next-match[hidden]{display:none}@media(max-width:520px){.next-match{align-items:flex-start;gap:.7rem;padding:.95rem 1rem}.next-teams{white-space:normal}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -126,11 +128,14 @@
       <div class="jauge-item"><div class="jauge-label">Réserve</div><div class="jauge-value" id="jaugeReserve">0/3</div></div>
       <div class="jauge-bar" aria-hidden="true"><div class="jauge-fill" id="jaugeFill" style="width:0%"></div></div>
       <button class="filter" id="shareBtn" type="button">Partager ma compo &amp; mes pronos</button>
+      <label class="avis-label" for="avisField">Votre avis en une phrase (facultatif)</label>
+      <input class="avis-input" id="avisField" type="text" maxlength="280" placeholder="Mon avis pour cette compo…" autocapitalize="sentences">
       <span class="compo-hint" id="shareHint" hidden></span>
     </div>
 
     <div class="share-banner" id="shareBanner" hidden>
       <p><b>Compo &amp; pronos partagés</b> par <span id="sharePseudo">un supporter</span> — jetez un œil, et importez-les dans votre espace si vous les aimez.</p>
+      <p class="share-avis" id="shareAvis" hidden>« <span id="shareAvisText"></span> »</p>
       <div class="share-actions">
         <button class="filter" id="shareImport" type="button">Importer chez moi</button>
         <button class="filter" id="shareDismiss" type="button">Fermer</button>
@@ -564,15 +569,16 @@
       var sBenchShare=encodeURIComponent(JSON.stringify(bench));
       var sReserveShare=encodeURIComponent(JSON.stringify(reserve));
       var pseudoTogether=(function(){try{var p=document.getElementById('cPseudo');return p?p.value.trim().slice(0,24):''}catch(e){return''}})();
+      var avis=(function(){try{var a=document.getElementById('avisField');var v=a?String(a.value||'').trim():'';return v.slice(0,280)}catch(e){return''}})();
       var base=(location.origin&&location.origin!=='null')?location.origin+location.pathname:location.pathname;
-      return base+'?compo='+compo+'&pronos='+sPronos+'&bench='+sBenchShare+'&reserve='+sReserveShare+(pseudoTogether?'&pseudo='+encodeURIComponent(pseudoTogether):'');
+      return base+'?compo='+compo+'&pronos='+sPronos+'&bench='+sBenchShare+'&reserve='+sReserveShare+(pseudoTogether?'&pseudo='+encodeURIComponent(pseudoTogether):'')+(avis?'&avis='+encodeURIComponent(avis):'');
     }
     function lockShareData(){
       var share=null;
       var c={};for(var k0 in cinq){if(cinq[k0])c[k0]=cinq[k0]}
       var hasCompo=Object.keys(c).length>0,hasBench=bench.length>0,hasReserve=reserve.length>0;
       var picks=[];for(var k1 in pronos){if(pronos[k1])picks.push([k1,pronos[k1]])}
-      if(hasCompo||hasBench||hasReserve||picks.length){share={u:buildShareUrl()};if(hasCompo)share.c=c;if(hasBench)share.b=bench.slice(0,7);if(hasReserve)share.r=reserve.slice(0,3);if(picks.length)share.p=picks}
+      if(hasCompo||hasBench||hasReserve||picks.length){share={u:buildShareUrl()};if(hasCompo)share.c=c;if(hasBench)share.b=bench.slice(0,7);if(hasReserve)share.r=reserve.slice(0,3);if(picks.length)share.p=picks;var avisTxt=(function(){try{var a=document.getElementById('avisField');return a?String(a.value||'').trim().slice(0,280):''}catch(e){return''}})();if(avisTxt)share.a=avisTxt}
       return share;
     }
     function flashShare(msg){
@@ -601,12 +607,13 @@
       var inc=document.getElementById('cIncludeLink');if(inc)inc.checked=true;
     });
     (function(){
-      var compo=qp('compo'),sPronos=qp('pronos'),sBench=qp('bench'),sReserve=qp('reserve'),pseudo=qp('pseudo');
+      var compo=qp('compo'),sPronos=qp('pronos'),sBench=qp('bench'),sReserve=qp('reserve'),pseudo=qp('pseudo'),avis=qp('avis');
       if(!compo&&!sPronos)return;
       var banner=document.getElementById('shareBanner');if(!banner)return;
       var who=document.getElementById('sharePseudo');if(who)who.textContent=(pseudo||'un supporter').slice(0,24);
+      if(avis){var sa=document.getElementById('shareAvis'),sat=document.getElementById('shareAvisText');if(sa&&sat){sat.textContent=avis.slice(0,280);sa.hidden=false}}
       var base=(location.origin&&location.origin!=='null')?location.origin+location.pathname:location.pathname;
-      lastShareUrl=base+'?compo='+compo+'&pronos='+sPronos+(sBench?'&bench='+sBench:'')+(sReserve?'&reserve='+sReserve:'')+(pseudo?'&pseudo='+encodeURIComponent(pseudo):'');
+      lastShareUrl=base+'?compo='+compo+'&pronos='+sPronos+(sBench?'&bench='+sBench:'')+(sReserve?'&reserve='+sReserve:'')+(pseudo?'&pseudo='+encodeURIComponent(pseudo):'')+(avis?'&avis='+encodeURIComponent(avis):'');
       banner.hidden=false;
       document.getElementById('shareImport').addEventListener('click',function(){
         try{
@@ -665,6 +672,7 @@
       if(sh.b&&sh.b.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🪑</span><span><b>Banc</b>'+esc(sh.b.slice(0,7).join(' · '))+'</span></div>');
       if(sh.r&&sh.r.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🧤</span><span><b>Réserve</b>'+esc(sh.r.slice(0,3).join(' · '))+'</span></div>');
       if(sh.p&&sh.p.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">📊</span><span><b>Pronos</b>'+esc(sh.p.map(littleProno).join(' · '))+'</span></div>');
+      if(sh.a)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">💬</span><span><b>Avis</b><span class="cs-avis">'+esc(sh.a)+'</span></span></div>');
       if(sh.u)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🔗</span><span><b>Importer</b><a href="'+esc(sh.u)+'" target="_blank" rel="noopener nofollow">Ouvrir cette compo dans mon espace</a></span></div>');
       return rows.length?'<div class="comment-share">'+rows.join('')+'</div>':'';
     }

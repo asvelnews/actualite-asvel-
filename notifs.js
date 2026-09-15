@@ -262,6 +262,7 @@
     var list = document.getElementById('notifsList');
     renderMatches(list);
     fetchRSS(function (items) { renderNews(list, items); updateBadge(); });
+    return panel;
   }
 
   /* ---- Cloche + ouverture/fermeture ---- */
@@ -272,7 +273,6 @@
     if (bell) bell.setAttribute('aria-expanded', String(open));
   }
   function toggle() {
-    pick();
     setPanel(!open);
   }
   function init() {
