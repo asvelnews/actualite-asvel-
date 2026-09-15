@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="theme.css?v=20260915-theme-v4">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
+    *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}html{scroll-behavior:smooth}body{background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
     .hero{position:relative;isolation:isolate;overflow:hidden;padding:5rem 5vw 3.8rem;background:#050505;color:#fff}.hero:after{content:'VS';position:absolute;z-index:-1;right:4vw;bottom:-4.2rem;color:#121212;font-family:'Archivo Black',sans-serif;font-size:clamp(9rem,22vw,22rem);line-height:1}.hero-inner,.page{width:min(1180px,100%);margin:auto}.eyebrow{display:flex;align-items:center;gap:.65rem;color:#bbb;font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.eyebrow:before{content:'';width:34px;height:3px;background:var(--gold)}.hero h1{max-width:850px;margin-top:.85rem;font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,7vw,5.6rem);line-height:.9;letter-spacing:-.055em;text-transform:uppercase}.hero p{max-width:650px;margin-top:1.3rem;color:#c7c7c7;line-height:1.6}
     .page{padding:2.5rem 1.2rem 5rem}
     .local-note{display:flex;align-items:center;gap:.6rem;margin-bottom:2rem;padding:.7rem 1rem;border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:.78rem;line-height:1.4}.local-note:before{content:'';flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
@@ -61,7 +61,7 @@
     .tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:1.4rem}.tip{display:flex;gap:.8rem;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:.9rem 1rem}.tip-ico{flex:0 0 34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#111;color:var(--gold);font-size:1rem}.tip strong{display:block;font-family:'Oswald',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.tip p{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:.25rem}
     @media(max-width:720px){.tips{grid-template-columns:1fr}}
     /* ---- Tribune des supporters ---- */
-    .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
+    .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.comments-gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin-top:1.4rem;padding:1.4rem 1.4rem 1.5rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}.comments-gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}.comments-gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}.comments-gate[hidden]{display:none}.composer input[readonly]{cursor:default;opacity:.85}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
     /* ---- Partage compo/pronos affiché directement dans un message ---- */
     .comment-share{display:flex;flex-direction:column;margin-top:.65rem;padding:.15rem 0 0;font-size:.8rem}.comment-share-row{display:flex;gap:.5rem;align-items:baseline;padding:.3rem .7rem;border-left:3px solid var(--gold);background:var(--off);border-radius:6px}.comment-share-row+.comment-share-row{margin-top:.35rem}.comment-share-row .cs-ic{flex:none;font-size:.9rem}.comment-share-row b{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-light);margin-right:.4rem}.comment-share-row a{color:var(--gold-light);text-decoration:underline;font-weight:600}
     /* ---- Bannière prochain match + compte à rebours ---- */
@@ -182,11 +182,16 @@
 
     <section class="section-block" id="tribune" aria-labelledby="tribune-title">
       <h2 id="tribune-title">La Tribune des supporters</h2>
-      <p>La place est à vous : échangez vos pronos, vos cinq et vos idées, en direct. Messages publics — soyez courtois, c’est la maison de tout le monde. Le chat reste propre : chaque message est gardé 48 heures puis effacé automatiquement.</p>
-      <div class="comments" id="commentsBox" data-disabled="1">
+      <p>Réservée aux membres Actu ASVEL : créez un compte, connectez-vous, et la place est à vous — échangez vos pronos, vos cinq et vos idées, en direct. Messages publics — soyez courtois, c’est la maison de tout le monde. Le chat reste propre : chaque message est gardé 48 heures puis effacé automatiquement.</p>
+      <div class="comments-gate" id="tribuneGate" hidden>
+        <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
+        <p>Cette tribune n’est pas ouverte à tout le monde : il faut un compte pour la lire et y publier. C’est gratuit, et votre compte reste dans votre navigateur — 100 % local, aucun service externe.</p>
+        <a class="filter active" href="compte.html">Créer mon compte / Me connecter</a>
+      </div>
+      <div class="comments" id="commentsBox" data-disabled="1" hidden>
         <div class="composer" id="composerBox">
-          <label for="cPseudo">Votre pseudo</label>
-          <input id="cPseudo" type="text" maxlength="24" placeholder="Ex : Supporter Villeurbanne (facultatif)" autocomplete="nickname">
+          <label for="cPseudo">Votre pseudo (celui de votre compte)</label>
+          <input id="cPseudo" type="text" maxlength="24" readonly placeholder="—" autocomplete="off" title="Le pseudo de votre compte Actu ASVEL">
           <label for="cMessage">Votre message</label>
           <textarea id="cMessage" maxlength="600" placeholder="Votre prono du derby ? Votre cinq du jour ? Cochez « Joindre ma compo » et votre équipe s’affiche dans votre message."></textarea>
           <div class="composer-actions">
@@ -595,7 +600,7 @@
       document.getElementById('shareDismiss').addEventListener('click',function(){banner.hidden=true});
     })();
 
-    /* ======= TRIBUNE DES SUPPORTERS — chat en direct (sans compte, sans historique) ======= */
+    /* ======= TRIBUNE DES SUPPORTERS — chat en direct, réservé aux membres (session locale) ======= */
     var TRIBE_TOPIC='actuasvel/tribune';
     var TRIBE_TTL=48*60*60*1000;  /* durée de vie d'un message : 48 heures, puis il s'efface tout seul */
     var TRIBE_MAX=60;
@@ -606,6 +611,19 @@
     var tribuneOnline=false;
     var mqttClient=null;
     var myId=Math.random().toString(36).slice(2,10);
+    /* ---- Accès réservé aux membres : la tribune exige une session locale (compte.html) ---- */
+    var currentUser=null;
+    (function(){
+      try{
+        var norm=localStorage.getItem('asvel-session');
+        if(!norm)return;
+        var raw=localStorage.getItem('asvel-accounts');
+        if(!raw)return;
+        var arr=JSON.parse(raw);
+        if(!Array.isArray(arr))return;
+        for(var i=0;i<arr.length;i++){if(arr[i].norm===norm){currentUser=arr[i];return}}
+      }catch(e){}
+    })();
     function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     function fmtDate(t){try{if(!t)return'';var d=new Date(t);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}catch(e){return''}}
     function linkified(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener nofollow">$1</a>').replace(/\n/g,'<br>')}
@@ -714,17 +732,30 @@
       });
       client.on('error',function(){});
     }
-    loadMqtt(function(){
-      if(!window.mqtt||!commentsBox)return;
-      try{
-        document.getElementById('cSend').addEventListener('click',postLive);
-        document.getElementById('cMessage').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey)){ev.preventDefault();postLive()}});
-      }catch(e){}
-      startTribune();
-    });
+    var gateEl=document.getElementById('tribuneGate');
+    if(!currentUser){
+      /* Visiteur sans compte : la tribune est verrouillée — on ne charge même pas le chat. */
+      if(gateEl)gateEl.hidden=false;
+      if(commentsBox)commentsBox.hidden=true;
+    }else{
+      /* Membre connecté : on déverrouille, le pseudo vient du compte. */
+      if(gateEl)gateEl.hidden=true;
+      if(commentsBox)commentsBox.hidden=false;
+      var pi=document.getElementById('cPseudo');
+      if(pi){pi.value=currentUser.pseudo||'';pi.readOnly=true}
+      try{if(pi)localStorage.setItem('asvel-pseudo',pi.value)}catch(e){}
+      loadMqtt(function(){
+        if(!window.mqtt||!commentsBox)return;
+        try{
+          document.getElementById('cSend').addEventListener('click',postLive);
+          document.getElementById('cMessage').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey)){ev.preventDefault();postLive()}});
+        }catch(e){}
+        startTribune();
+      });
+    }
   })();
   </script>
-  <script src="site.js?v=20260915-interactif" defer></script>
+  <script src="site.js?v=20260915-compte" defer></script>
   <!-- Cloudflare Web Analytics -->
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
   <!-- End Cloudflare Web Analytics -->

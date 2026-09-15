@@ -50,6 +50,7 @@
       ['Stats', root + 'statistiques.html', 'stats'],
       ['Palmarès', root + 'palmares.html', 'honours'],
       ['Accès', root + 'acces.html', 'access'],
+      ['Mon compte', root + 'compte.html', 'account'],
       ['À propos', root + 'a-propos.html', 'about']
     ];
 
@@ -125,6 +126,7 @@
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
       if (page === 'acces.html') return 'access';
+      if (page === 'compte.html') return 'account';
       if (page === 'a-propos.html') return 'about';
       if (page === 'matchs.html') return location.hash === '#classement' ? 'standings' : 'matches';
       return 'home';
