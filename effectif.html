@@ -11,9 +11,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css?v=20260915-theme-v4">
+  <link rel="stylesheet" href="theme.css?v=20260915-notifs">
   <style>
+    [hidden]{display:none!important}
     *{box-sizing:border-box;margin:0;padding:0}
+    .comments-gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin:1.4rem 1.2rem;padding:1.4rem 1.4rem 1.5rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}
+    .comments-gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}
+    .comments-gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}
     html{scroll-behavior:smooth}
     body{overflow:hidden;background:var(--soft);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}
     a{color:inherit;text-decoration:none}
@@ -155,6 +159,12 @@
       </div>
     </div>
 
+    <div class="comments-gate" id="cinqGate" hidden>
+      <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
+      <p>Le « Mon cinq » est réservé aux membres Actu ASVEL. C’est gratuit — créez votre équipe avec un compte, directement dans votre navigateur, sans service externe.</p>
+      <a class="filter active" href="compte.html">Créer mon compte / Me connecter</a>
+    </div>
+
     <section class="cinq-bar" id="cinqBar" aria-labelledby="cinq-title">
       <div class="cinq-head"><div><h2 id="cinq-title">Votre cinq majeur</h2><p>Composez votre équipe de départ pour les matchs. Cinq postes à remplir, sauvegardés sur votre appareil.</p></div><span class="cinq-count" id="cinqCount">0/5 rempli</span></div>
       <div class="cinq-slots" id="cinqSlots"></div>
@@ -254,6 +264,18 @@
       var toggleBtn=document.getElementById('compoToggle');
       var compoMode=false;
       var cinq=readCinq();
+      var currentUser=null;
+      (function(){
+        try{
+          var normS=localStorage.getItem('asvel-session');
+          if(!normS)return;
+          var rawA=localStorage.getItem('asvel-accounts');
+          if(!rawA)return;
+          var arr=JSON.parse(rawA);
+          if(!Array.isArray(arr))return;
+          for(var i=0;i<arr.length;i++){if(arr[i].norm===normS){currentUser=arr[i];return}}
+        }catch(e){}
+      })();
       function readCinq(){try{var raw=localStorage.getItem(CINQ_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
       function writeCinq(obj){try{localStorage.setItem(CINQ_KEY,JSON.stringify(obj))}catch(e){}}
       function playerByName(name){for(var i=0;i<players.length;i++)if(players[i].dataset.name===name)return players[i];return null}
@@ -319,9 +341,21 @@
         cinq[free.key]=name;writeCinq(cinq);render();
         setStatus(name+' sélectionné au poste de '+free.label.toLowerCase()+'.');
       },true);
+      var cGate=document.getElementById('cinqGate'),cBar=document.getElementById('cinqBar'),ct=document.getElementById('compoToggle');
+      if(!currentUser){
+        if(cGate)cGate.hidden=false;
+        if(cBar)cBar.hidden=true;
+        if(ct)ct.hidden=true;
+      }else{
+        if(cGate)cGate.hidden=true;
+        if(cBar)cBar.hidden=false;
+        if(ct)ct.hidden=false;
+      }
     })();
   </script>
-<script src="site.js?v=20260915-compte" defer></script>
+<script src="site.js?v=20260915-notifs" defer></script>
+<script src="data.js?v=20260915-notifs" defer></script>
+<script src="notifs.js?v=20260915-notifs" defer></script>
 <!-- Cloudflare Web Analytics -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
 <!-- End Cloudflare Web Analytics -->

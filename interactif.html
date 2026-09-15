@@ -10,7 +10,7 @@
   <link rel="alternate" type="application/rss+xml" title="Actu ASVEL — Flux RSS" href="rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css?v=20260915-theme-v4">
+  <link rel="stylesheet" href="theme.css?v=20260915-notifs">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}html{scroll-behavior:smooth}body{background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
     .hero{position:relative;isolation:isolate;overflow:hidden;padding:5rem 5vw 3.8rem;background:#050505;color:#fff}.hero:after{content:'VS';position:absolute;z-index:-1;right:4vw;bottom:-4.2rem;color:#121212;font-family:'Archivo Black',sans-serif;font-size:clamp(9rem,22vw,22rem);line-height:1}.hero-inner,.page{width:min(1180px,100%);margin:auto}.eyebrow{display:flex;align-items:center;gap:.65rem;color:#bbb;font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.eyebrow:before{content:'';width:34px;height:3px;background:var(--gold)}.hero h1{max-width:850px;margin-top:.85rem;font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,7vw,5.6rem);line-height:.9;letter-spacing:-.055em;text-transform:uppercase}.hero p{max-width:650px;margin-top:1.3rem;color:#c7c7c7;line-height:1.6}
@@ -61,7 +61,7 @@
     .tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:1.4rem}.tip{display:flex;gap:.8rem;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:.9rem 1rem}.tip-ico{flex:0 0 34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#111;color:var(--gold);font-size:1rem}.tip strong{display:block;font-family:'Oswald',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.tip p{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:.25rem}
     @media(max-width:720px){.tips{grid-template-columns:1fr}}
     /* ---- Tribune des supporters ---- */
-    .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.comments-gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin-top:1.4rem;padding:1.4rem 1.4rem 1.5rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}.comments-gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}.comments-gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}.comments-gate[hidden]{display:none}.composer input[readonly]{cursor:default;opacity:.85}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
+    .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.comments-gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin-top:1.4rem;padding:1.4rem 1.4rem 1.5rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}.comments-gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}.comments-gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}.comments-gate[hidden]{display:none}.composer input[readonly]{cursor:default;opacity:.85}.comment-pseudo.from-member{color:var(--gold)}.member-tag{display:inline-flex;align-items:center;padding:.16rem .5rem;border:1px solid rgba(201,164,77,.55);border-radius:20px;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
     /* ---- Partage compo/pronos affiché directement dans un message ---- */
     .comment-share{display:flex;flex-direction:column;margin-top:.65rem;padding:.15rem 0 0;font-size:.8rem}.comment-share-row{display:flex;gap:.5rem;align-items:baseline;padding:.3rem .7rem;border-left:3px solid var(--gold);background:var(--off);border-radius:6px}.comment-share-row+.comment-share-row{margin-top:.35rem}.comment-share-row .cs-ic{flex:none;font-size:.9rem}.comment-share-row b{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-light);margin-right:.4rem}.comment-share-row a{color:var(--gold-light);text-decoration:underline;font-weight:600}
     /* ---- Bannière prochain match + compte à rebours ---- */
@@ -119,7 +119,7 @@
       </div>
     </section>
 
-    <div class="jauge" aria-label="Votre activité de supporter">
+    <div class="jauge" id="jaugeBox" aria-label="Votre activité de supporter">
       <div class="jauge-item"><div class="jauge-label">Vos pronostics</div><div class="jauge-value"><span id="jaugePronos">0</span></div></div>
       <div class="jauge-item"><div class="jauge-label">Titulaires</div><div class="jauge-value" id="jaugeCinq">0/5</div></div>
       <div class="jauge-item"><div class="jauge-label">Remplaçants</div><div class="jauge-value" id="jaugeBench">0/7</div></div>
@@ -135,6 +135,12 @@
         <button class="filter" id="shareImport" type="button">Importer chez moi</button>
         <button class="filter" id="shareDismiss" type="button">Fermer</button>
       </div>
+    </div>
+
+    <div class="comments-gate" id="pronosGate" hidden>
+      <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
+      <p>Les pronostics et la composition du jour ne sont pas ouverts à tout le monde : il faut un compte pour voter et composer l’équipe. C’est gratuit, et votre compte reste dans votre navigateur — 100 % local, aucun service externe.</p>
+      <a class="filter active" href="compte.html">Créer mon compte / Me connecter</a>
     </div>
 
     <section class="section-block" id="pronostics" aria-labelledby="prono-title">
@@ -221,7 +227,7 @@
     var games=[
     ['2026-09-24','20h45','Maccabi Tel-Aviv','home','euroleague','LDLC Arena'],['2026-09-30','21h15','Panathinaïkos','away','euroleague'],['2026-10-02','20h00','Valencia Basket','home','euroleague','LDLC Arena'],['2026-10-07','20h45','Paris Basketball','away','euroleague'],['2026-10-13','20h00','Étoile Rouge de Belgrade','home','euroleague'],['2026-10-15','21h00','Real Madrid','away','euroleague'],['2026-10-23','20h00','Žalgiris Kaunas','away','euroleague'],['2026-10-28','20h00','Partizan Belgrade','home','euroleague','LDLC Arena'],['2026-10-30','20h00','Baskonia','home','euroleague','LDLC Arena'],['2026-11-05','20h00','Bayern Munich','home','euroleague','LDLC Arena'],['2026-11-13','20h30','Beşiktaş','home','euroleague','LDLC Arena'],['2026-11-17','20h45','Fenerbahçe','away','euroleague'],['2026-11-20','20h30','Anadolu Efes','away','euroleague'],['2026-11-24','20h45','Olimpia Milan','home','euroleague','LDLC Arena'],['2026-12-04','21h15','Olympiakos','away','euroleague'],['2026-12-10','20h00','Hapoël Tel-Aviv','away','euroleague'],['2026-12-15','20h30','Virtus Bologne','away','euroleague'],['2026-12-17','20h00','Dubai Basketball','home','euroleague'],['2026-12-22','20h00','FC Barcelone','home','euroleague','LDLC Arena'],['2026-12-30','20h00','Olympiakos','home','euroleague','LDLC Arena'],['2027-01-08','20h00','Étoile Rouge de Belgrade','away','euroleague'],['2027-01-12','20h00','Žalgiris Kaunas','home','euroleague','LDLC Arena'],['2027-01-14','20h30','Olimpia Milan','away','euroleague'],['2027-01-22','20h30','Valencia Basket','away','euroleague'],['2027-01-29','20h00','Hapoël Tel-Aviv','home','euroleague'],['2027-02-03','20h30','FC Barcelone','away','euroleague'],['2027-02-05','20h00','Fenerbahçe','home','euroleague'],['2027-02-10','20h00','Anadolu Efes','home','euroleague','LDLC Arena'],['2027-03-05','20h30','Bayern Munich','away','euroleague'],['2027-03-09','20h00','Beşiktaş','away','euroleague'],['2027-03-11','20h05','Maccabi Tel-Aviv','away','euroleague'],['2027-03-19','20h00','Virtus Bologne','home','euroleague'],['2027-03-23','20h00','Panathinaïkos','home','euroleague','LDLC Arena'],['2027-03-25','20h00','Paris Basketball','home','euroleague','LDLC Arena'],['2027-04-02','20h45','Partizan Belgrade','away','euroleague'],['2027-04-06','20h30','Baskonia','away','euroleague'],['2027-04-08','20h00','Real Madrid','home','euroleague','LDLC Arena'],['2027-04-16','20h00','Dubai Basketball','away','euroleague'],
     ['2026-10-10','À venir','Chorale de Roanne','home','derby','Astroballe'],['2026-11-22','À venir','JL Bourg','home','derby','Astroballe'],['2027-01-31','À venir','JL Bourg','away','derby','Ekinox'],['2027-04-18','À venir','Chorale de Roanne','away','derby','Roanne'],
-    ['2026-09-26','À venir','Cholet Basket','away','belite'],['2027-03-27','À venir','Cholet Basket','home','belite'],['2026-10-04','À venir','Gravelines-Dunkerque','away','belite'],['2027-04-10','À venir','Gravelines-Dunkerque','home','belite'],['2026-10-17','À venir','Limoges','away','belite'],['2027-04-27','À venir','Limoges','home','belite'],['2026-10-25','À venir','Nancy','home','belite'],['2027-05-01','À venir','Nancy','away','belite'],['2026-11-01','À venir','Saint-Quentin','away','belite'],['2027-05-09','À venir','Saint-Quentin','home','belite'],['2026-11-07','À venir','Élan Béarnais Pau-Lacq-Orthez','home','belite'],['2027-03-21','À venir','Élan Béarnais Pau-Lacq-Orthez','away','belite'],['2026-11-15','À venir','Le Mans','away','belite'],['2027-03-13','À venir','Le Mans','home','belite'],['2026-12-06','À venir','Strasbourg','away','belite'],['2027-01-24','À venir','Strasbourg','home','belite'],['2026-12-13','À venir','Paris Basketball','home','belite'],['2027-01-16','À venir','Paris Basketball','away','belite'],['2026-12-19','À venir','Nanterre 92','home','belite'],['2027-03-06','À venir','Nanterre 92','away','belite'],['2026-12-27','À venir','Dijon','home','belite'],['2027-04-04','À venir','Dijon','away','belite'],['2027-01-10','À venir','Boulazac','away','belite'],['2027-02-13','À venir','Boulazac','home','belite'],['2027-02-07','À venir','Chalon-sur-Saône','home','belite'],['2026-12-23','Date à définir','Chalon-sur-Saône','away','belite']];
+    ['2026-09-27','19h00','Cholet Basket','away','belite'],['2027-03-27','À venir','Cholet Basket','home','belite'],['2026-10-04','À venir','Gravelines-Dunkerque','away','belite'],['2027-04-10','À venir','Gravelines-Dunkerque','home','belite'],['2026-10-17','À venir','Limoges','away','belite'],['2027-04-27','À venir','Limoges','home','belite'],['2026-10-25','À venir','Nancy','home','belite'],['2027-05-01','À venir','Nancy','away','belite'],['2026-11-01','À venir','Saint-Quentin','away','belite'],['2027-05-09','À venir','Saint-Quentin','home','belite'],['2026-11-07','À venir','Élan Béarnais Pau-Lacq-Orthez','home','belite'],['2027-03-21','À venir','Élan Béarnais Pau-Lacq-Orthez','away','belite'],['2026-11-15','À venir','Le Mans','away','belite'],['2027-03-13','À venir','Le Mans','home','belite'],['2026-12-06','À venir','Strasbourg','away','belite'],['2027-01-24','À venir','Strasbourg','home','belite'],['2026-12-13','À venir','Paris Basketball','home','belite'],['2027-01-16','À venir','Paris Basketball','away','belite'],['2026-12-19','À venir','Nanterre 92','home','belite'],['2027-03-06','À venir','Nanterre 92','away','belite'],['2026-12-27','À venir','Dijon','home','belite'],['2027-04-04','À venir','Dijon','away','belite'],['2027-01-10','À venir','Boulazac','away','belite'],['2027-02-13','À venir','Boulazac','home','belite'],['2027-02-07','À venir','Chalon-sur-Saône','home','belite'],['2026-12-23','Date à définir','Chalon-sur-Saône','away','belite']];
 
     var months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
     var PRONO_KEY='asvel-pronos';
@@ -229,7 +235,20 @@
     var listEl=document.getElementById('pronoList'),emptyEl=document.getElementById('pronoEmpty');
 
     function readPronos(){try{var raw=localStorage.getItem(PRONO_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
-    function writePronos(obj){try{localStorage.setItem(PRONO_KEY,JSON.stringify(obj))}catch(e){}}
+    function writePronos(obj){try{localStorage.setItem(PRONO_KEY,JSON.stringify(obj))}catch(e){}touchActivity('pronos')}
+    /* Mini-trace d'activité membre — alimente le mini-classement local (espace-membre.html).
+       currentUser est résolu plus bas dans l'IIFE mais ces write ne tournent qu'à l'action d'un membre. */
+    function touchActivity(area){
+      if(typeof currentUser==='undefined'||!currentUser||!currentUser.norm)return;
+      try{
+        var key='asvel-activity-'+currentUser.norm;
+        var a=JSON.parse(localStorage.getItem(key)||'{}');
+        if(!a||typeof a!=='object')a={};
+        a[area]=(a[area]||0)+1;
+        a.lastAt=Date.now();
+        localStorage.setItem(key,JSON.stringify(a));
+      }catch(e){}
+    }
     function matchKey(g){return g[0]+'|'+g[2]+'|'+g[3]}
     function shortName(name,w){w=w||16;return name.length>w?name.slice(0,w-1).trim()+'…':name}
     var pronos=readPronos();
@@ -379,11 +398,14 @@
     var reserve=readReserve();
 
     function readCinq(){try{var raw=localStorage.getItem(CINQ_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
-    function writeCinq(obj){try{localStorage.setItem(CINQ_KEY,JSON.stringify(obj))}catch(e){}}
+    function writeCinq(obj){try{localStorage.setItem(CINQ_KEY,JSON.stringify(obj))}catch(e){}
+      touchActivity('compo')}
     function readBench(){try{var raw=localStorage.getItem(BENCH_KEY);if(raw){var parsed=JSON.parse(raw);if(Object.prototype.toString.call(parsed)==='[object Array]')return parsed.slice(0,7)}}catch(e){}return[]}
-    function writeBench(arr){try{localStorage.setItem(BENCH_KEY,JSON.stringify((Array.isArray(arr)?arr:[]).slice(0,7)))}catch(e){}}
+    function writeBench(arr){try{localStorage.setItem(BENCH_KEY,JSON.stringify((Array.isArray(arr)?arr:[]).slice(0,7)))}catch(e){}
+      touchActivity('compo')}
     function readReserve(){try{var raw=localStorage.getItem(RESERVE_KEY);if(raw){var parsed=JSON.parse(raw);if(Object.prototype.toString.call(parsed)==='[object Array]')return parsed.slice(0,3)}}catch(e){}return[]}
-    function writeReserve(arr){try{localStorage.setItem(RESERVE_KEY,JSON.stringify((Array.isArray(arr)?arr:[]).slice(0,3)))}catch(e){}}
+    function writeReserve(arr){try{localStorage.setItem(RESERVE_KEY,JSON.stringify((Array.isArray(arr)?arr:[]).slice(0,3)))}catch(e){}
+      touchActivity('compo')}
     var ZONES={cinq:{max:5},bench:{max:7},reserve:{max:3}};
     function zoneOfPlayer(name){if(slotOfPlayer(name))return'cinq';if(bench.indexOf(name)>-1)return'bench';if(reserve.indexOf(name)>-1)return'reserve';return null}
     function eligibleSlots(player){var groups=(player.dataset.group||'').split(' ');return SLOTS.filter(function(s){return groups.indexOf(s.key)>-1})}
@@ -646,7 +668,8 @@
       if(sh.u)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🔗</span><span><b>Importer</b><a href="'+esc(sh.u)+'" target="_blank" rel="noopener nofollow">Ouvrir cette compo dans mon espace</a></span></div>');
       return rows.length?'<div class="comment-share">'+rows.join('')+'</div>':'';
     }
-    function commentHTML(m){return '<div class="comment"><div class="comment-head"><span class="comment-pseudo">'+esc(m.p||'Supporter')+'</span><span class="comment-date">'+fmtDate(m.t)+'</span></div>'+(m.m?'<div class="comment-msg">'+linkified(m.m)+'</div>':'')+shareHTML(m.share)+'</div>'}
+    var memberPseudos={};(function(){try{var raw=localStorage.getItem('asvel-accounts');if(!raw)return;var arr=JSON.parse(raw);if(Array.isArray(arr))arr.forEach(function(a){if(a&&a.pseudo)memberPseudos[String(a.pseudo).toLowerCase()]=a.pseudo})}catch(e){}})();
+    function commentHTML(m){var p=esc(m.p||'Supporter');var isM=m.p&&memberPseudos[String(m.p).toLowerCase()];return '<div class="comment"><div class="comment-head"><span class="comment-pseudo'+(isM?' from-member':'')+'">'+p+'</span>'+(isM?'<span class="member-tag">Membre</span>':'')+'<span class="comment-date">'+fmtDate(m.t)+'</span></div>'+(m.m?'<div class="comment-msg">'+linkified(m.m)+'</div>':'')+shareHTML(m.share)+'</div>'}
     var tribeMsgs=[],tribeSeen={};
     function renderTribune(){
       if(!discussionList)return;
@@ -732,6 +755,21 @@
       });
       client.on('error',function(){});
     }
+    var pronosGate=document.getElementById('pronosGate');
+    if(!currentUser){
+      /* Visiteur sans compte : pronos & cinq verrouillés — on masque toute la zone interactive. */
+      if(pronosGate)pronosGate.hidden=false;
+      ['jaugeBox','shareBanner','pronostics','composition'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el)el.hidden=true;
+      });
+    }else{
+      if(pronosGate)pronosGate.hidden=true;
+      ['jaugeBox','shareBanner','pronostics','composition'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el)el.hidden=false;
+      });
+    }
     var gateEl=document.getElementById('tribuneGate');
     if(!currentUser){
       /* Visiteur sans compte : la tribune est verrouillée — on ne charge même pas le chat. */
@@ -755,7 +793,9 @@
     }
   })();
   </script>
-  <script src="site.js?v=20260915-compte" defer></script>
+  <script src="site.js?v=20260915-notifs" defer></script>
+  <script src="data.js?v=20260915-notifs" defer></script>
+  <script src="notifs.js?v=20260915-notifs" defer></script>
   <!-- Cloudflare Web Analytics -->
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
   <!-- End Cloudflare Web Analytics -->

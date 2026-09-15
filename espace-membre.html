@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace membre — Actu ASVEL</title>
+  <meta name="description" content="L'espace réservé aux membres Actu ASVEL : votre activité de supporter, votre compo, votre bilan pronos et le mini-classement local.">
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="Actu ASVEL — Flux RSS" href="rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css?v=20260915-notifs">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button{font:inherit}
+    [hidden]{display:none!important}
+    .hero{position:relative;isolation:isolate;overflow:hidden;padding:5.6rem 5vw 4.5rem;background:#050505;color:#fff}.hero:after{content:'EM';position:absolute;z-index:-1;right:3vw;bottom:-6.5rem;color:#121212;font-family:'Archivo Black',sans-serif;font-size:clamp(10rem,22vw,19rem);line-height:1}.hero-inner,.page{width:min(1180px,100%);margin:auto}.eyebrow{display:flex;align-items:center;gap:.65rem;color:#bbb;font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.eyebrow:before{content:'';width:34px;height:3px;background:var(--gold)}.hero h1{max-width:850px;margin-top:.85rem;font-family:'Archivo Black',sans-serif;font-size:clamp(3rem,8vw,6.6rem);line-height:.88;letter-spacing:-.055em;text-transform:uppercase}.hero p{max-width:650px;margin-top:1.3rem;color:#c7c7c7;line-height:1.6}
+    .page{padding:3rem 1.2rem 5rem}
+    .info{margin-bottom:1.1rem;padding:1rem 1.2rem;background:var(--paper);border:1px dashed var(--line);border-left:3px solid var(--gold);color:var(--muted);font-size:.82rem;line-height:1.6}.info strong{color:var(--text)}
+    .gate{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;margin:1rem 0;padding:1.6rem 1.5rem 1.7rem;border:1px dashed var(--gold);background:var(--paper);border-radius:12px}
+    .gate .gate-ic{display:inline-flex;align-items:center;gap:.55rem;font-family:'Archivo Black',sans-serif;font-size:1.05rem;letter-spacing:-.02em;text-transform:uppercase}
+    .gate p{margin:0;max-width:560px;color:var(--muted);font-size:.84rem;line-height:1.55}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1rem;border:1px solid var(--gold);background:transparent;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;transition:background .2s,color .2s}
+    .btn.solid{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+    .btn:hover{background:var(--gold);color:var(--on-gold)}
+    .member-card{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:1.6rem 1.8rem}
+    .acc-avatar{width:60px;height:60px;border-radius:50%;background:#111;color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:1.4rem;flex:none}
+    .acc-pseudo{font-family:'Archivo Black',sans-serif;font-size:clamp(1.3rem,3vw,1.9rem);text-transform:uppercase;letter-spacing:-.02em}
+    .acc-meta{color:var(--muted);font-size:.85rem;margin-top:.2rem}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem;margin-top:1.1rem}
+    .stat{padding:.8rem .9rem;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+    .stat strong{display:block;font-family:'Archivo Black',sans-serif;font-size:1.25rem;letter-spacing:-.02em}
+    .stat span{display:block;margin-top:.2rem;color:var(--muted);font-size:.65rem;font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+    .block{margin-top:2rem}
+    .block>h2{font-family:'Archivo Black',sans-serif;font-size:clamp(1.3rem,3vw,1.8rem);text-transform:uppercase;letter-spacing:-.03em}
+    .block-note{margin:.55rem 0 0;max-width:640px;color:var(--muted);font-size:.84rem;line-height:1.55}
+    .em-cinq{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-top:1rem}
+    .seat{padding:.85rem .9rem;background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:8px}
+    .seat span{display:block;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .seat b{display:block;margin-top:.3rem;font-size:.98rem;line-height:1.25}
+    .seat b.empty{color:var(--muted);font-weight:400;font-size:.85rem}
+    .em-bilan{margin-top:1rem}
+    .em-empty{padding:1.4rem 1.2rem;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:.84rem;line-height:1.55;background:var(--paper)}
+    .em-rank{margin-top:1rem;list-style:none;display:grid;gap:.55rem}
+    .rank-row{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+    .rank-row.me{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+    .rank-pos{flex:0 0 30px;font-family:'Archivo Black',sans-serif;font-size:1.05rem;color:var(--muted);text-align:center}
+    .rank-pos.first,.rank-pos.second,.rank-pos.third{color:var(--gold)}
+    .rank-info{min-width:0;flex:1}
+    .rank-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.86rem}
+    .rank-pseudo .you{display:inline-block;margin-left:.45rem;padding:.12rem .45rem;border-radius:20px;background:var(--gold);color:#050505;font-family:'Oswald',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+    .rank-sub{color:var(--muted);font-size:.74rem;margin-top:.15rem}
+    .rank-score{flex:0 0 auto;text-align:right;font-family:'Archivo Black',sans-serif;font-size:1.2rem}
+    .rank-score span{display:block;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:.1rem}
+    @media(max-width:820px){.hero{padding:4.4rem 1.2rem 3.7rem}.member-card{padding:1.3rem 1.2rem}}
+    @media(max-width:520px){.hero h1{font-size:2.7rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html">ACTU ASVEL</a>
+    <nav id="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="actualites.html">Actualités</a>
+      <a href="mercato.html">Mercato</a>
+      <a href="matchs.html#calendrier">Matchs</a>
+      <a href="matchs.html#classement">Classements</a>
+      <a href="effectif.html">Effectif</a>
+      <a href="interactif.html">Pronos &amp; Cinq</a>
+      <a href="statistiques.html">Stats</a>
+      <a href="palmares.html">Palmarès</a>
+      <a href="acces.html">Accès</a>
+      <a href="compte.html">Mon compte</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Espace réservé aux membres</div>
+      <h1>Espace membre</h1>
+      <p>Votre avantage compte : tribune, Pronos &amp; Cinq, alertes match, et ici votre activité de supporter et le mini-classement local.</p>
+    </div>
+  </section>
+
+  <main class="page">
+    <p class="info"><strong>100 % sur GitHub.</strong> Les comptes vivent dans ce navigateur : le classement ci-dessous ne compare que les comptes enregistrés sur cet appareil, et l'activité n'est pas partagée entre téléphones.</p>
+
+    <section id="memberGuest" hidden>
+      <div class="gate">
+        <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
+        <p>Cet espace est réservé aux personnes qui ont créé un compte. C'est gratuit, en deux minutes, et votre compte reste dans votre navigateur — aucun service externe.</p>
+        <div>
+          <a class="btn solid" href="compte.html">Créer mon compte / Me connecter</a>
+          <a class="btn" href="index.html">← Retour à l'accueil</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="memberPanel" hidden>
+      <div class="member-card">
+        <div class="acc-avatar" id="emMonogram" aria-hidden="true">?</div>
+        <div>
+          <div class="acc-pseudo" id="emPseudo">Supporter</div>
+          <p class="acc-meta">Membre — avantages actifs : tribune · Pronos &amp; Cinq · alertes match.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat"><strong id="emSince">—</strong><span>Membre depuis</span></div>
+        <div class="stat"><strong id="emPronos">0</strong><span>Pronostics posés</span></div>
+        <div class="stat"><strong id="emCinqN">0/5</strong><span>Ma compo · cinq</span></div>
+        <div class="stat"><strong id="emParticipation">0&nbsp;%</strong><span>Participation</span></div>
+      </div>
+
+      <section class="block" aria-labelledby="em-cinq-title">
+        <h2 id="em-cinq-title">Ma compo du jour</h2>
+        <div class="em-cinq" id="emCinq"></div>
+      </section>
+
+      <section class="block" aria-labelledby="em-bilan-title">
+        <h2 id="em-bilan-title">Mon bilan pronos</h2>
+        <p class="block-note">Chaque pronostic sera comparé au <strong>vrai score</strong> dès qu'un match aura son résultat sur le site. Rien n'est inventé : le bilan se remplit au fil de la saison.</p>
+        <div class="em-bilan" id="emBilan">
+          <div class="em-empty">Aucun match du calendrier n'a encore de résultat renseigné. Revenez après les premières rencontres : vos bons et mauvais pronostics apparaîtront ici.</div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="em-rank-title">
+        <h2 id="em-rank-title">Mini-classement local</h2>
+        <p class="block-note">Classement des comptes enregistrés <strong>sur cet appareil</strong> par activité réelle (pronostics posés + compo enregistrée). Sans serveur, il ne peut pas être partagé entre téléphones — c'est la limite « GitHub seul ». Votre activité est comptée à partir d'aujourd'hui.</p>
+        <ol class="em-rank" id="emRank"></ol>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>ACTU ASVEL</strong>
+      <p>Média indépendant consacré à l'actualité de l'ASVEL, non affilié au club.</p>
+    </div>
+    <a href="https://www.instagram.com/ASVEL_NEWS" target="_blank" rel="noopener">Instagram @ASVEL_NEWS</a>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var KEY_ACCOUNTS = 'asvel-accounts';
+    var KEY_SESSION = 'asvel-session';
+    var MONTHS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+
+    function readStorage(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+    function readObject(key) {
+      try { var raw = readStorage(key); if (!raw) return {}; var o = JSON.parse(raw); return (o && typeof o === 'object') ? o : {}; } catch (e) { return {}; }
+    }
+    function countValues(obj) {
+      var n = 0;
+      for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k]) n++;
+      return n;
+    }
+    function valuesOf(obj) {
+      var out = [];
+      for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k]) out.push(String(obj[k]));
+      return out;
+    }
+    function readAccounts() {
+      try { var raw = readStorage(KEY_ACCOUNTS); if (!raw) return []; var arr = JSON.parse(raw); return Array.isArray(arr) ? arr : []; } catch (e) { return []; }
+    }
+    function findAccount(norm) {
+      var list = readAccounts();
+      for (var i = 0; i < list.length; i++) if (list[i].norm === norm) return list[i];
+      return null;
+    }
+    function monogram(pseudo) {
+      var words = String(pseudo || '').trim().split(/\s+/).filter(Boolean);
+      if (!words.length) return '?';
+      return words.slice(0, 2).map(function (w) { return w.charAt(0); }).join('').toUpperCase() || '?';
+    }
+    function el(id) { return document.getElementById(id); }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+    var currentUser = null;
+    var norm = readStorage(KEY_SESSION);
+    if (norm) currentUser = findAccount(norm);
+
+    function fmtDate(ts) {
+      if (!ts) return '—';
+      var d = new Date(ts);
+      if (isNaN(d.getTime())) return '—';
+      return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    }
+    function participation(activity, pronosLen) {
+      var pc = (activity && activity.pronos) || 0;
+      var cp = (activity && activity.compo) || 0;
+      return Math.min(100, Math.round(((Math.min(pc, 38) / 38) + Math.min(cp, 15) / 15) / 2 * 100));
+    }
+    function renderCinq() {
+      var names = valuesOf(readObject('asvel-cinq'));
+      var box = el('emCinq'), html = '';
+      for (var i = 0; i < 5; i++) {
+        var name = names[i] ? esc(names[i]) : '';
+        html += '<div class="seat"><span>Poste ' + (i + 1) + '</span><b' + (name ? '' : ' class="empty"') + '>' + (name || '· à composer ·') + '</b></div>';
+      }
+      box.innerHTML = html;
+    }
+    function renderRank(sessionNorm) {
+      var list = readAccounts();
+      var rows = [];
+      for (var i = 0; i < list.length; i++) {
+        var acc = list[i];
+        if (!acc || !acc.pseudo) continue;
+        var act = readObject('asvel-activity-' + acc.norm);
+        var pronos = (act && act.pronos) || 0;
+        var compo = (act && act.compo) || 0;
+        rows.push({
+          pseudo: acc.pseudo,
+          norm: acc.norm,
+          pronos: pronos,
+          compo: compo,
+          score: pronos + compo,
+          seniority: acc.createdAt || 0
+        });
+      }
+      rows.sort(function (a, b) {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.seniority - b.seniority;
+      });
+      var ol = el('emRank'), html = '';
+      if (!rows.length) {
+        html = '<li class="em-empty">Aucun compte enregistré sur cet appareil pour l'instant.</li>';
+      } else {
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          var cls = 'rank-row' + (row.norm === sessionNorm ? ' me' : '');
+          var posCls = r === 0 ? ' first' : (r === 1 ? ' second' : (r === 2 ? ' third' : ''));
+          var prog = participation(readObject('asvel-activity-' + row.norm), row.pronos);
+          html += '<li class="' + cls + '"><span class="rank-pos' + posCls + '">' + (r + 1) + '</span>' +
+            '<span class="rank-info"><span class="rank-pseudo">' + esc(row.pseudo) + (row.norm === sessionNorm ? '<span class="you">Vous</span>' : '') + '</span>' +
+            '<span class="rank-sub">' + row.pronos + ' pronostics · ' + row.compo + ' compo · participation ' + prog + ' %</span></span>' +
+            '<span class="rank-score">' + row.score + '<span>points</span></span></li>';
+        }
+      }
+      ol.innerHTML = html;
+    }
+    function init() {
+      if (currentUser) {
+        el('memberPanel').hidden = false;
+        el('emMonogram').textContent = monogram(currentUser.pseudo);
+        el('emPseudo').textContent = currentUser.pseudo;
+        el('emSince').textContent = fmtDate(currentUser.createdAt);
+        var act = readObject('asvel-activity-' + currentUser.norm);
+        el('emPronos').textContent = String((act && act.pronos) || 0);
+        el('emCinqN').textContent = countValues(readObject('asvel-cinq')) + '/5';
+        el('emParticipation').textContent = participation(act, (act && act.pronos) || 0) + ' %';
+        renderCinq();
+        renderRank(currentUser.norm);
+      } else {
+        el('memberGuest').hidden = false;
+      }
+    }
+    init();
+  })();
+  </script>
+  <script src="site.js?v=20260915-notifs" defer></script>
+  <script src="data.js?v=20260915-notifs" defer></script>
+  <script src="notifs.js?v=20260915-notifs" defer></script>
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
