@@ -62,6 +62,8 @@
     @media(max-width:720px){.tips{grid-template-columns:1fr}}
     /* ---- Tribune des supporters ---- */
     .comments{display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}.composer{border:1px solid var(--line);border-top:4px solid var(--gold);background:var(--paper);border-radius:12px;padding:1.05rem 1rem}.composer label{display:block;font-family:'Oswald',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .4rem}.composer label:first-child{margin-top:0}.composer input[type="text"],.composer textarea{width:100%;border:1px solid var(--line);background:var(--off);color:var(--text);border-radius:8px;padding:.6rem .7rem;font-size:.85rem;font-family:inherit}.composer input[type="text"]:focus,.composer textarea:focus{outline:none;border-color:var(--gold)}.composer textarea{min-height:84px;resize:vertical}.composer input::placeholder,.composer textarea::placeholder{color:var(--muted)}.composer-actions{display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap}.composer-actions .filter{margin-left:auto}.composer label.optional{display:inline-flex;align-items:center;gap:.45rem;margin:0;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}.composer label.optional input{width:auto;margin:0;accent-color:var(--gold)}.posted{color:var(--muted);font-size:.78rem}.comment{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--paper);border-radius:10px;padding:.85rem 1rem}.comment-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.comment-pseudo{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.comment-date{color:var(--muted);font-size:.66rem}.comment-msg{margin-top:.35rem;color:var(--text);font-size:.85rem;line-height:1.55;overflow-wrap:anywhere}.comment-msg a{color:var(--gold-light);text-decoration:underline}.comments-empty{padding:2.2rem 1rem;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:.82rem}.comments[data-disabled="1"] .composer{opacity:.55;pointer-events:none}.tribune-status{display:flex;align-items:flex-start;gap:.45rem;color:var(--muted);font-size:.76rem;line-height:1.45}.tribune-status:before{content:'●';color:var(--gold);flex:none;margin-top:.13rem}.tribune-status[hidden]{display:none}
+    /* ---- Partage compo/pronos affiché directement dans un message ---- */
+    .comment-share{display:flex;flex-direction:column;margin-top:.65rem;padding:.15rem 0 0;font-size:.8rem}.comment-share-row{display:flex;gap:.5rem;align-items:baseline;padding:.3rem .7rem;border-left:3px solid var(--gold);background:var(--off);border-radius:6px}.comment-share-row+.comment-share-row{margin-top:.35rem}.comment-share-row .cs-ic{flex:none;font-size:.9rem}.comment-share-row b{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-light);margin-right:.4rem}.comment-share-row a{color:var(--gold-light);text-decoration:underline;font-weight:600}
     /* ---- Bannière prochain match + compte à rebours ---- */
     .next-match{display:flex;align-items:center;gap:1rem;margin-top:1.6rem;padding:1.1rem 1.2rem;border-radius:12px;background:linear-gradient(92deg,#b8860b,#f0c04a);color:#181510;box-shadow:0 10px 24px rgba(0,0,0,.20)}.next-ico{font-size:2rem;flex:none;line-height:1}.next-body{display:flex;flex-direction:column;gap:.15rem;min-width:0}.next-eyebrow{font-family:'Oswald',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5a4500}.next-teams{font-family:'Archivo Black',sans-serif;font-size:clamp(1.05rem,3.2vw,1.45rem);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.next-meta{font-size:.8rem;color:#4a3800;line-height:1.4}.next-count{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.03em;color:#181510;margin-top:.15rem}.next-match[hidden]{display:none}@media(max-width:520px){.next-match{align-items:flex-start;gap:.7rem;padding:.95rem 1rem}.next-teams{white-space:normal}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -186,9 +188,9 @@
           <label for="cPseudo">Votre pseudo</label>
           <input id="cPseudo" type="text" maxlength="24" placeholder="Ex : Supporter Villeurbanne (facultatif)" autocomplete="nickname">
           <label for="cMessage">Votre message</label>
-          <textarea id="cMessage" maxlength="600" placeholder="Votre prono du derby ? Votre cinq du jour ? Collez votre lien partagé pour montrer votre équipe à tous."></textarea>
+          <textarea id="cMessage" maxlength="600" placeholder="Votre prono du derby ? Votre cinq du jour ? Cochez « Joindre ma compo » et votre équipe s’affiche dans votre message."></textarea>
           <div class="composer-actions">
-            <label class="optional"><input type="checkbox" id="cIncludeLink"><span>Joindre le lien de ma compo/pronos au message</span></label>
+            <label class="optional"><input type="checkbox" id="cIncludeLink"><span>Joindre ma compo et mes pronos au message (affichés en clair)</span></label>
             <span class="posted" id="postedStatus" hidden></span>
             <button class="filter active" id="cSend" type="button">Publier</button>
           </div>
@@ -529,6 +531,23 @@
     /* ======= PARTAGE par lien (compo + pronos) ======= */
     var lastShareUrl='';
     function qp(name){try{return new URLSearchParams(location.search).get(name)}catch(e){return null}}
+    function buildShareUrl(){
+      var compo=encodeURIComponent(JSON.stringify(cinq));
+      var sPronos=encodeURIComponent(JSON.stringify(pronos));
+      var sBenchShare=encodeURIComponent(JSON.stringify(bench));
+      var sReserveShare=encodeURIComponent(JSON.stringify(reserve));
+      var pseudoTogether=(function(){try{var p=document.getElementById('cPseudo');return p?p.value.trim().slice(0,24):''}catch(e){return''}})();
+      var base=(location.origin&&location.origin!=='null')?location.origin+location.pathname:location.pathname;
+      return base+'?compo='+compo+'&pronos='+sPronos+'&bench='+sBenchShare+'&reserve='+sReserveShare+(pseudoTogether?'&pseudo='+encodeURIComponent(pseudoTogether):'');
+    }
+    function lockShareData(){
+      var share=null;
+      var c={};for(var k0 in cinq){if(cinq[k0])c[k0]=cinq[k0]}
+      var hasCompo=Object.keys(c).length>0,hasBench=bench.length>0,hasReserve=reserve.length>0;
+      var picks=[];for(var k1 in pronos){if(pronos[k1])picks.push([k1,pronos[k1]])}
+      if(hasCompo||hasBench||hasReserve||picks.length){share={u:buildShareUrl()};if(hasCompo)share.c=c;if(hasBench)share.b=bench.slice(0,7);if(hasReserve)share.r=reserve.slice(0,3);if(picks.length)share.p=picks}
+      return share;
+    }
     function flashShare(msg){
       var h=document.getElementById('shareHint');if(!h)return;
       h.hidden=false;h.textContent=msg;
@@ -548,12 +567,9 @@
       var raw=window.prompt('Un pseudo pour votre lien partagé ? (facultatif)','');
       if(raw===null)return;
       var pseudo=raw.trim().slice(0,24);
-      var compo=encodeURIComponent(JSON.stringify(cinq));
-      var sPronos=encodeURIComponent(JSON.stringify(pronos));
-      var sBenchShare=encodeURIComponent(JSON.stringify(bench));
-      var sReserveShare=encodeURIComponent(JSON.stringify(reserve));
-      var base=(location.origin&&location.origin!=='null')?location.origin+location.pathname:location.pathname;
-      lastShareUrl=base+'?compo='+compo+'&pronos='+sPronos+'&bench='+sBenchShare+'&reserve='+sReserveShare+(pseudo?'&pseudo='+encodeURIComponent(pseudo):'');
+      var existing=document.getElementById('cPseudo');
+      if(existing&&pseudo&&!existing.value)existing.value=pseudo;
+      lastShareUrl=buildShareUrl();
       copyText(lastShareUrl);
       var inc=document.getElementById('cIncludeLink');if(inc)inc.checked=true;
     });
@@ -592,7 +608,27 @@
     var myId=Math.random().toString(36).slice(2,10);
     function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     function fmtDate(t){try{if(!t)return'';var d=new Date(t);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}catch(e){return''}}
-    function commentHTML(m){return '<div class="comment"><div class="comment-head"><span class="comment-pseudo">'+esc(m.p||'Supporter')+'</span><span class="comment-date">'+fmtDate(m.t)+'</span></div><div class="comment-msg">'+esc(m.m||'').replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener nofollow">$1</a>').replace(/\n/g,'<br>')+'</div></div>'}
+    function linkified(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener nofollow">$1</a>').replace(/\n/g,'<br>')}
+    function littleProno(e){
+      var kv=String(e&&e[0]||'').split('|'),opp=kv[1]||'',pick=e[1],when='';
+      try{var d=new Date((kv[0]||'')+'T12:00:00');if(!isNaN(d.getTime()))when=String(d.getDate()).padStart(2,'0')+' '+months[d.getMonth()]+' '}catch(err){}
+      var o=shortName(opp,18);
+      return when+(pick==='asvel'?(o+' → ASVEL ✓'):(o+' ✓'));
+    }
+    function shareHTML(sh){
+      if(!sh||typeof sh!=='object')return'';
+      var rows=[];
+      if(sh.c&&typeof sh.c==='object'){
+        var cinco=SLOTS.map(function(s){return sh.c[s.key]}).filter(Boolean);
+        if(cinco.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">⭐</span><span><b>Cinq</b>'+esc(cinco.join(' · '))+'</span></div>');
+      }
+      if(sh.b&&sh.b.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🪑</span><span><b>Banc</b>'+esc(sh.b.slice(0,7).join(' · '))+'</span></div>');
+      if(sh.r&&sh.r.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🧤</span><span><b>Réserve</b>'+esc(sh.r.slice(0,3).join(' · '))+'</span></div>');
+      if(sh.p&&sh.p.length)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">📊</span><span><b>Pronos</b>'+esc(sh.p.map(littleProno).join(' · '))+'</span></div>');
+      if(sh.u)rows.push('<div class="comment-share-row"><span class="cs-ic" aria-hidden="true">🔗</span><span><b>Importer</b><a href="'+esc(sh.u)+'" target="_blank" rel="noopener nofollow">Ouvrir cette compo dans mon espace</a></span></div>');
+      return rows.length?'<div class="comment-share">'+rows.join('')+'</div>':'';
+    }
+    function commentHTML(m){return '<div class="comment"><div class="comment-head"><span class="comment-pseudo">'+esc(m.p||'Supporter')+'</span><span class="comment-date">'+fmtDate(m.t)+'</span></div>'+(m.m?'<div class="comment-msg">'+linkified(m.m)+'</div>':'')+shareHTML(m.share)+'</div>'}
     var tribeMsgs=[],tribeSeen={};
     function renderTribune(){
       if(!discussionList)return;
@@ -600,7 +636,7 @@
       if(commentsEmpty)commentsEmpty.hidden=tribeMsgs.length>0;
     }
     function processMsg(obj){
-      if(!obj||typeof obj!=='object'||!obj.m)return;
+      if(!obj||typeof obj!=='object'||(!obj.m&&!obj.share))return;
       var mid=obj.mid;
       if(!mid||tribeSeen[mid])return;
       tribeSeen[mid]=true;
@@ -638,11 +674,12 @@
       var pseudo=(document.getElementById('cPseudo').value||'').trim().slice(0,24);
       var msg=(document.getElementById('cMessage').value||'').trim();
       var inc=document.getElementById('cIncludeLink');
-      if(inc&&inc.checked&&lastShareUrl&&msg.indexOf(lastShareUrl)===-1){msg+=(msg?'\n':'')+lastShareUrl}
-      if(!msg)return;
+      var share=(inc&&inc.checked)?lockShareData():null;
+      if(!msg&&!share)return;
       try{localStorage.setItem('asvel-pseudo',pseudo)}catch(e){}
       var mid=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
       var payload={mid:mid,p:pseudo||'Supporter',m:msg,t:Date.now()};
+      if(share)payload.share=share;
       mqttClient.publish(TRIBE_TOPIC+'/'+mid,JSON.stringify(payload),{qos:0,retain:true});
       processMsg(payload);
       document.getElementById('cMessage').value='';
