@@ -5,7 +5,7 @@
    Contrôle de version : incrémenter SW_VERSION à chaque déploiement. */
 'use strict';
 
-var SW_VERSION = 1;
+var SW_VERSION = 2;
 
 try { importScripts('data.js'); } catch (e) {}
 
@@ -27,15 +27,33 @@ function scheduleAll(){
     var k = kickOfGame(g);
     if(!k) return;
     if(k.getTime() <= now) return;           // déjà passé
-    if(k.getTime() - now > 24*60*60*1000) return; // hors fenêtre 24 h
+    if(k.getTime() - now > 48*60*60*1000) return; // fenêtre 48 h : veille + heure du match
     pending.push({ kick: k.getTime(), g: g });
   });
   pending.sort(function(a,b){ return a.kick - b.kick; });
+  var DAY = 24*60*60*1000;
   pending.forEach(function(p){
     var key = p.g[0]+'|'+p.g[2]+'|'+p.g[3];
-    if (scheduled[key]) return;              // déjà planifié dans cette vie du SW
+    /* Rappel veille : 24 h avant le coup d'envoi (si encore à venir). */
+    var seeWait = (p.kick - DAY) - now;
+    if (seeWait > 0 && !scheduled[key+':see']) {
+      scheduled[key+':see'] = setTimeout(function(){
+        var title = 'Match demain !';
+        var body = 'Demain : LDLC ASVEL – ' + p.g[2] + ' · ' + compLabel(p.g[4]);
+        if (self.registration && self.registration.showNotification) {
+          self.registration.showNotification(title, {
+            body: body,
+            tag: 'asvel-see-' + key,
+            icon: 'favicon.svg',
+            badge: 'favicon.svg'
+          });
+        }
+        delete scheduled[key+':see'];
+      }, seeWait);
+    }
+    if (scheduled[key+':kick']) return;      // déjà planifié dans cette vie du SW
     var wait = p.kick - now;
-    scheduled[key] = setTimeout(function(){
+    scheduled[key+':kick'] = setTimeout(function(){
       var title = 'C\'est l\'heure du match !';
       var body = 'LDLC ASVEL – ' + p.g[2] + ' · ' + compLabel(p.g[4]);
       if (self.registration && self.registration.showNotification) {
@@ -46,7 +64,7 @@ function scheduleAll(){
           badge: 'favicon.svg'
         });
       }
-      delete scheduled[key];
+      delete scheduled[key+':kick'];
     }, wait);
   });
 }

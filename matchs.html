@@ -167,11 +167,7 @@ var teamLogos={
 function normalize(v){return v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
 function clubBlock(name,isAsvel,role){return '<div class="game-club'+(isAsvel?' asvel':'')+'"><span class="game-club-role">'+role+'</span><span class="game-club-name">'+(isAsvel?'LDLC ASVEL':name)+'</span><span class="game-club-line"></span></div>'}
 var PRONO_KEY='asvel-pronos';
-function readPronos(){try{var raw=localStorage.getItem(PRONO_KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
-function writePronos(obj){try{localStorage.setItem(PRONO_KEY,JSON.stringify(obj))}catch(e){}}
-function matchKey(g){return g[0]+'|'+g[2]+'|'+g[3]}
-function shortName(name,w){w=w||16;return name.length>w?name.slice(0,w-1).trim()+'…':name}
-var pronos=readPronos();
+var GAME_KEYS=['asvel-pronos','asvel-cinq','asvel-bench','asvel-reserve'];
 var currentUser=null;
 (function(){
   try{
@@ -184,6 +180,25 @@ var currentUser=null;
     for(var i=0;i<arr.length;i++){if(arr[i].norm===norm){currentUser=arr[i];return}}
   }catch(e){}
 })();
+/* Clés par compte : le membre a son historique de saison, le visiteur garde la clé globale. */
+function normKey(base){return (currentUser&&currentUser.norm)?base+'-'+currentUser.norm:base}
+/* Migration idempotente : à la première connexion, l'historique du navigateur devient celui du compte. */
+(function(){
+  if(!currentUser||!currentUser.norm)return;
+  for(var i=0;i<GAME_KEYS.length;i++){
+    var base=GAME_KEYS[i],member=base+'-'+currentUser.norm;
+    try{
+      if(localStorage.getItem(member)!=null)continue;
+      var glob=localStorage.getItem(base);
+      if(glob!=null)localStorage.setItem(member,glob);
+    }catch(e){}
+  }
+})();
+function readPronos(){try{var raw=localStorage.getItem(normKey(PRONO_KEY));if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object')return parsed}}catch(e){}return{}}
+function writePronos(obj){try{localStorage.setItem(normKey(PRONO_KEY),JSON.stringify(obj))}catch(e){}}
+function matchKey(g){return g[0]+'|'+g[2]+'|'+g[3]}
+function shortName(name,w){w=w||16;return name.length>w?name.slice(0,w-1).trim()+'…':name}
+var pronos=readPronos();
 /* Pronos ouverts à tous — aucun compte requis. */
 function refreshPronoBar(){
   var total=0;for(var k in pronos){if(pronos[k])total++}

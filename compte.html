@@ -139,7 +139,7 @@
           <div class="acc-avatar" id="accMonogram" aria-hidden="true">?</div>
           <div>
             <div class="acc-pseudo" id="accPseudo">Supporter</div>
-            <p class="acc-meta">Bienvenue dans votre espace personnel. Votre compte vous ouvre la tribune et les alertes match (les Pronos &amp; Cinq sont gratuits et ouverts à tous).</p>
+            <p class="acc-meta">Bienvenue dans votre espace personnel. Votre compte vous ouvre la tribune, les alertes match et les favoris. Les Pronos &amp; Cinq sont gratuits et ouverts à tous.</p>
           </div>
         </div>
         <div class="miniprofile">
@@ -149,6 +149,7 @@
             <div class="mp-item"><strong id="mpPronos">0</strong><span>Pronostics (cet appareil)</span></div>
             <div class="mp-item"><strong id="mpCinq">0/5</strong><span>Ma compo · cinq</span></div>
             <div class="mp-item"><strong id="mpJauge">0&nbsp;%</strong><span>Participation</span></div>
+            <div class="mp-item"><strong id="mpLevel">🔵 Bleu</strong><span>Niveau</span></div>
           </div>
           <a class="member-link" href="espace-membre.html">→ Mon espace membre</a>
         </div>
@@ -202,6 +203,17 @@
     function readObject(key) {
       try { var raw = readStorage(key); if (!raw) return {}; var o = JSON.parse(raw); return (o && typeof o === 'object') ? o : {}; } catch (e) { return {}; }
     }
+    /* Niveaux de supporter : score réel = pronos (cap 38) + cases de compo (cap 15). */
+    function levelOf(act) {
+      act = act || {};
+      var pronos = Math.min((act.pronos) || 0, 38);
+      var compo = Math.min((act.compo) || 0, 15);
+      var score = pronos + compo;
+      if (score >= 35) return { name: 'Vétéran', ik: '🏆' };
+      if (score >= 15) return { name: 'Or', ik: '🔶' };
+      if (score >= 1) return { name: 'Vert', ik: '🟢' };
+      return { name: 'Bleu', ik: '🔵' };
+    }
     function populateProfile() {
       var el = function (id) { return document.getElementById(id); };
       var norm = readStorage(KEY_SESSION);
@@ -218,6 +230,8 @@
       el('mpCinq').textContent = c5 + '/5';
       var participation = Math.round(((Math.min(pc, 38) / 38) + (c5 / 5) + (cB / 7) + (cR / 3)) / 4 * 100);
       el('mpJauge').textContent = participation + ' %';
+      var lv = levelOf(readObject('asvel-activity-' + norm));
+      el('mpLevel').textContent = lv.ik + ' ' + lv.name;
     }
     function showErr(el, msg) { if (el) { el.className = 'auth-error'; el.textContent = msg; el.hidden = false; } }
     function monogram(pseudo) {

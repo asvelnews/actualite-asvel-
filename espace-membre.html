@@ -52,6 +52,9 @@
     .rank-sub{color:var(--muted);font-size:.74rem;margin-top:.15rem}
     .rank-score{flex:0 0 auto;text-align:right;font-family:'Archivo Black',sans-serif;font-size:1.2rem}
     .rank-score span{display:block;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:.1rem}
+    /* ---- Niveaux de supporter & favoris « à lire » ---- */
+    .level-tag{display:inline-flex;align-items:center;gap:.4rem;margin-top:.45rem;padding:.28rem .65rem;border:1px solid var(--gold);border-radius:99px;color:var(--gold-light);font-family:'Oswald',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .em-favs{margin-top:1rem;list-style:none;display:grid;gap:.55rem}.fav-row{display:flex;align-items:center;gap:.85rem;padding:.8rem 1rem;background:var(--paper);border:1px solid var(--line);border-radius:10px}.fav-row a{min-width:0;flex:1;font-weight:600;font-size:.9rem;line-height:1.4}.fav-row button.fav-del{flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;padding:.4rem .7rem;font-family:'Oswald',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;transition:.2s}.fav-row button.fav-del:hover{border-color:#c0392b;color:#c0392b}
     @media(max-width:820px){.hero{padding:4.4rem 1.2rem 3.7rem}.member-card{padding:1.3rem 1.2rem}}
     @media(max-width:520px){.hero h1{font-size:2.7rem}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -81,7 +84,7 @@
     <div class="hero-inner">
       <div class="eyebrow">Espace réservé aux membres</div>
       <h1>Espace membre</h1>
-      <p>Votre avantage compte : la tribune, les alertes match, votre activité de supporter et le mini-classement local. Les Pronos &amp; Cinq, eux, sont ouverts à tous.</p>
+      <p>Votre avantage compte : la tribune, les alertes match, vos favoris « à lire » et votre niveau de supporter. Les Pronos &amp; Cinq, eux, sont ouverts à tous.</p>
     </div>
   </section>
 
@@ -104,7 +107,8 @@
         <div class="acc-avatar" id="emMonogram" aria-hidden="true">?</div>
         <div>
           <div class="acc-pseudo" id="emPseudo">Supporter</div>
-          <p class="acc-meta">Membre — avantages actifs : tribune · alertes match.</p>
+          <p class="acc-meta">Membre — avantages actifs : tribune · alertes match · favoris.</p>
+          <span class="level-tag" id="emLevel">🔵 Bleu</span>
         </div>
       </div>
 
@@ -114,6 +118,14 @@
         <div class="stat"><strong id="emCinqN">0/5</strong><span>Ma compo · cinq</span></div>
         <div class="stat"><strong id="emParticipation">0&nbsp;%</strong><span>Participation</span></div>
       </div>
+
+      <section class="block" aria-labelledby="em-favs-title">
+        <h2 id="em-favs-title">À lire plus tard</h2>
+        <p class="block-note">Les articles que vous avez marqués d’une étoile sur la page Actualités. Le titre et le lien sont captés au moment du clic — rien n’est inventé.</p>
+        <ul class="em-favs" id="emFavs">
+          <li class="em-empty">Aucun favori pour l’instant. Ouvrez la page Actualités et cliquez sur l’étoile d’un article.</li>
+        </ul>
+      </section>
 
       <section class="block" aria-labelledby="em-cinq-title">
         <h2 id="em-cinq-title">Ma compo du jour</h2>
@@ -197,6 +209,17 @@
       var cp = (activity && activity.compo) || 0;
       return Math.min(100, Math.round(((Math.min(pc, 38) / 38) + Math.min(cp, 15) / 15) / 2 * 100));
     }
+    /* Niveaux de supporter : score réel = pronos (cap 38) + cases de compo (cap 15). */
+    function levelOf(act) {
+      act = act || {};
+      var pronos = Math.min((act.pronos) || 0, 38);
+      var compo = Math.min((act.compo) || 0, 15);
+      var score = pronos + compo;
+      if (score >= 35) return { name: 'Vétéran', ik: '🏆' };
+      if (score >= 15) return { name: 'Or', ik: '🔶' };
+      if (score >= 1) return { name: 'Vert', ik: '🟢' };
+      return { name: 'Bleu', ik: '🔵' };
+    }
     function renderCinq() {
       var names = valuesOf(readObject('asvel-cinq'));
       var box = el('emCinq'), html = '';
@@ -245,6 +268,40 @@
       }
       ol.innerHTML = html;
     }
+    function favsKey() {
+      return currentUser ? ('asvel-favs-' + currentUser.norm) : null;
+    }
+    function renderFavs() {
+      var box = el('emFavs'); if (!box) return;
+      var key = favsKey(); if (!key) return;
+      var favs = [];
+      try { var raw = localStorage.getItem(key); if (raw) { var p = JSON.parse(raw); if (Array.isArray(p)) favs = p; } } catch (e) { favs = []; }
+      if (!favs.length) {
+        box.innerHTML = '<li class="em-empty">Aucun favori pour l’instant. Ouvrez la page Actualités et cliquez sur l’étoile d’un article.</li>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < favs.length; i++) {
+        var f = favs[i]; if (!f || !f.title) continue;
+        html += '<li class="fav-row"><a href="' + esc(f.url || 'actualites.html') + '" target="_blank" rel="noopener">' + esc(f.title) + '</a><button class="fav-del" type="button" data-id="' + esc(f.id || '') + '">Retirer</button></li>';
+      }
+      box.innerHTML = html;
+      var dels = box.querySelectorAll('.fav-del');
+      for (var d = 0; d < dels.length; d++) {
+        (function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var k = favsKey(); if (!k) return;
+            var list = [];
+            try { var r = localStorage.getItem(k); if (r) { var pp = JSON.parse(r); if (Array.isArray(pp)) list = pp; } } catch (e) { list = []; }
+            var out = [];
+            for (var i2 = 0; i2 < list.length; i2++) { if (list[i2] && list[i2].id !== id) out.push(list[i2]); }
+            try { localStorage.setItem(k, JSON.stringify(out)); } catch (e) {}
+            renderFavs();
+          });
+        })(dels[d]);
+      }
+    }
     function init() {
       if (currentUser) {
         el('memberPanel').hidden = false;
@@ -255,8 +312,11 @@
         el('emPronos').textContent = String((act && act.pronos) || 0);
         el('emCinqN').textContent = countValues(readObject('asvel-cinq')) + '/5';
         el('emParticipation').textContent = participation(act, (act && act.pronos) || 0) + ' %';
+        var lv = levelOf(act);
+        var lvEl = el('emLevel'); if (lvEl) lvEl.textContent = lv.ik + ' ' + lv.name;
         renderCinq();
         renderRank(currentUser.norm);
+        renderFavs();
       } else {
         el('memberGuest').hidden = false;
       }
