@@ -159,12 +159,6 @@
       </div>
     </div>
 
-    <div class="comments-gate" id="cinqGate" hidden>
-      <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
-      <p>Le « Mon cinq » est réservé aux membres Actu ASVEL. C’est gratuit — créez votre équipe avec un compte, directement dans votre navigateur, sans service externe.</p>
-      <a class="filter active" href="compte.html">Créer mon compte / Me connecter</a>
-    </div>
-
     <section class="cinq-bar" id="cinqBar" aria-labelledby="cinq-title">
       <div class="cinq-head"><div><h2 id="cinq-title">Votre cinq majeur</h2><p>Composez votre équipe de départ pour les matchs. Cinq postes à remplir, sauvegardés sur votre appareil.</p></div><span class="cinq-count" id="cinqCount">0/5 rempli</span></div>
       <div class="cinq-slots" id="cinqSlots"></div>
@@ -341,16 +335,10 @@
         cinq[free.key]=name;writeCinq(cinq);render();
         setStatus(name+' sélectionné au poste de '+free.label.toLowerCase()+'.');
       },true);
-      var cGate=document.getElementById('cinqGate'),cBar=document.getElementById('cinqBar'),ct=document.getElementById('compoToggle');
-      if(!currentUser){
-        if(cGate)cGate.hidden=false;
-        if(cBar)cBar.hidden=true;
-        if(ct)ct.hidden=true;
-      }else{
-        if(cGate)cGate.hidden=true;
-        if(cBar)cBar.hidden=false;
-        if(ct)ct.hidden=false;
-      }
+      /* Mode compo ouvert à tous — aucun compte requis. */
+      var cBar=document.getElementById('cinqBar'),ct=document.getElementById('compoToggle');
+      if(cBar)cBar.hidden=false;
+      if(ct)ct.hidden=false;
     })();
   </script>
 <script src="site.js?v=20260915-notifs" defer></script>

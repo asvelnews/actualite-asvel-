@@ -142,12 +142,6 @@
       </div>
     </div>
 
-    <div class="comments-gate" id="pronosGate" hidden>
-      <div class="gate-ic"><span aria-hidden="true">🔒</span><strong>Réservée aux membres</strong></div>
-      <p>Les pronostics et la composition du jour ne sont pas ouverts à tout le monde : il faut un compte pour voter et composer l’équipe. C’est gratuit, et votre compte reste dans votre navigateur — 100 % local, aucun service externe.</p>
-      <a class="filter active" href="compte.html">Créer mon compte / Me connecter</a>
-    </div>
-
     <section class="section-block" id="pronostics" aria-labelledby="prono-title">
       <h2 id="prono-title">Pronostics</h2>
       <p>Vainqueur ou perdant pour chaque match. Cliquez sur <strong>ASVEL</strong> ou sur l'adversaire pour voter ; re-cliquez sur ✕ pour retirer votre pronostic.</p>
@@ -763,21 +757,11 @@
       });
       client.on('error',function(){});
     }
-    var pronosGate=document.getElementById('pronosGate');
-    if(!currentUser){
-      /* Visiteur sans compte : pronos & cinq verrouillés — on masque toute la zone interactive. */
-      if(pronosGate)pronosGate.hidden=false;
-      ['jaugeBox','shareBanner','pronostics','composition'].forEach(function(id){
-        var el=document.getElementById(id);
-        if(el)el.hidden=true;
-      });
-    }else{
-      if(pronosGate)pronosGate.hidden=true;
-      ['jaugeBox','shareBanner','pronostics','composition'].forEach(function(id){
-        var el=document.getElementById(id);
-        if(el)el.hidden=false;
-      });
-    }
+    /* Pronos & cinq ouverts à tous — aucun compte requis. La tribune reste réservée aux membres (voir plus bas). */
+    ['jaugeBox','shareBanner','pronostics','composition'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)el.hidden=false;
+    });
     var gateEl=document.getElementById('tribuneGate');
     if(!currentUser){
       /* Visiteur sans compte : la tribune est verrouillée — on ne charge même pas le chat. */
