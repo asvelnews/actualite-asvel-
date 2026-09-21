@@ -65,6 +65,15 @@
     logo.href = root + 'index.html';
     logo.textContent = 'ACTU ASVEL';
 
+    var oldFanBadge = header.querySelector('.fan-badge');
+    if (oldFanBadge) oldFanBadge.remove();
+    var fanBadge = document.createElement('span');
+    fanBadge.className = 'fan-badge';
+    fanBadge.textContent = 'SITE FAN';
+    fanBadge.title = 'Média indépendant créé par des fans, non affilié au club ASVEL';
+    fanBadge.style.cssText = 'display:inline-flex;align-items:center;margin-left:.55rem;padding:.2rem .5rem;background:#c9a44d;color:#050505;border-radius:3px;font-family:Oswald,Arial,sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1;white-space:nowrap;vertical-align:middle;';
+    logo.insertAdjacentElement('afterend', fanBadge);
+
     var oldNav = header.querySelector('nav, .site-nav, .nav');
     var desktopNav = document.createElement('nav');
     desktopNav.id = 'site-navigation';
@@ -185,6 +194,20 @@
 
     syncMenuPosition();
     markCurrentSection();
+  }
+
+  /* ---- Lien "Mentions légales" dans le pied de page, sur toutes les pages ---- */
+  var footer = document.querySelector('footer');
+  if (footer && !footer.querySelector('.legal-link')) {
+    var legalRoot = location.pathname.indexOf('/articles/') !== -1 ? '../' : '';
+    var legalLink = document.createElement('a');
+    legalLink.className = 'legal-link';
+    legalLink.href = legalRoot + 'a-propos.html';
+    legalLink.textContent = 'Mentions légales';
+    legalLink.style.cssText = 'margin-left:.9rem;';
+    var igLink = footer.querySelector('a[href*="instagram.com"]');
+    if (igLink) igLink.insertAdjacentElement('afterend', legalLink);
+    else footer.appendChild(legalLink);
   }
 
   document.querySelectorAll('img').forEach(function (image, index) {
