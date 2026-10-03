@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css?v=20260915-notifs">
+  <link rel="stylesheet" href="theme.css?v=20261002-theme-rouge">
   <style>
     [hidden]{display:none!important}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -118,12 +118,12 @@
     /* --- Joueurs favoris (membres) --- */
     .fav-btn{position:absolute;top:.75rem;right:.75rem;z-index:3;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.55);color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;transition:.2s}
     .fav-btn:hover{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.6)}
-    .fav-btn[aria-pressed="true"]{background:var(--gold);color:#050505;border-color:var(--gold)}
+    .fav-btn[aria-pressed="true"]{background:var(--gold);color:#fff;border-color:var(--gold)}
     .fav-btn[aria-pressed="true"]:hover{background:#b89220;border-color:#b89220}
     .player.fav{outline:2px solid var(--gold);outline-offset:-2px}
-    .player.fav .fav-btn{background:var(--gold);color:#050505;border-color:var(--gold)}
+    .player.fav .fav-btn{background:var(--gold);color:#fff;border-color:var(--gold)}
     .filters .fav-chip{border-color:var(--gold);color:var(--gold)}
-    .filters .fav-chip[aria-pressed="true"],.filters .fav-chip:hover{background:var(--gold);color:#050505}
+    .filters .fav-chip[aria-pressed="true"],.filters .fav-chip:hover{background:var(--gold);color:#fff}
     .player[data-fav="0"].hidden-by-fav{display:none}
     @media(max-width:650px){.fav-btn{width:30px;height:30px;font-size:.95rem;top:.55rem;right:.55rem}}
   </style>
@@ -354,9 +354,9 @@
       if(ct)ct.hidden=false;
     })();
   </script>
-<script src="site.js?v=20260915-notifs" defer></script>
-<script src="data.js?v=20260915-notifs" defer></script>
-<script src="notifs.js?v=20260915-notifs" defer></script>
+<script src="site.js?v=20261002-theme-rouge" defer></script>
+<script src="data.js?v=20261002-theme-rouge" defer></script>
+<script src="notifs.js?v=20261002-theme-rouge" defer></script>
 <!-- Cloudflare Web Analytics -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"775ee7d0d68047bfb7614f6b49ac9787"}'></script>
 <!-- End Cloudflare Web Analytics -->

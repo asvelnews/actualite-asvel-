@@ -16,7 +16,7 @@
     var btn = document.getElementById('themeToggle');
     if (btn) btn.textContent = theme === 'light' ? '☀' : '☾';
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f1e8' : '#050505');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#000000');
   }
   function toggleTheme() {
     var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
@@ -39,20 +39,36 @@
   if (header) {
     var inArticle = location.pathname.indexOf('/articles/') !== -1;
     var root = inArticle ? '../' : '';
-    var items = [
+    /* Fonctionnalités préparées mais désactivées. Passer bourse à true quand le service de
+       Bourse aux places existe (page bourse-aux-places.html) : l'entrée « Plus » et le bloc
+       d'accueil (#bourse-block) apparaissent alors sans autre modification. */
+    var FEATURES = window.ASVEL_FEATURES || { bourse: false };
+
+    var primary = [
       ['Accueil', root + 'index.html', 'home'],
       ['Actualités', root + 'actualites.html', 'news'],
-      ['Mercato', root + 'mercato.html', 'mercato'],
       ['Matchs', root + 'matchs.html#calendrier', 'matches'],
-      ['Classements', root + 'matchs.html#classement', 'standings'],
-      ['Effectif', root + 'effectif.html', 'roster'],
-      ['Pronos & Cinq', root + 'interactif.html', 'interactive'],
-      ['Stats', root + 'statistiques.html', 'stats'],
-      ['Palmarès', root + 'palmares.html', 'honours'],
-      ['Accès', root + 'acces.html', 'access'],
-      ['Mon compte', root + 'compte.html', 'account'],
-      ['À propos', root + 'a-propos.html', 'about']
+      ['Équipe', root + 'effectif.html', 'roster']
     ];
+    var more = [
+      ['Statistiques', root + 'statistiques.html', 'stats', 'Chiffres par compétition'],
+      ['Classements', root + 'matchs.html#classement', 'standings', 'EuroLeague · Betclic ÉLITE'],
+      ['Mercato', root + 'mercato.html', 'mercato', 'Arrivées, départs, prêts'],
+      ['Palmarès', root + 'palmares.html', 'honours', 'Titres et finales'],
+      ['Supporters', root + 'interactif.html', 'interactive', 'Pronos & Cinq, tribune'],
+      ['Accès', root + 'acces.html', 'access', 'Venir à la salle'],
+      ['Mon compte', root + 'compte.html', 'account', 'Espace supporter'],
+      ['À propos', root + 'a-propos.html', 'about', 'Le site et les mentions'],
+      ['Contact', root + 'a-propos.html#contact', 'contact', 'Nous écrire']
+    ];
+    if (FEATURES.bourse) more.splice(5, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
+    var moreKeys = more.map(function (m) { return m[2]; });
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+    function linkHtml(item, withHint) {
+      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + esc(item[0]) +
+        (withHint && item[3] ? '<small>' + esc(item[3]) + '</small>' : '') + '</a>';
+    }
 
     header.classList.add('global-site-header');
 
@@ -71,7 +87,7 @@
     fanBadge.className = 'fan-badge';
     fanBadge.textContent = 'SITE FAN';
     fanBadge.title = 'Média indépendant créé par des fans, non affilié au club ASVEL';
-    fanBadge.style.cssText = 'display:inline-flex;align-items:center;margin-left:.55rem;padding:.2rem .5rem;background:#c9a44d;color:#050505;border-radius:3px;font-family:Oswald,Arial,sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1;white-space:nowrap;vertical-align:middle;';
+    fanBadge.style.cssText = 'display:inline-flex;align-items:center;margin-left:.55rem;padding:.2rem .5rem;background:#ff3b30;color:#fff;border-radius:3px;font-family:Oswald,Arial,sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1;white-space:nowrap;vertical-align:middle;';
     logo.insertAdjacentElement('afterend', fanBadge);
 
     var oldNav = header.querySelector('nav, .site-nav, .nav');
@@ -79,11 +95,39 @@
     desktopNav.id = 'site-navigation';
     desktopNav.className = 'global-site-nav';
     desktopNav.setAttribute('aria-label', 'Navigation principale');
-    desktopNav.innerHTML = items.map(function (item) {
-      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + item[0] + '</a>';
-    }).join('');
+    desktopNav.innerHTML = primary.map(function (item) { return linkHtml(item, false); }).join('') +
+      '<button type="button" class="plus-toggle" id="plusToggle" aria-haspopup="true" aria-expanded="false" aria-controls="plus-panel">Plus <i aria-hidden="true">▾</i></button>';
     if (oldNav) oldNav.replaceWith(desktopNav);
     else header.appendChild(desktopNav);
+
+    /* Panneau « Plus » (bureau) : hors du <nav> pour ne pas hériter de ses styles de liens */
+    var plusPanel = document.createElement('div');
+    plusPanel.id = 'plus-panel';
+    plusPanel.className = 'plus-panel';
+    plusPanel.setAttribute('aria-label', 'Plus de pages');
+    plusPanel.hidden = true;
+    plusPanel.innerHTML = more.map(function (item) { return linkHtml(item, true); }).join('');
+    header.appendChild(plusPanel);
+    var plusToggle = desktopNav.querySelector('#plusToggle');
+    function setPlus(open, restoreFocus) {
+      plusPanel.hidden = !open;
+      plusToggle.setAttribute('aria-expanded', String(open));
+      plusToggle.classList.toggle('open', open);
+      if (!open && restoreFocus) plusToggle.focus();
+    }
+    plusToggle.addEventListener('click', function (event) {
+      event.stopPropagation();
+      setPlus(plusPanel.hidden, false);
+    });
+    plusPanel.addEventListener('click', function (event) {
+      if (event.target.closest('a')) setPlus(false, false);
+    });
+    document.addEventListener('click', function (event) {
+      if (!plusPanel.hidden && !plusPanel.contains(event.target)) setPlus(false, false);
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !plusPanel.hidden) setPlus(false, true);
+    });
 
     var oldToggle = header.querySelector('.menu-toggle, .global-menu-toggle');
     if (oldToggle) oldToggle.remove();
@@ -114,9 +158,9 @@
     drawer.className = 'mobile-nav-drawer';
     drawer.setAttribute('aria-label', 'Navigation mobile');
     drawer.setAttribute('aria-hidden', 'true');
-    drawer.innerHTML = items.map(function (item) {
-      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + item[0] + '</a>';
-    }).join('');
+    drawer.innerHTML = primary.map(function (item) { return linkHtml(item, false); }).join('') +
+      '<div class="drawer-label">Plus</div>' +
+      more.map(function (item) { return linkHtml(item, false); }).join('');
     document.body.appendChild(drawer);
 
     var backdrop = document.createElement('button');
@@ -131,19 +175,20 @@
       if (inArticle || page === 'actualites.html') return 'news';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
-      if (page === 'interactif.html') return 'interactive';
+      if (page === 'interactif.html' || page === 'espace-membre.html') return 'interactive';
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
       if (page === 'acces.html') return 'access';
       if (page === 'compte.html') return 'account';
-      if (page === 'a-propos.html') return 'about';
+      if (page === 'bourse-aux-places.html') return 'tickets';
+      if (page === 'a-propos.html') return location.hash === '#contact' ? 'contact' : 'about';
       if (page === 'matchs.html') return location.hash === '#classement' ? 'standings' : 'matches';
       return 'home';
     }
 
     function markCurrentSection() {
       var section = currentSection();
-      [desktopNav, drawer].forEach(function (nav) {
+      [desktopNav, plusPanel, drawer].forEach(function (nav) {
         nav.querySelectorAll('a').forEach(function (link) {
           var active = link.dataset.menuPage === section;
           link.classList.toggle('active', active);
@@ -151,6 +196,7 @@
           else link.removeAttribute('aria-current');
         });
       });
+      plusToggle.classList.toggle('active', moreKeys.indexOf(section) !== -1);
     }
 
     function syncMenuPosition() {
@@ -183,6 +229,7 @@
     window.addEventListener('resize', function () {
       syncMenuPosition();
       if (window.innerWidth > 980 && drawer.classList.contains('open')) setMenu(false, false);
+      if (window.innerWidth <= 980 && !plusPanel.hidden) setPlus(false, false);
     });
     window.addEventListener('scroll', function () {
       if (drawer.classList.contains('open')) syncMenuPosition();
@@ -194,6 +241,11 @@
 
     syncMenuPosition();
     markCurrentSection();
+
+    /* Blocs « préparés » : visibles uniquement quand la fonctionnalité est activée */
+    document.querySelectorAll('[data-feature]').forEach(function (block) {
+      block.hidden = !FEATURES[block.getAttribute('data-feature')];
+    });
   }
 
   /* ---- Lien "Mentions légales" dans le pied de page, sur toutes les pages ---- */
