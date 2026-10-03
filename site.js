@@ -55,13 +55,12 @@
       ['Classements', root + 'matchs.html#classement', 'standings', 'EuroLeague · Betclic ÉLITE'],
       ['Mercato', root + 'mercato.html', 'mercato', 'Arrivées, départs, prêts'],
       ['Palmarès', root + 'palmares.html', 'honours', 'Titres et finales'],
-      ['Supporters', root + 'interactif.html', 'interactive', 'Pronos & Cinq, tribune'],
       ['Accès', root + 'acces.html', 'access', 'Venir à la salle'],
       ['Mon compte', root + 'compte.html', 'account', 'Espace supporter'],
       ['À propos', root + 'a-propos.html', 'about', 'Le site et les mentions'],
       ['Contact', root + 'a-propos.html#contact', 'contact', 'Nous écrire']
     ];
-    if (FEATURES.bourse) more.splice(5, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
+    if (FEATURES.bourse) more.splice(4, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
     var moreKeys = more.map(function (m) { return m[2]; });
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -175,7 +174,7 @@
       if (inArticle || page === 'actualites.html') return 'news';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
-      if (page === 'interactif.html' || page === 'espace-membre.html') return 'interactive';
+      if (page === 'espace-membre.html') return 'account';
       if (page === 'statistiques.html') return 'stats';
       if (page === 'palmares.html') return 'honours';
       if (page === 'acces.html') return 'access';
