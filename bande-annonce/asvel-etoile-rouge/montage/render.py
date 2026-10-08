@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, '..', 'sources')
 FONTS = os.path.join(HERE, 'fonts')
-W, H, FPS, DUR = 1080, 1920, 30, 35
+W, H, FPS, DUR = 1080, 1920, 30, 46
 N = FPS * DUR
 CX = 525                      # axe central legerement decale a gauche (rail TikTok a droite)
 RED = (226, 28, 38)
@@ -622,7 +622,7 @@ def scene5(t):
     return zoom(can, 1 + 0.07 * (1 - e_expo(seg(t, p0, p0 + 0.35))), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 6 & 7 : face-a-face, revelation, affiche
-T_DARK, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 28.0, 34.45
+T_DARK, READY_END, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 38.75, 39.75, 45.5
 
 def scene6a(t):
     u = t - 24.0
@@ -650,7 +650,7 @@ def ready(t):
     for i, (t0, w, col) in enumerate(READY):
         kinetic(can, w, ANTON, size, col, CX, y0 + i * lh, t - t0, stagger=0.04, dur=0.28)
         echo(can, w, ANTON, size, col, CX, y0 + i * lh, t - t0 - 0.12, n=2, dur=0.45)
-    return zoom(can, 1 + 0.05 * e_io(seg(t, T_DARK, T_REVEAL)), CX, 960).convert('RGB')
+    return zoom(can, 1 + 0.05 * e_io(seg(t, T_DARK, READY_END)), CX, 960).convert('RGB')
 
 def poster(t, date_line):
     ur = t - T_REVEAL
@@ -687,11 +687,95 @@ def poster(t, date_line):
     arr = np.asarray(can.convert('RGB')).astype(np.float32)
     fl = 0.32 * (1 - seg(ur, 0.0, 0.12))
     arr = arr * (1 - fl) + 255 * fl
-    arr *= 1 - e_io(seg(t, T_END, 34.97))
+    arr *= 1 - e_io(seg(t, T_END, DUR - 0.03))
     return Image.fromarray(arr.clip(0, 255).astype(np.uint8), 'RGB')
 
+# ================================================================== SCENE CLIPS : le duel (actions reelles fournies)
+UP = os.environ.get('CLIPS_DIR', '/root/.claude/uploads/885fa05c-4277-5de5-8886-1583c42ed6b9') + '/'   # clips fournis (non versionnes)
+VSRC = {'M1': ('3d6d2ed1-Patty_Mills_Cholet_TikTok_nettoye.mp4', 37, 718, 1005, 484),
+        'M2': ('19eec89f-Patty_Mills_TikTok_sans_son.mp4', 41, 656, 997, 480),      # caches flous du bas exclus
+        'K1': ('3f4bb3e7-Moneke_Fenerbahce_TikTok.mp4', 15, 705, 1049, 505),
+        'K2': ('ca0e0f4a-Moneke_Olympiacos_TikTok.mp4', 15, 705, 1049, 505)}
+PW, PH, PY = 1080, 520, 930                     # panneau video : 1080 x 520 centre en y = 930
+# (source, debut, fin, ralenti (debut, fin, facteur) ou None)
+MILLS_CLIPS = [('M1', 15.57, 16.37, None), ('M2', 13.45, 15.60, (14.10, 14.70, 0.5)), ('M2', 6.80, 8.85, (7.60, 8.10, 0.5))]
+MONEKE_CLIPS = [('K1', 0.90, 3.25, (2.20, 2.70, 0.5)), ('K2', 5.30, 8.58, None)]
+T_MILLS, T_MONEKE = 26.51, 32.61
+
+def _plan(clips, t0, t1):
+    """Liste (debut, fin, source, fonction temps local -> temps source) ; le dernier clip s'ajuste a la fin du bloc."""
+    out, t = [], t0
+    for i, (src, a, b, slow) in enumerate(clips):
+        if slow: s0, s1, f = slow; d = (s0 - a) + (s1 - s0) / f + (b - s1)
+        else: d = b - a
+        if i == len(clips) - 1: d = t1 - t
+        def fmap(u, a=a, slow=slow):
+            if not slow: return a + u
+            s0, s1, f = slow
+            if u < s0 - a: return a + u
+            if u < s0 - a + (s1 - s0) / f: return s0 + (u - (s0 - a)) * f
+            return s1 + (u - (s0 - a) - (s1 - s0) / f)
+        out.append((t, t + d, src, fmap, a, b)); t += d
+    return out
+PLAN = _plan(MILLS_CLIPS, T_MILLS, T_MONEKE) + _plan(MONEKE_CLIPS, T_MONEKE, T_REVEAL)
+
+_vc = {}
+def _decode(src, a, b):
+    key = (src, a, b)
+    if key not in _vc:
+        if len(_vc) >= 2: _vc.pop(next(iter(_vc)))
+        fn, x0, y0, w, h = VSRC[src]
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f'{max(0, a - 0.05):.3f}', '-i', UP + fn, '-t', f'{b - a + 0.6:.3f}',
+                              '-an', '-vf', f'crop={w}:{h}:{x0}:{y0},scale={PW}:{PH}:flags=lanczos', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
+                             capture_output=True).stdout
+        fr = np.frombuffer(raw, np.uint8).reshape(-1, PH, PW, 3)
+        _vc[key] = (fr, max(0, a - 0.05))
+    return _vc[key]
+
+def clip_frame(src, a, b, ts):
+    fr, base = _decode(src, a, b)
+    x = (min(ts, b) - base) * 30
+    i = int(x); k = x - i
+    i = min(i, len(fr) - 1); j = min(i + 1, len(fr) - 1)
+    if k < 0.05 or i == j: return Image.fromarray(fr[i])
+    return Image.fromarray((fr[i] * (1 - k) + fr[j] * k).astype(np.uint8))   # ralenti : fondu entre images voisines
+
+def clips(t):
+    mills = t < T_MONEKE
+    tb = T_MILLS if mills else T_MONEKE
+    ub = t - tb
+    for c0, c1, src, fmap, a, b in PLAN:
+        if c0 <= t < c1 or c1 >= T_REVEAL - 1e-6 and t >= c0: break
+    u = t - c0
+    if mills: can = bg(glow(540, 930, 700, (255, 255, 255), 0.12))
+    else: can = bg(glow(540, 930, 700, (255, 25, 30), 0.24))
+    stripes(can, t, 140 if mills else -140, 14, (255, 255, 255) if mills else (255, 60, 60))
+    rows(can, 'MILLS' if mills else 'MONEKE', (255, 255, 255) if mills else (255, 40, 40), 0.12, [1260, 1530], t, 120 if mills else -120, size=230)
+    # panneau video : coup de zoom a chaque nouvelle action, puis lente poussee
+    img = clip_frame(src, a, b, fmap(u))
+    z = (1 + 0.10 * (1 - e_expo(u / 0.28))) * (1 + 0.035 * u)
+    img = img.resize((round(PW * z), round(PH * z)), Image.BICUBIC).crop(
+        (round((PW * z - PW) / 2), round((PH * z - PH) / 2), round((PW * z - PW) / 2) + PW, round((PH * z - PH) / 2) + PH))
+    pk = e_expo(seg(ub, 0.0, 0.35))
+    py = PY - PH / 2 + (1 - pk) * 120
+    comp(can, img.convert('RGBA'), 0, py)
+    fl = 0.55 * (1 - seg(u, 0.0, 0.12))
+    if fl > 0: shape(can, [(0, py), (W, py), (W, py + PH), (0, py + PH)], (255, 255, 255, int(255 * fl)))
+    col = (255, 255, 255) if mills else RED
+    lw = W * e_expo(seg(ub, 0.05, 0.5))
+    shape(can, [(0, py - 10), (lw, py - 10), (lw, py - 4), (0, py - 4)], col + (255,))
+    shape(can, [(W - lw, py + PH + 4), (W, py + PH + 4), (W, py + PH + 10), (W - lw, py + PH + 10)], (RED if mills else WHITE) + (255,))
+    # en-tete : equipe + nom du joueur
+    team, name = ('ASVEL', 'PATTY MILLS') if mills else ('ÉTOILE ROUGE', 'CHIMA MONEKE')
+    kinetic(can, team, B8, 54, RED if mills else WHITE, CX, 470, ub - 0.05, stagger=0.03, dur=0.35, track=12)
+    sz = fit(name, ANTON, 900, 170)
+    kinetic(can, name, ANTON, sz, WHITE if mills else RED, CX, 640, ub - 0.1, stagger=0.035, dur=0.4)
+    echo(can, name, ANTON, sz, WHITE if mills else RED, CX, 640, ub - 0.3, n=2)
+    return can.convert('RGB')
+
 # ================================================================== timeline
-TRANS = [(10.0, scene2, scene3, True, ((255, 255, 255), RED)),
+TRANS = [(32.61, clips, clips, False, (RED, (255, 255, 255))),
+         (10.0, scene2, scene3, True, ((255, 255, 255), RED)),
          (14.0, scene3, scene4, False, (RED, (255, 255, 255))),
          (18.0, scene4, scene5, True, ((255, 255, 255), RED))]
 
@@ -700,14 +784,15 @@ def frame(i, date_line):
     for B, a, b, fl, cols in TRANS:
         if B - 0.12 <= t < B + 0.36:
             p = e_cub(seg(t, B - 0.12, B + 0.36))
-            return bars(a(t), b(max(t, B)), p, fl, cols)
+            return bars(a(min(t, B - 0.001) if a is b else t), b(max(t, B)), p, fl, cols)
     if t < 6.0: return scene1_mg(t)
     if t < 10.0: return scene2(t)
     if t < 14.0: return scene3(t)
     if t < 18.0: return scene4(t)
     if t < 24.0: return scene5(t)
     if t < T_DARK: return scene6a(t)
-    if t < T_REVEAL: return ready(t)
+    if t < READY_END: return ready(t)
+    if t < T_REVEAL: return clips(t)
     return poster(t, date_line)
 
 DATES = {'date': 'MARDI 13 OCTOBRE • 20H00', 'today': 'AUJOURD’HUI • 20H00'}
