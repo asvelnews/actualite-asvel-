@@ -4,7 +4,7 @@ import numpy as np, subprocess, sys, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1080, 1920, 30
-TOTAL = 25 * FPS
+TOTAL = 28 * FPS
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n, s: ImageFont.truetype(os.path.join(HERE, 'fonts', n), s)
 ANTON = 'Anton-Regular.ttf'; BARLOW_B = 'BarlowCondensed-Bold.ttf'; BARLOW_SB = 'BarlowCondensed-SemiBold.ttf'
@@ -12,11 +12,19 @@ WHITE = (255, 255, 255); GREY = (150, 150, 150); LGREY = (190, 190, 190)
 X0 = 92  # left margin: everything left-aligned, far from TikTok's right rail
 
 # ---------- picture segments: (first frame, n frames, file) ----------
-SEGS = [(150, 52, 's1'), (202, 53, 's2'), (255, 45, 's3'), (300, 75, 's4'), (375, 15, 's5'),
-        (390, 30, 's6'), (420, 45, 's7'), (465, 45, 's8'), (510, 90, 's9')]
+# v2: all 5 clips, every basket shown to its conclusion; clip audio is never used.
+SEGS = [(150, 64, 's1'),   # Find the shooter: Mills sets up (0.8x)
+        (214, 41, 's2'),   #   ball flight, swish at 8.0 s, held
+        (255, 78, 'a'),    # Tremont Waters: drive, pull-up, ball in at 10.55 s
+        (333, 72, 'c1'),   # Mills -> Crowder: pass, corner three
+        (405, 30, 'c2'),   #   ball drops in at 14.1 s
+        (435, 48, 'b'),    # Yves Pons: drive + dunk at 15.55 s
+        (483, 30, 'd1'),   # Touchdown: full-court pass, catch
+        (513, 87, 'd2'),   #   Sestina finish (ball in 18.6 s) + celebration, one continuous take
+        (600, 90, 'm')]    # Crowder roar under the message
 
 def read_seg(name, n):
-    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg', name + '.mp4'),
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg2', name + '.mp4'),
                           '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
     fr = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
     if len(fr) < n:  # pad by holding last frame (never needed by more than 1 frame)
@@ -106,14 +114,14 @@ def gradient_top(img, h=760, strength=0.82):
 def message(img, f):
     gradient_top(img)
     big = F(ANTON, 176)
-    draw_text(img, (X0, 250), 'CETTE FOIS,', big, WHITE, alpha=appear(f, 518, 4))   # 17.27
-    draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 540, 4))    # 18.00
+    draw_text(img, (X0, 250), 'CETTE FOIS,', big, WHITE, alpha=appear(f, 608, 4))   # 20.27
+    draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 630, 4))    # 21.00
 
 def rdv(f):
     img = card_canvas()
     title = F(ANTON, 150); line = F(ANTON, 112); handle = F(BARLOW_B, 54)
     ts = 132
-    a0 = appear(f, 600, 4); a1 = appear(f, 607, 4); a2 = appear(f, 614, 4); a3 = appear(f, 621, 4)  # all in by 20.83 s
+    a0 = appear(f, 690, 4); a1 = appear(f, 697, 4); a2 = appear(f, 704, 4); a3 = appear(f, 711, 4)  # all in by 23.83 s
     y = 430
     img.alpha_composite(fade_rgba(tile(ASVEL_BOX, ts), a0), (X0, y))
     img.alpha_composite(fade_rgba(tile(ROANNE_BOX, ts), a0), (X0 + ts + 26, y))
@@ -137,9 +145,9 @@ def pygame_rule(img, y, a):
 def frame_image(f, base):
     if f < 75: return hook(f)
     if f < 150: return rappel(f)
-    if f >= 600: return rdv(f)
+    if f >= 690: return rdv(f)
     img = Image.fromarray(base).convert('RGBA')
-    if f >= 510: message(img, f)
+    if f >= 600: message(img, f)
     return img
 
 def main():
@@ -162,7 +170,7 @@ def main():
                             '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '17',
                             '-profile:v', 'high', '-level', '4.1', '-pix_fmt', 'yuv420p',
                             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '25', '-movflags', '+faststart', out],
+                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '28', '-movflags', '+faststart', out],
                            stdin=subprocess.PIPE)
     for f in range(TOTAL):
         enc.stdin.write(np.asarray(frame_image(f, base.get(f)).convert('RGB')).tobytes())

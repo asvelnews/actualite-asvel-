@@ -1,10 +1,10 @@
 """Original trailer score for the ASVEL - Roanne teaser (procedural synthesis, 120 BPM, C minor).
-Writes music.wav (stereo 48 kHz, 25 s)."""
+Writes music.wav (stereo 48 kHz, 28 s). This is the ONLY audio of the teaser (clip sound muted)."""
 import numpy as np, wave, sys
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
-DUR = 25.0
+DUR = 28.0
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 dry = np.zeros((N, 2))
@@ -179,72 +179,67 @@ while tt < 7.78:
 add(riser(2.6), 5.2, 0.32, send=0.3)
 add(reverse_swell(0.9), 7.1, 0.35)
 
-# 8.0 DROP
+# ===== 8.0 DROP on the Mills swish =====
 add(boom(2.0), 8.0, 1.0)
 add(braam(36, 1.8), 8.0, 0.5, send=0.3)
 add(noise_hit(1.0, 80, 6000, 5), 8.0, 0.35, send=0.6)
 
-chords = {  # bar start -> (pad chord, bass root)
-    8.0: ([48, 51, 55, 60], 36),   # Cm
-    10.0: ([44, 48, 51, 56], 32),  # Ab
-    12.0: ([51, 55, 58, 63], 39),  # Eb
-    14.0: ([46, 50, 53, 58], 34),  # Bb
-    16.0: ([43, 47, 50, 55], 31),  # G (dominant tension)
-}
-for bs, (ch, root) in chords.items():
-    blen = 1.0 if bs == 16.0 else 2.0
-    add(pad(ch, blen + 0.1, 1100 + (bs - 8) * 120), bs, 0.32, send=0.35)
-    # 16th bass ostinato
-    pat = [0, 0, 12, 0, 0, 0, 7, 0, 0, 0, 12, 0, 3, 0, 7, 0]
-    for i in range(int(blen / (B / 4))):
-        add(bass_note(root + pat[i % 16], 0.14), bs + i * B / 4, 0.42 if i % 4 == 0 else 0.28)
-
-# drums 8 -> 17
-for b in np.arange(8.0, 17.0, B):
+# groove 8 -> 20 (6 bars of 2 s)
+chords = [([48, 51, 55, 60], 36), ([44, 48, 51, 56], 32), ([51, 55, 58, 63], 39),
+          ([46, 50, 53, 58], 34), ([48, 51, 55, 60], 36), ([43, 47, 50, 55], 31)]
+pat = [0, 0, 12, 0, 0, 0, 7, 0, 0, 0, 12, 0, 3, 0, 7, 0]
+for bi, (ch, root) in enumerate(chords):
+    bs = 8.0 + 2.0 * bi
+    add(pad(ch, 2.1, 1000 + bi * 160), bs, 0.30 + bi * 0.012, send=0.35)
+    for i in range(16):
+        add(bass_note(root + pat[i], 0.14), bs + i * B / 4, 0.42 if i % 4 == 0 else 0.28)
+for b in np.arange(8.0, 20.0, B):
     beat_in_bar = int(round((b - 8.0) / B)) % 4
-    add(kick(), b, 0.75 if beat_in_bar in (0, 2) else 0.0)
-    if beat_in_bar in (1, 3):
-        add(snare(), b, 0.5, send=0.35)
-    if b >= 12.0:
+    if b >= 19.0: break                      # tom fill takes the last bar half
+    if beat_in_bar in (0, 2): add(kick(), b, 0.75)
+    if beat_in_bar in (1, 3): add(snare(), b, 0.5, send=0.35)
+    if b >= 11.0:
         add(hat(), b + B / 2, 0.12, pan=0.3)
-        add(hat(), b + B / 4, 0.06, pan=-0.3)
-    if b >= 14.0 and beat_in_bar == 2:
-        add(kick(), b + 0.25, 0.5)
-# accents on montée cuts
-for at in (10.0, 12.5, 13.0, 14.0):
-    add(boom(1.2, 58, 34), at, 0.45)
-    add(noise_hit(0.5, 200, 5000, 9), at, 0.15, send=0.5)
-# tom fill into the climax (16 -> 17)
-for i, tt in enumerate(np.arange(16.0, 17.0, 0.125)):
+    if b >= 14.5:
+        add(hat(), b + B / 4, 0.07, pan=-0.3)
+        if beat_in_bar == 2: add(kick(), b + 0.25, 0.5)
+# musical accents follow the edit: baskets get a hit, cuts a light pulse
+for at in (10.55, 14.08, 15.55, 18.6):
+    add(boom(1.4, 60, 32), at, 0.55)
+    add(noise_hit(0.7, 150, 7000, 7), at, 0.22, send=0.6)
+for at in (11.1, 13.5, 14.5, 16.1, 17.1):
+    add(boom(0.8, 55, 38), at, 0.28)
+# tom fill + riser into the message
+for i, tt in enumerate(np.arange(19.0, 20.0, 0.125)):
     add(tom(150 - i * 8, 0.45), tt, 0.35 + i * 0.03, pan=(-0.4 + 0.1 * i), send=0.3)
-add(riser(1.0, 400, 6000), 16.0, 0.22, send=0.3)
+add(riser(1.4, 400, 6000), 18.6, 0.22, send=0.3)
 
-# 17.0 MESSAGE: pull back
-add(boom(2.6, 58, 28), 17.0, 0.9)
-add(braam(36, 2.6, 0.5), 17.0, 0.35, send=0.5)
-add(pad([48, 51, 55, 60, 63], 2.9, 700), 17.0, 0.34, send=0.5)
-for b in np.arange(17.0, 19.6, 1.0):
+# ===== 20.0 MESSAGE: pull back =====
+add(boom(2.6, 58, 28), 20.0, 0.9)
+add(braam(36, 2.6, 0.5), 20.0, 0.35, send=0.5)
+add(pad([48, 51, 55, 60, 63], 2.9, 700), 20.0, 0.34, send=0.5)
+for b in np.arange(20.0, 22.6, 1.0):
     add(kick(0.4), b, 0.45)
     add(kick(0.35), b + 0.22, 0.28)
-tt = 18.0; k = 0
-while tt < 19.8:
-    add(tick(), tt, 0.14 + 0.1 * (tt - 18) / 1.8, pan=(-0.3 if k % 2 == 0 else 0.3))
+tt = 21.0; k = 0
+while tt < 22.8:
+    add(tick(), tt, 0.14 + 0.1 * (tt - 21) / 1.8, pan=(-0.3 if k % 2 == 0 else 0.3))
     tt += B / 2; k += 1
-add(riser(1.8, 150, 5000), 18.05, 0.30, send=0.3)
-add(reverse_swell(0.8), 19.15, 0.4)
+add(riser(1.8, 150, 5000), 21.05, 0.30, send=0.3)
+add(reverse_swell(0.8), 22.15, 0.4)
 
-# 20.0 RENDEZ-VOUS
-add(boom(3.5, 64, 26), 20.0, 1.0)
-add(braam(36, 3.4, 1.0), 20.0, 0.6, send=0.45)
-add(noise_hit(1.6, 60, 6000, 3.5), 20.0, 0.35, send=0.7)
-add(pad([36, 43, 48, 51, 55], 3.6, 600), 20.1, 0.30, send=0.4)
-for b in np.arange(21.0, 23.4, 0.5):
+# ===== 23.0 RENDEZ-VOUS =====
+add(boom(3.5, 64, 26), 23.0, 1.0)
+add(braam(36, 3.4, 1.0), 23.0, 0.6, send=0.45)
+add(noise_hit(1.6, 60, 6000, 3.5), 23.0, 0.35, send=0.7)
+add(pad([36, 43, 48, 51, 55], 3.6, 600), 23.1, 0.30, send=0.4)
+for b in np.arange(24.0, 26.4, 0.5):
     add(bass_note(24, 0.4), b, 0.30)
     add(tick(), b + 0.25, 0.08)
-# final button + resonance
-add(boom(1.6, 62, 30), 23.5, 1.0)
-add(braam(36, 1.5, 0.9), 23.5, 0.5, send=0.6)
-add(noise_hit(1.2, 80, 6000, 4), 23.5, 0.3, send=0.8)
+# final button + short resonance
+add(boom(1.6, 62, 30), 26.5, 1.0)
+add(braam(36, 1.5, 0.9), 26.5, 0.5, send=0.6)
+add(noise_hit(1.2, 80, 6000, 4), 26.5, 0.3, send=0.8)
 
 # ---------------- reverb + master ----------------
 ir_len = int(2.2 * SR)
@@ -261,7 +256,7 @@ def duck(a, b, depth):
     ramp = np.ones(j - i) * depth
     mix[i:j] *= ramp[:, None]
 duck(7.86, 8.0, 0.25)
-duck(19.88, 20.0, 0.25)
+duck(22.88, 23.0, 0.25)
 # end fade
 f = int(0.35 * SR)
 mix[-f:] *= np.linspace(1, 0, f)[:, None]
