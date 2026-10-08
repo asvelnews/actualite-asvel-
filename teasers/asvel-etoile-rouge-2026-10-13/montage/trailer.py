@@ -20,22 +20,23 @@ X0 = 92
 
 # ------------------------------------------------------------------ timeline
 # (name, seconds, kind, extra)
-TL = [('open', 6.0, 'open', None),
-      ('hist', 11.0, 'hist', None),
-      ('p_mills', 2.0, 'photo', 'mills'),
-      ('mills', 111 / 30, 'clip', ('PATTY MILLS', WHITE)),
-      ('p_moneke', 2.0, 'photo', 'moneke'),
-      ('moneke_fin', 84 / 30, 'clip', ('CHIMA MONEKE', RED)),
-      ('pullup', 116 / 30, 'clip', None),
-      ('stepback', 108 / 30, 'clip', None),
-      ('rookie', 69 / 30, 'clip', None),
-      ('moneke_tir', 113 / 30, 'clip', None),
-      ('layup', 111 / 30, 'clip', None),
-      ('dunk', 105 / 30, 'clip', None),
-      ('final', 62 / 30, 'clip', None),
-      ('reac', 38 / 30, 'clip', None),
-      ('breath', 0.8, 'black', None),
-      ('poster', 7.5, 'poster', None)]
+# v2: short intro (open 6 s + history 4 s), actions from 10.0 s, teams alternate, no mid portraits.
+TL = [('open', 5.6, 'open', None),
+      ('hist', 4.4, 'hist', None),
+      ('a1', 116 / 30, 'clip', None),   # ASVEL   tir apres dribble
+      ('b3', 125 / 30, 'clip', None),   # BELGRADE tir de Jared
+      ('a3', 111 / 30, 'clip', None),   # ASVEL   tir de Patty Mills
+      ('b4', 84 / 30, 'clip', None),    # BELGRADE finition de Moneke
+      ('a4', 69 / 30, 'clip', None),    # ASVEL   tir a 3 pts (Rookie)
+      ('b2', 108 / 30, 'clip', None),   # BELGRADE step-back de Jared
+      ('a7', 48 / 30, 'clip', None),    # ASVEL   contre
+      ('b5', 112 / 30, 'clip', None),   # BELGRADE tir de Moneke (attaque apres le contre)
+      ('a2', 110 / 30, 'clip', None),   # ASVEL   finition au cercle
+      ('b1', 105 / 30, 'clip', None),   # BELGRADE dunk d'Izundu (ralenti court)
+      ('a5', 61 / 30, 'clip', None),    # ASVEL   tir final (coupure musicale avant)
+      ('a6', 38 / 30, 'clip', None),    # ASVEL   reaction
+      ('breath', 0.4, 'black', None),
+      ('poster', 7.0, 'poster', None)]
 START = {}
 _t = 0
 for name, d, kind, extra in TL:
@@ -96,72 +97,106 @@ def _clock_digit(src, ch):
     return Image.fromarray(out.clip(0, 255).astype(np.uint8))
 
 def _cam(im, t):
-    """slow push towards the backboard / clock: zoom 1.20 -> 1.45 over 5 s, no stretching."""
+    """slow push towards backboard and clock, framing kept inside the source's sharp band (no blur)."""
     e = 0.5 - 0.5 * np.cos(np.pi * min(t / 5.0, 1.0))
-    z = 1.20 + 0.25 * e
-    cx = 560 + (615 - 560) * e; cy = 820 + (900 - 820) * e
+    z = 1.45 + 0.15 * e
+    cx = 630; cy = 960 + 40 * e
     w, h = W / z, H / z
-    box = (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)
-    return im.resize((W, H), Image.LANCZOS, box=box)
+    return im.resize((W, H), Image.LANCZOS, box=(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
+
+def _to_out(x, y):           # source px -> output px at the end of the push (z 1.6, centre 630,1000)
+    return ((x - (630 - W / 3.2)) * 1.6, (y - (1000 - H / 3.2)) * 1.6)
+BOARD = (*_to_out(313, 998), *_to_out(950, 1376))     # backboard glass in output px
+IMPACT = _to_out(632, 1170)
+_rng = np.random.default_rng(5)
+_seeds = np.concatenate([_rng.normal(IMPACT, [70, 55], (18, 2)),
+                         _rng.uniform(BOARD[:2], BOARD[2:], (30, 2))])
+_seeds = np.clip(_seeds, np.array(BOARD[:2]) + 2, np.array(BOARD[2:]) - 2)
+_bx0, _by0, _bx1, _by1 = [int(round(v)) for v in BOARD]
+_yy, _xx = np.mgrid[_by0:_by1, _bx0:_bx1]
+_LAB = np.argmin((_xx[..., None] - _seeds[:, 0]) ** 2 + (_yy[..., None] - _seeds[:, 1]) ** 2, axis=-1)
+_EDGE = ((np.diff(_LAB, axis=0, prepend=_LAB[:1]) != 0) | (np.diff(_LAB, axis=1, prepend=_LAB[:, :1]) != 0))
+_EDGE = np.array(Image.fromarray(_EDGE.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(3))) > 0
+_RAD = np.hypot(_xx - IMPACT[0], _yy - IMPACT[1])
+
+def crack_layer(k):
+    """cracks spreading from the impact point inside the glass only (k 0..1)."""
+    rad = 40 + 700 * ease(k)
+    m = _EDGE & (_RAD < rad)
+    a = np.zeros((H, W), np.uint8); a[_by0:_by1, _bx0:_bx1] = (m * 235).astype(np.uint8)
+    lay = Image.new('RGBA', (W, H), (235, 242, 255, 0)); lay.putalpha(Image.fromarray(a))
+    return lay
+
+def shatter_board(k, cracked):
+    """k = 0.. frames since the glass gives way: shards of the backboard fall and spin out of frame."""
+    t = k / 30
+    out = cracked.copy()
+    # the glass is gone: the panel area shows the (darkened) arena behind it
+    hole = cracked.crop((_bx0, _by0, _bx1, _by1)).point(lambda v: int(v * 0.55))
+    out.paste(hole, (_bx0, _by0))
+    src = np.asarray(cracked)
+    for i, (sx, sy) in enumerate(_seeds):
+        m = _LAB == i
+        rows = np.flatnonzero(m.any(1)); cols = np.flatnonzero(m.any(0))
+        if rows.size == 0: continue
+        y0, y1, x0, x1 = rows[0], rows[-1] + 1, cols[0], cols[-1] + 1
+        piece = np.zeros((y1 - y0, x1 - x0, 4), np.uint8)
+        piece[..., :3] = src[_by0 + y0:_by0 + y1, _bx0 + x0:_bx0 + x1, :3]
+        piece[..., 3] = m[y0:y1, x0:x1] * 255
+        im = Image.fromarray(piece, 'RGBA')
+        rim = Image.fromarray(m[y0:y1, x0:x1].astype(np.uint8) * 255).filter(ImageFilter.FIND_EDGES)
+        rl = Image.new('RGBA', im.size, (240, 245, 255, 0)); rl.putalpha(rim.point(lambda p: min(255, p) * 0.8))
+        im.alpha_composite(rl)
+        d = np.array([sx - IMPACT[0], sy - IMPACT[1]]); n = np.linalg.norm(d) + 1
+        v = d / n * (250 + 500 * _rng.random()) if k == 0 else d / n * (350 + 2 * (i % 7) * 60)
+        spin = ((i * 37) % 120) - 60
+        im = im.rotate(spin * t * 3, resample=Image.BILINEAR, expand=True)
+        cx = _bx0 + (x0 + x1) / 2 + v[0] * t; cy = _by0 + (y0 + y1) / 2 + v[1] * t + 2600 * t * t
+        px, py = int(cx - im.width / 2), int(cy - im.height / 2)
+        if px >= W or py >= H or px + im.width <= 0 or py + im.height <= 0: continue
+        sx0, sy0 = max(0, -px), max(0, -py)
+        out.alpha_composite(im.crop((sx0, sy0, min(im.width, W - px), min(im.height, H - py))), (max(px, 0), max(py, 0)))
+    return out
 
 _OPEN_CACHE = {}
 def opening_frame(f):
-    """0-5 s: 5,4,3,2,1 ; 5.0 s: 0 + buzzer ; 5.0-5.4 crack ; 5.4-5.9 shatter -> history card"""
+    """0-5 s: 5,4,3,2,1 on the real shot clock ; 5.0 s: 0 + buzzer, the backboard glass cracks from the
+    impact point (5.0-5.43 s) ; 5.43-5.6 s: brief light impact from the same point, then a hard cut."""
     n = 5 - min(f // 30, 5)
     key = str(n)
     if key not in _OPEN_CACHE: _OPEN_CACHE[key] = _clock_digit(_open_src(), key)
     fr = _cam(_OPEN_CACHE[key], min(f, 150) / 30).convert('RGBA')
     if f < 150: return fr
-    if f < 162:                                                            # crack spreading from the clock area
-        k = (f - 150) / 12
-        e = np.asarray(opening._edges(), np.float32) / 255
-        yy, xx = np.mgrid[0:H, 0:W]
-        r = np.hypot(xx - W / 2, yy - 700)
-        m = (e * (r < 200 + 1500 * ease(k))).astype(np.float32)
-        lay = Image.new('RGBA', (W, H), (235, 240, 255, 0)); lay.putalpha(Image.fromarray((m * 220).astype(np.uint8)))
-        fr.alpha_composite(lay)
-        if f < 152:                                                        # very short white flash on the buzzer
-            fl = Image.new('RGBA', (W, H), (255, 255, 255, int(110 * (1 - (f - 150) / 2)))); fr.alpha_composite(fl)
-        return fr
-    k = f - 162                                                            # 0..14 shards fly
-    glass = opening_frame.__dict__.setdefault('glass', None)
-    if glass is None:
-        glass = opening_frame(161); opening_frame.glass = glass
-    return opening.shatter(min(k, 14), hist_frame(0), glass)
+    fr.alpha_composite(crack_layer(min(1.0, (f - 150 + 1) / 11)))
+    if f >= 163:                                                           # light impact from the glass
+        k = (f - 162) / 5
+        yy, xx = np.mgrid[0:H:4, 0:W:4]
+        r = np.hypot(xx - IMPACT[0], yy - IMPACT[1])
+        a = np.clip(k ** 1.2 * np.exp(-(r / (120 + 520 * k)) ** 2) * 1.3 + 0.4 * k ** 4, 0, 1)
+        glow = Image.fromarray((a * 255).astype(np.uint8)).resize((W, H), Image.BILINEAR)
+        lay = Image.new('RGBA', (W, H), (255, 250, 240, 0)); lay.putalpha(glow); fr.alpha_composite(lay)
+    return fr
 
 # ------------------------------------------------------------------ 2. history
 def hist_frame(r):
-    """r = frame within the 11-s history block"""
+    """4 s: one composition. Labels at 0, '5' at 0.35 s, '9' at 0.9 s, both held; then UNE NOUVELLE BATAILLE."""
     img = black(); s = r / FPS
-    big = F(ANTON, 170); huge = F(ANTON, 420); lab = F(BB, 64)
-    if s < 1.6:
-        text(img, (X0, 820), 'FACE-À-FACE', fit(ANTON, 'FACE-À-FACE', 860, 190), WHITE, alpha=ease(s / 0.15))
-    elif s < 3.8:
-        a = ease((s - 1.6) / 0.12)
-        text(img, (X0, 500), 'ASVEL', big, WHITE, alpha=a)
-        if s >= 2.1:
-            text(img, (X0 - 10, 690), '5', huge, WHITE)
-            text(img, (X0 + 4, 1210), 'VICTOIRES', lab, LGREY, track=6)
-    elif s < 6.0:
-        a = ease((s - 3.8) / 0.12)
-        text(img, (X0, 500), 'ÉTOILE ROUGE', fit(ANTON, 'ÉTOILE ROUGE', 860, 170), WHITE, alpha=a)
-        if s >= 4.3:
-            text(img, (X0 - 10, 690), '9', huge, RED)
-            text(img, (X0 + 4, 1210), 'VICTOIRES', lab, LGREY, track=6)
-    elif s < 8.7:                                                          # both records together
-        a = ease((s - 6.0) / 0.15)
-        text(img, (X0 + 2, 420), 'BILAN DES CONFRONTATIONS', F(BB, 52), GREY, track=4, alpha=a)
-        colw = 400
-        for i, (team, num, col) in enumerate((('ASVEL', '5', WHITE), ('ÉTOILE ROUGE', '9', RED))):
+    if s < 3.05:
+        text(img, (X0 + 2, 470), 'FACE-À-FACE', F(ANTON, 96), WHITE, alpha=ease(s / 0.12))
+        text(img, (X0 + 4, 590), 'BILAN DES CONFRONTATIONS', F(BB, 44), GREY, track=4, alpha=ease(s / 0.12))
+        colw = 410
+        for i, (team, num, col, t0) in enumerate((('ASVEL', '5', WHITE, 0.35), ('ÉTOILE ROUGE', '9', RED, 0.9))):
             x = X0 + i * (colw + 20)
-            text(img, (x, 540), team, fit(ANTON, team, colw - 10, 96), WHITE, alpha=a)
-            text(img, (x - 6, 680), num, F(ANTON, 360), col, alpha=a)
-            text(img, (x + 2, 1110), 'VICTOIRES', F(BB, 56), LGREY, track=5, alpha=a)
-        d = ImageDraw.Draw(img); d.rectangle([X0 + colw - 2, 600, X0 + colw + 2, 1160], fill=(70, 70, 70))
+            text(img, (x, 700), team, fit(ANTON, team, colw - 10, 100), WHITE, alpha=ease(s / 0.12))
+            if s >= t0:
+                text(img, (x - 6, 830), num, F(ANTON, 380), col)
+                text(img, (x + 2, 1290), 'VICTOIRES', F(BB, 58), LGREY, track=5)
+        d = ImageDraw.Draw(img); d.rectangle([X0 + colw - 2, 720, X0 + colw + 2, 1340], fill=(70, 70, 70))
     else:
-        a = ease((s - 8.7) / 0.2)
-        text(img, (X0, 760), 'UNE NOUVELLE', fit(ANTON, 'UNE NOUVELLE', 860, 170), WHITE, alpha=a)
-        text(img, (X0, 960), 'BATAILLE.', fit(ANTON, 'UNE NOUVELLE', 860, 170), WHITE, alpha=a)
+        a = ease((s - 3.05) / 0.12)
+        f = fit(ANTON, 'UNE NOUVELLE', 860, 170)
+        text(img, (X0, 760), 'UNE NOUVELLE', f, WHITE, alpha=a)
+        text(img, (X0, 960), 'BATAILLE.', f, WHITE, alpha=a)
     return img
 
 # ------------------------------------------------------------------ 3. photo cards & poster
@@ -210,24 +245,27 @@ def poster():
     g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(g)
     d.polygon([(600, 0), (W, 0), (W, H), (480, H)], fill=(95, 8, 14, 150))   # subtle red side for Belgrade
     img.alpha_composite(g.filter(ImageFilter.GaussianBlur(90)))
-    EYE_Y = 330
-    m, me, mem = load_player('moneke'); place(img, m, me, mem, (790, EYE_Y), 66)
-    p, pe, pem = load_player('mills'); place(img, p, pe, pem, (290, EYE_Y), 66)
-    fade_bottom(img, 720, 900)
-    text(img, (X0, 820), 'ASVEL', F(ANTON, 200), WHITE)
-    text(img, (X0 + 4, 1052), 'VS', F(ANTON, 80), GREY)
-    t = fit(ANTON, 'ÉTOILE ROUGE DE BELGRADE', 820, 120)
-    text(img, (X0, 1135), 'ÉTOILE ROUGE DE BELGRADE', t, RED)
-    d = ImageDraw.Draw(img); d.rectangle([X0, 1288, X0 + 130, 1295], fill=WHITE)
-    text(img, (X0, 1310), 'MARDI 13 OCTOBRE • 20H00', fit(ANTON, 'MARDI 13 OCTOBRE • 20H00', 820, 96), WHITE)
-    text(img, (X0, 1414), 'ASTROBALLE', F(ANTON, 96), WHITE)
-    text(img, (X0 + 2, 1545), 'ASVEL_NEWS', F(BB, 48), GREY, track=6)
+    EYE_Y, EM = 300, 80                                                     # bigger players, eyes aligned
+    m, me, mem = load_player('moneke'); place(img, m, me, mem, (800, EYE_Y), EM)
+    p, pe, pem = load_player('mills'); place(img, p, pe, pem, (285, EYE_Y), EM)
+    fade_bottom(img, 820, 990)
+    text(img, (X0, 860), 'ASVEL', F(ANTON, 190), WHITE)
+    text(img, (X0 + 4, 1082), 'VS', F(ANTON, 70), GREY)
+    t = fit(ANTON, 'ÉTOILE ROUGE DE BELGRADE', 816, 120)
+    text(img, (X0, 1158), 'ÉTOILE ROUGE DE BELGRADE', t, RED)
+    d = ImageDraw.Draw(img); d.rectangle([X0, 1306, X0 + 130, 1313], fill=WHITE)
+    l = fit(ANTON, 'MARDI 13 OCTOBRE • 20H00', 816, 96)
+    text(img, (X0, 1328), 'MARDI 13 OCTOBRE • 20H00', l, WHITE)
+    text(img, (X0, 1430), 'ASTROBALLE', F(ANTON, l.size), WHITE)
+    b = fit(BB, 'beIN SPORTS & EuroLeague TV', 816, 60)
+    text(img, (X0 + 2, 1548), 'beIN SPORTS & EuroLeague TV', b, LGREY, track=1)
+    text(img, (X0 + 2, 1622), 'ASVEL_NEWS', F(BB, 42), GREY, track=6)
     _POSTER = img
     return img.copy()
 
 # ------------------------------------------------------------------ clips
 def read_seg(name):
-    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg', name + '.mp4'), '-f', 'rawvideo',
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg2', name + '.mp4'), '-f', 'rawvideo',
                           '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
     return np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
 
@@ -253,7 +291,6 @@ def frame(f, cache):
                 return img
             if name not in cache: cache.clear(); cache[name] = read_seg(name)
             fr = cache[name]; img = Image.fromarray(fr[min(r, len(fr) - 1)]).convert('RGBA')
-            if extra: name_tag(img, extra[0], extra[1], r)
             return img
     return black()
 

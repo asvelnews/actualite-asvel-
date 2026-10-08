@@ -8,7 +8,7 @@ import os, sys, wave
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-os.environ['TRAILER_DUR'] = '59.87'
+os.environ['TRAILER_DUR'] = '53.64'
 import synth_lib as L
 from synth_lib import *                       # SR, N, add, boom, braam, kick, snare, tom, tick, hat, riser, pad, ...
 from scipy.signal import fftconvolve
@@ -24,81 +24,69 @@ def render_bus():
 
 B = 0.5
 # =============================== SFX STEM ===============================
-t = t_(5.0)                                                     # electric hum under the countdown
-hum = (np.sin(2 * np.pi * 50 * t) + 0.5 * np.sin(2 * np.pi * 100 * t) + 0.25 * np.sign(np.sin(2 * np.pi * 150 * t)) * 0.3)
+t = t_(5.0)                                                     # faint electric hum under the countdown
+hum = (np.sin(2 * np.pi * 50 * t) + 0.5 * np.sin(2 * np.pi * 100 * t))
 hum = lp(hum, 600) * np.minimum(1, t / 0.6) * (0.6 + 0.4 * t / 5)
 add(hum, 0.0, 0.10)
 for k in range(5):                                              # one beep per digit, the first one isolated
     add(beep(880 if k < 4 else 1000, 0.09), float(k), 0.22 + 0.04 * k)
-bt = t_(0.7)                                                    # 5.0 buzzer
+bt = t_(0.5)                                                    # 5.0 short buzzer
 buzz = np.sign(np.sin(2 * np.pi * 330 * bt)) * 0.5 + np.sign(np.sin(2 * np.pi * 495 * bt)) * 0.3
-buzz = lp(buzz, 3500) * np.minimum(1, bt / 0.01) * np.minimum(1, (0.7 - bt) / 0.08)
-add(buzz, 5.0, 0.28)
+buzz = lp(buzz, 3500) * np.minimum(1, bt / 0.01) * np.minimum(1, (0.5 - bt) / 0.06)
+add(buzz, 5.0, 0.26)
 add(boom(3.0, 60, 26), 5.0, 1.0)                                # grave impact
-ct = t_(0.4); crack = hp(L.rng.standard_normal(len(ct)), 2500) * np.exp(-ct * 30)
-add(crack, 5.0, 0.5)                                            # crack
-add(lp(glass(), 11000, 4), 5.4, 1.2, send=0.25)                 # glass bursts
-for at, g in ((8.1, 0.8), (10.3, 0.9), (14.7, 0.7)):            # history: "5", "9", "UNE NOUVELLE BATAILLE"
-    add(boom(1.8, 58, 30), at, g)
-add(boom(3.0, 64, 26), 49.88, 1.0)                              # final basket
-add(boom(3.5, 62, 26), 52.37, 0.8)                              # poster
-add(boom(2.0, 60, 28), 58.6, 0.9)                               # last impact
+ct = t_(0.45); crack = hp(L.rng.standard_normal(len(ct)), 2500) * np.exp(-ct * 18)
+add(crack, 5.0, 0.45)                                           # glass cracking
+add(lp(glass(), 11000, 4), 5.43, 1.0, send=0.25)               # glass gives way with the light impact
+for at, g in ((5.95, 0.7), (6.5, 0.8)):                         # history: "5", then "9"
+    add(boom(1.6, 58, 30), at, g)
+add(boom(1.4, 56, 32), 8.65, 0.6)                               # UNE NOUVELLE BATAILLE
+add(boom(3.0, 64, 26), 44.58, 1.0)                              # last basket
+add(boom(3.5, 62, 26), 46.63, 0.8)                              # poster
+add(boom(2.0, 60, 28), 52.5, 0.9)                               # last impact
 sfx = render_bus()
 
 # =========================== PROVISIONAL MUSIC ===========================
-dr = drone(16.0); dr *= np.linspace(0.0, 1.0, len(dr))[:, None].squeeze() ** 1.5
-add(dr, 1.0, 0.30)                                              # bass appears gradually under the countdown
-add(riser(3.0, 120, 3000), 2.0, 0.18, send=0.3)
-for b in np.arange(3.0, 5.0, 0.5): add(kick(0.4), b, 0.2 + 0.08 * (b - 3))
-add(braam(36, 2.6, 0.6), 5.0, 0.35, send=0.4)
-# history 6-17: contained
-for b in np.arange(6.0, 17.0, 1.0):                             # heartbeat
+# (replace with Justice - Genesis via mix_genesis.py once the file is supplied)
+dr = drone(10.0); dr *= np.linspace(0.0, 1.0, len(dr))[:, None].squeeze() ** 1.5
+add(dr, 0.5, 0.28)                                              # bass appears progressively
+for b in np.arange(3.0, 5.0, 0.5): add(kick(0.4), b, 0.18 + 0.08 * (b - 3))
+add(braam(36, 2.6, 0.7), 5.0, 0.45, send=0.4)                   # music enters on the zero
+for b in np.arange(5.6, 10.0, 1.0):                             # history: contained pulse
     add(kick(0.4), b, 0.30); add(kick(0.35), b + 0.22, 0.18)
-add(pad([48, 51, 55], 11.0, 650), 6.0, 0.20, send=0.4)
-add(riser(2.0, 150, 4000), 15.0, 0.2, send=0.3)
-# heads 17-27.5: the music starts to grow
-add(pad([44, 48, 51, 56], 5.5, 900), 17.0, 0.24, send=0.35)
-add(pad([46, 50, 53, 58], 5.0, 1000), 22.5, 0.26, send=0.35)
-pat = [0, 0, 12, 0, 0, 0, 7, 0, 0, 0, 12, 0, 3, 0, 7, 0]
-for i, tt in enumerate(np.arange(17.0, 27.5, B / 2)):
-    add(bass_note(36 + pat[i % 16] * (tt >= 21), 0.2), tt, 0.25 if i % 2 == 0 else 0.15)
-for b in np.arange(19.0, 27.5, B):
-    if int(round((b - 19) / B)) % 2 == 0: add(kick(), b, 0.55)
-    else: add(snare(0.3), b, 0.30, send=0.3)
-for at in (21.8, 27.2): add(braam(36, 1.2, 0.8), at, 0.25, send=0.4)
-# 27.5-48.23: full groove, accelerating
+add(pad([48, 51, 55], 4.4, 650), 5.6, 0.20, send=0.4)
+add(riser(1.4, 150, 4000), 8.6, 0.2, send=0.3)
 prog = [([48, 51, 55, 60], 36), ([44, 48, 51, 56], 32), ([51, 55, 58, 63], 39), ([46, 50, 53, 58], 34)]
-for bi, bs in enumerate(np.arange(27.5, 48.2, 2.0)):
+pat = [0, 0, 12, 0, 0, 0, 7, 0, 0, 0, 12, 0, 3, 0, 7, 0]
+for bi, bs in enumerate(np.arange(10.0, 42.9, 2.0)):           # actions: progressive build 10 -> 42.9
     ch, root = prog[bi % 4]
-    add(pad(ch, 2.05, 1000 + bi * 60), bs, 0.27, send=0.35)
+    add(pad(ch, 2.05, 900 + bi * 60), bs, 0.22 + 0.004 * bi, send=0.35)
     for i in range(16):
-        if bs + i * B / 4 < 48.2: add(bass_note(root + pat[i], 0.14), bs + i * B / 4, 0.40 if i % 4 == 0 else 0.26)
-for b in np.arange(27.5, 48.2, B):
-    beat = int(round((b - 27.5) / B)) % 4
-    if beat in (0, 2): add(kick(), b, 0.75)
-    if beat in (1, 3): add(snare(), b, 0.5, send=0.35)
-    add(hat(), b + B / 2, 0.11, pan=0.3)
-    if b >= 37.0: add(hat(), b + B / 4, 0.07, pan=-0.3)
-    if b >= 41.0 and beat == 2: add(kick(), b + 0.25, 0.5)
-for at in (30.9, 34.47, 36.67, 40.62, 44.03, 46.78):            # baskets get an accent
-    add(braam(36, 1.0, 0.7), at, 0.22, send=0.4)
-add(riser(1.6, 300, 6000), 45.2, 0.2, send=0.3)
-# 48.23-48.63: music cut (silence) ; 48.63-49.88: tension while the ball flies
-add(riser(1.25, 100, 2500), 48.63, 0.22, send=0.2)
-for k, tt in enumerate(np.arange(48.7, 49.85, 0.125)): add(tick(), tt, 0.10 + 0.012 * k)
-# 49.88: the music comes back hard on the basket
-add(braam(36, 3.0, 1.0), 49.88, 0.6, send=0.45)
-for b in np.arange(49.88, 51.6, B):
+        tt = bs + i * B / 4
+        if tt < 42.93 and (bs >= 18.0 or i % 2 == 0):
+            add(bass_note(root + pat[i], 0.14), tt, 0.40 if i % 4 == 0 else 0.26)
+for b in np.arange(10.0, 42.9, B):
+    beat = int(round((b - 10.0) / B)) % 4
+    if beat in (0, 2): add(kick(), b, 0.6 if b < 18 else 0.75)
+    if beat in (1, 3) and b >= 13.9: add(snare(), b, 0.45 if b < 26.8 else 0.55, send=0.35)
+    if b >= 18.0: add(hat(), b + B / 2, 0.10, pan=0.3)
+    if b >= 26.8: add(hat(), b + B / 4, 0.07, pan=-0.3)
+    if b >= 35.7 and beat == 2: add(kick(), b + 0.25, 0.5)
+for at in (13.5, 17.6, 21.1, 24.2, 26.2, 30.0, 31.13, 35.4, 38.8, 40.9):   # baskets / block get an accent
+    add(braam(36, 1.0, 0.7), at, 0.20, send=0.4)
+add(riser(1.4, 300, 6000), 41.5, 0.2, send=0.3)
+add(riser(1.25, 100, 2500), 43.33, 0.22, send=0.2)            # tension after the cut, ball in the air
+for k, tt in enumerate(np.arange(43.4, 44.55, 0.125)): add(tick(), tt, 0.10 + 0.012 * k)
+add(braam(36, 3.0, 1.0), 44.58, 0.6, send=0.45)                 # back hard on the last basket
+for b in np.arange(44.58, 46.2, B):
     add(kick(), b, 0.8); add(snare(), b + 0.25, 0.4, send=0.3)
-add(pad([36, 43, 48, 51, 55], 2.6, 900), 49.9, 0.3, send=0.4)
-# poster 52.37-59.87
-add(braam(36, 3.4, 0.9), 52.37, 0.45, send=0.5)
-add(pad([36, 43, 48, 51, 55], 6.4, 600), 52.4, 0.30, send=0.45)
-for b in np.arange(53.0, 58.4, 0.5): add(bass_note(24, 0.4), b, 0.24)
-add(braam(36, 1.4, 0.9), 58.6, 0.45, send=0.6)
+add(braam(36, 3.4, 0.9), 46.63, 0.45, send=0.5)                 # poster
+add(pad([36, 43, 48, 51, 55], 6.0, 600), 46.65, 0.30, send=0.45)
+for b in np.arange(47.0, 52.4, 0.5): add(bass_note(24, 0.4), b, 0.24)
+add(braam(36, 1.0, 0.9), 52.5, 0.45, send=0.6)
 music = render_bus()
-i, j = int(48.23 * SR), int(48.63 * SR)
-music[i:j] *= np.linspace(0.05, 0.0, j - i)[:, None]             # the 0.4-s cut
+i, j = int(42.93 * SR), int(43.33 * SR)
+music[i:j] *= np.linspace(0.05, 0.0, j - i)[:, None]             # 0.4-s music cut before the last action
 music[j:j + int(0.05 * SR)] *= np.linspace(0, 1, int(0.05 * SR))[:, None]
 
 # ================================ MIX ================================
