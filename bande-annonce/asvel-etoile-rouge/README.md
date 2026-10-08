@@ -35,8 +35,8 @@ Chaque action est recadrée serré sur le joueur (panneau 1080×800, zoom ≈ 1,
 | Bloc | Fichier | Plage source | Action |
 |---|---|---|---|
 | Mills 1 | Patty_Mills_Cholet_TikTok_nettoye | 15,57–16,37 s | gros plan de Patty Mills |
-| Mills 2 | Patty_Mills_TikTok_sans_son | 5,00–6,70 s (ralenti 5,25–5,75) | tir dans le coin, ballon jusqu'au cercle |
-| Mills 3 | Patty_Mills_TikTok_sans_son | 13,45–15,60 s (ralenti 14,15–14,75) | tir en suspension par-dessus le n°1, filet |
+| Mills 2 | Patty_Mills_TikTok_sans_son | 4,45–6,75 s (vitesse réelle) | tir dans le coin, action complète jusqu’au cercle |
+| Mills 3 | Patty_Mills_TikTok_sans_son | 13,10–15,60 s (ralenti 14,15–14,75) | tir en suspension par-dessus le n°1, du dribble au filet |
 | Moneke 1 | Moneke_Fenerbahce_TikTok | 0,90–3,25 s (ralenti 2,00–2,60) | pénétration et finition au cercle |
 | Moneke 2 | Moneke_Olympiacos_TikTok | 5,30–8,58 s | gros plan puis tir filmé sous le panier |
 

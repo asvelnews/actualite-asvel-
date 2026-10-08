@@ -699,9 +699,9 @@ VSRC = {'M1': ('3d6d2ed1-Patty_Mills_Cholet_TikTok_nettoye.mp4', 718, 484),   # 
 PW, PH, PY = 1080, 800, 930                     # panneau video 1080 x 800 centre en y = 930 : cadrage serre sur le joueur
 # (source, debut, fin, ralenti (debut, fin, facteur) ou None, suivi [(temps source, x du joueur dans l'image d'origine)])
 MILLS_CLIPS = [('M1', 15.57, 16.37, None, [(15.57, 340), (16.37, 420)]),                       # gros plan Patty Mills
-               ('M2', 5.00, 6.70, (5.25, 5.75, 0.5), [(5.0, 580), (5.3, 620), (5.9, 610), (6.3, 700), (6.7, 720)]),  # tir dans le coin
-               ('M2', 13.45, 15.60, (14.15, 14.75, 0.5), [(13.45, 280), (14.2, 330), (14.6, 390), (14.85, 430),
-                                                         (15.05, 690), (15.6, 680)])]          # tir en suspension sur le n.1
+               ('M2', 4.45, 6.75, None, [(4.45, 690), (4.9, 650), (5.3, 620), (5.9, 610), (6.3, 700), (6.75, 720)]),  # tir dans le coin, action complete
+               ('M2', 13.10, 15.60, (14.15, 14.75, 0.5), [(13.1, 260), (13.45, 280), (14.2, 330), (14.6, 390), (14.85, 430),
+                                                         (15.05, 690), (15.6, 680)])]          # tir en suspension sur le n.1, action complete
 MONEKE_CLIPS = [('K1', 0.90, 3.25, (2.00, 2.60, 0.5), [(0.9, 790), (1.5, 762), (2.0, 740), (2.4, 750), (3.25, 740)]),  # penetration, dunk
                 ('K2', 5.30, 8.58, None, [(5.3, 540), (8.58, 540)])]                           # gros plan puis tir filme sous le panier
 T_MILLS, T_MONEKE = 26.5, 32.61
