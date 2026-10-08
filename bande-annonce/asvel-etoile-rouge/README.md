@@ -6,7 +6,7 @@
 | `ASVEL_NEWS_ASVEL-EtoileRouge_AUJOURDHUI.mp4` | publication le 13 octobre uniquement (AUJOURD’HUI • 20H00) |
 | `ASVEL_NEWS_Teaser_RDV-lundi-12-octobre.mp4` | teaser 18 s : BANDE-ANNONCE COMPLÈTE / RENDEZ-VOUS LUNDI 12 OCTOBRE (`montage/teaser.py`) |
 
-1080×1920, 30 i/s, 46,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 14,4 Mo, −15 LUFS, crête −1,2 dBFS.
+1080×1920, 30 i/s, 46,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 18,5 Mo, −14 LUFS, crête −1 dBFS.
 
 ## Langage motion design
 Typo cinétique (chaque lettre surgit derrière un masque), échos en contour à chaque impact, blocs et panneaux obliques qui glissent,
