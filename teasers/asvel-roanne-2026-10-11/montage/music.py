@@ -179,7 +179,7 @@ def glass(d=1.4):
 for k in range(5):
     add(beep(1000, 0.11), float(k), 0.32)          # 00:05 .. 00:01
 add(beep(1000, 0.45), 5.0, 0.38)                   # 00:00
-add(glass(), 5.5, 1.8, send=0.25)                 # the glass breaks, on the score impact
+add(lp(glass(), 11000, 4), 5.5, 1.5, send=0.25)                 # the glass breaks, on the score impact
 
 OFF = 5.5  # ---- everything below is in teaser-body time (body 0.0 = absolute 5.0 s) ----
 # 0.00 HOOK impact (score card appears)
