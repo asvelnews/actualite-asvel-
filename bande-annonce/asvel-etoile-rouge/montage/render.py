@@ -124,7 +124,7 @@ class Player:
         arr[..., 3] = a.astype(np.uint8)
         return Image.fromarray(arr, 'RGBA')
 
-MILLS = Player(os.path.join(SRC, 'patty-mills-detoure.png'), 2, (343, 160), (2, 45))
+MILLS = Player(os.path.join(SRC, 'patty-mills-detoure.png'), 4, (162, 80), (2.5, 70))
 MONEKE = Player(os.path.join(SRC, 'chima-moneke-detoure.png'), 4, (170, 80), (2.5, 70))
 
 # ------------------------------------------------------------------ lights / backgrounds
@@ -427,8 +427,8 @@ def scene3(t):
     kt = e_expo(seg(u, 0.12, 0.7))
     put(can, text('ASVEL', ANTON, sz, (245, 245, 245, 255)), 540 - 70 * (1 - kt) + 22 * e_io(u / 4), 492,
         alpha=c01(seg(u, 0.12, 0.35)))
-    sc = lerp(1.80, 1.52, e_io(seg(u, 0.5, 3.2)))
-    can.alpha_composite(MILLS.layer(sc, 540 - 10 * e_io(u / 4), 770, fade_bottom=(1270, 1640), side_fade=70))
+    sc = lerp(3.42, 2.94, e_io(seg(u, 0.5, 3.2)))
+    can.alpha_composite(MILLS.layer(sc, 540 - 10 * e_io(u / 4), 770, fade_bottom=(1270, 1640)))
     can = darken(can, vgrad(1180, 1620, 1.0, 0.18))
     caption(can, u, 'PATTY MILLS', 'l', 92)
     can = wipe(can, u, True, ((255, 255, 255), RED))
@@ -458,7 +458,7 @@ def shot(kind, v):
     if kind.startswith('split'):
         tight = kind == 'split2'
         can = bg(glow(270, 760, 500, (255, 255, 255), 0.12), glow(810, 760, 500, (255, 25, 30), 0.22))
-        l = MILLS.layer((1.75 if tight else 1.42) * z, 300, 790, side_fade=60)
+        l = MILLS.layer((3.40 if tight else 2.80) * z, 290, 790)
         r = MONEKE.layer((3.7 if tight else 3.05) * z, 790, 790)
         xs = np.arange(W)[None, :]; edge = 540 + (_ys[:, None] - H / 2) * -0.10
         la = np.asarray(l).copy(); la[..., 3] = (la[..., 3] * (xs < edge - 3)).astype(np.uint8)
@@ -469,13 +469,13 @@ def shot(kind, v):
         return can
     if kind == 'mills_tight':
         can = bg(glow(540, 760, 560, (255, 255, 255), 0.14))
-        can.alpha_composite(MILLS.layer(2.25 * z, 540, 820, side_fade=60)); return can
+        can.alpha_composite(MILLS.layer(3.63 * z, 540, 820)); return can
     if kind == 'moneke_tight':
         can = bg(glow(540, 760, 560, (255, 25, 30), 0.26))
         can.alpha_composite(MONEKE.layer(3.95 * z, 540, 820)); return can
     if kind == 'mills_side':
         can = bg(glow(380, 760, 560, (255, 255, 255), 0.14))
-        can.alpha_composite(MILLS.layer(1.9 * z, 360 + 30 * v, 800, side_fade=60)); return can
+        can.alpha_composite(MILLS.layer(3.22 * z, 360 + 30 * v, 800)); return can
     if kind == 'moneke_side':
         can = bg(glow(700, 760, 560, (255, 25, 30), 0.26))
         can.alpha_composite(MONEKE.layer(3.5 * z, 720 - 30 * v, 800)); return can
@@ -525,7 +525,7 @@ def scene6a(t):
     lv = 1 - e_io(seg(t, 24.6, T_DARK))
     can = bg(glow(280, 780, 520, (255, 255, 255), 0.13), glow(800, 780, 520, (255, 25, 30), 0.24))
     k = e_io(u / 1.9)
-    l = MILLS.layer(1.46, 250 + 45 * k, 820, side_fade=60, fade_bottom=(1350, 1650))
+    l = MILLS.layer(2.83, 250 + 45 * k, 820, fade_bottom=(1350, 1650))
     r = MONEKE.layer(3.08, 830 - 45 * k, 820, fade_bottom=(1350, 1650))
     xs = np.arange(W)[None, :]
     la = np.asarray(l).copy(); la[..., 3] = (la[..., 3] * np.clip((560 - xs) / 40, 0, 1)).astype(np.uint8)
@@ -539,7 +539,7 @@ def poster(t, date_line):
     ur = t - T_REVEAL
     can = bg(glow(285, 420, 520, (255, 255, 255), 0.15), glow(800, 420, 520, (255, 25, 30), 0.26))
     kp = e_expo(seg(ur, 0.0, 0.55))
-    l = MILLS.layer(0.82, 285 - 620 * (1 - kp), 335, fade_bottom=(600, 790), side_fade=55)
+    l = MILLS.layer(2.53, 285 - 620 * (1 - kp), 335, fade_bottom=(600, 790))
     r = MONEKE.layer(2.75, 805 + 620 * (1 - kp), 335, fade_bottom=(600, 790))
     can.alpha_composite(l); can.alpha_composite(r)
     # noms des equipes

@@ -5,7 +5,7 @@
 | `ASVEL_NEWS_ASVEL-EtoileRouge_13-octobre.mp4` | publication avant le jour du match (MARDI 13 OCTOBRE • 20H00) |
 | `ASVEL_NEWS_ASVEL-EtoileRouge_AUJOURDHUI.mp4` | publication le 13 octobre uniquement (AUJOURD’HUI • 20H00) |
 
-1080×1920, 30 i/s, 35,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 12,8 Mo, −15 LUFS, crête −1,2 dBFS.
+1080×1920, 30 i/s, 35,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 11,8 Mo, −15 LUFS, crête −1,2 dBFS.
 
 ## Déroulé
 | Temps | Scène |
@@ -30,8 +30,11 @@ Effets synthétisés (`montage/audio.py`) : bourdonnement, bips, basse pulsée, 
 Aucune voix off, aucun son de match.
 
 ## Sources
-- `sources/patty-mills-detoure.png` : `images/patty-mills.jpg` détourée (fond blanc retiré, bord décontaminé). Échelle uniforme uniquement.
-- `sources/chima-moneke-detoure.png` : photo fournie (déjà détourée, 352×469, agrandie en Lanczos : légèrement douce en gros plan).
+- `sources/patty-mills-asvel-original.png` : photo fournie de Patty Mills en maillot LDLC ASVEL n°8 (déjà détourée, 819×1024).
+- `sources/patty-mills-detoure.png` : la même, simplement recadrée au-dessus des genoux.
+- `sources/chima-moneke-detoure.png` : photo fournie de Chima Moneke (déjà détourée, 352×469).
+- Les deux visages ont une résolution proche (≈ 60 et 55 px de large) : même cadrage et même taille de visage pour les deux joueurs,
+  agrandissement Lanczos uniforme (aucune retouche, aucune reconstruction).
 - `sources/panier-chronometre.png` : image réelle du panier issue du projet (branche du teaser précédent) ; le ballon en vol a été retiré
   par retouche (inpainting) et l'affichage d'origine du chronomètre a été éteint pour y intégrer le compte à rebours.
 - Polices : Anton, Barlow Condensed (Google Fonts, licence OFL).
