@@ -622,11 +622,11 @@ def scene5(t):
     return zoom(can, 1 + 0.07 * (1 - e_expo(seg(t, p0, p0 + 0.35))), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 6 & 7 : face-a-face, revelation, affiche
-T_DARK, T_REVEAL, T_INFO, T_END = 25.9, 26.5, 28.0, 34.45
+T_DARK, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 28.0, 34.45
 
 def scene6a(t):
     u = t - 24.0
-    lv = 1 - e_io(seg(t, 24.7, T_DARK))
+    lv = 1 - e_io(seg(t, 24.45, T_DARK))
     can = bg(glow(280, 780, 520, (255, 255, 255), 0.13), glow(800, 780, 520, (255, 25, 30), 0.24))
     stripes(can, t, 12, 10)
     k = e_io(u / 1.9)
@@ -639,6 +639,18 @@ def scene6a(t):
     hl = 700 * e_expo(seg(u, 0.0, 0.6))
     shape(can, [(539, 900 - hl), (541, 900 - hl), (541, 900 + hl), (539, 900 + hl)], (200, 25, 30, 255))
     return darken(can, lv).convert('RGB')
+
+READY = [(25.05, 'ARE', WHITE), (25.36, 'YOU', WHITE), (25.67, 'READY?', RED)]
+def ready(t):
+    """Ecran sombre avant la revelation : ARE / YOU / READY? tombent un mot par temps."""
+    can = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    size = fit('READY?', ANTON, 860, 300)
+    lh = capline(ANTON, size) * 1.18
+    y0 = 960 - lh + capline(ANTON, size) / 2
+    for i, (t0, w, col) in enumerate(READY):
+        kinetic(can, w, ANTON, size, col, CX, y0 + i * lh, t - t0, stagger=0.04, dur=0.28)
+        echo(can, w, ANTON, size, col, CX, y0 + i * lh, t - t0 - 0.12, n=2, dur=0.45)
+    return zoom(can, 1 + 0.05 * e_io(seg(t, T_DARK, T_REVEAL)), CX, 960).convert('RGB')
 
 def poster(t, date_line):
     ur = t - T_REVEAL
@@ -695,7 +707,7 @@ def frame(i, date_line):
     if t < 18.0: return scene4(t)
     if t < 24.0: return scene5(t)
     if t < T_DARK: return scene6a(t)
-    if t < T_REVEAL: return Image.new('RGB', (W, H), (0, 0, 0))
+    if t < T_REVEAL: return ready(t)
     return poster(t, date_line)
 
 DATES = {'date': 'MARDI 13 OCTOBRE • 20H00', 'today': 'AUJOURD’HUI • 20H00'}

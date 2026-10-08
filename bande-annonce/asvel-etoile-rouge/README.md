@@ -23,8 +23,8 @@ coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et 
 | 10–14 s | Patty Mills, masque latéral depuis la gauche, ASVEL en grand derrière, plan serré puis recul |
 | 14–18 s | Chima Moneke, masque depuis la droite, lumière rouge, ÉTOILE ROUGE / DE BELGRADE |
 | 18–24 s | DEUX ÉQUIPES. / UNE VICTOIRE À PRENDRE. / UNE NOUVELLE BATAILLE. : coupes de plus en plus rapprochées, calées sur le tempo, lignes blanche et rouge qui se rejoignent |
-| 24–25,9 s | Les deux portraits face à face, ralenti, extinction |
-| 25,9–26,5 s | Écran noir, quasi-silence |
+| 24–25,0 s | Les deux portraits face à face, ralenti, extinction |
+| 25,0–26,5 s | Écran noir : ARE / YOU / READY? (un mot par temps, coup sourd discret), puis quasi-silence de 25,95 à 26,45 s |
 | 26,5 s | Révélation sur l'entrée de basse de la musique : les joueurs arrivent de côtés opposés, ASVEL VS ÉTOILE ROUGE DE BELGRADE |
 | 28–28,8 s | Infos du match ; affiche stable de 28,8 à 34,45 s, puis extinction courte |
 

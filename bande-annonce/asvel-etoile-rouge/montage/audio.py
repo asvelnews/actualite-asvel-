@@ -107,6 +107,9 @@ for t0 in (9.72, 13.72, 17.72):
 n = int(0.75 * SR); x = np.arange(n) / SR
 air = np.sin(2 * np.pi * 55 * x) + 0.5 * sosfilt(butter(2, [60, 240], 'band', fs=SR, output='sos'), rng.standard_normal(n))
 add(25.75, air * np.clip(x / 0.2, 0, 1) * np.clip((0.75 - x) / 0.02, 0, 1), db(-46))
+# ARE / YOU / READY? : un coup sourd par mot, tres court, avant le quasi-silence
+for t0, g in ((25.05, -17), (25.36, -15), (25.67, -13)):
+    add(t0, boom(70, 45, 0.35, 0.09), db(g))
 # revelation : le plus gros impact
 add(26.5, boom(85, 30, 2.4, 0.75), db(-3))
 add(26.5, noise_burst(1.6, 200, 5000, 0.001, 0.35), db(-12))
