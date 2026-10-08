@@ -33,9 +33,9 @@ def font(name, size):
     if k not in _fc: _fc[k] = ImageFont.truetype(os.path.join(FONTS, name), size)
     return _fc[k]
 
-def text(s, name, size, fill, track=0):
-    """Returns (img, cx, baseline, left, right) : anchor points inside img."""
-    k = (s, name, size, fill, track)
+def text(s, name, size, fill, track=0, stroke=0):
+    """Returns (img, cx, baseline, left, right) : anchor points inside img. stroke > 0 : contour seul."""
+    k = (s, name, size, fill, track, stroke)
     if k in _tc: return _tc[k]
     f = font(name, size)
     wid = sum(f.getlength(ch) for ch in s) + track * (len(s) - 1) if track else f.getlength(s)
@@ -44,12 +44,13 @@ def text(s, name, size, fill, track=0):
     img = Image.new('RGBA', (int(wid) + 2 * pad, asc + desc + 2 * pad), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     base = pad + asc
+    kw = dict(fill=(0, 0, 0, 0), stroke_width=stroke, stroke_fill=fill) if stroke else dict(fill=fill)
     if track:
         x = pad
         for ch in s:
-            d.text((x, base), ch, font=f, fill=fill, anchor='ls'); x += f.getlength(ch) + track
+            d.text((x, base), ch, font=f, anchor='ls', **kw); x += f.getlength(ch) + track
     else:
-        d.text((pad, base), s, font=f, fill=fill, anchor='ls')
+        d.text((pad, base), s, font=f, anchor='ls', **kw)
     r = (img, pad + wid / 2, base, pad, pad + wid)
     _tc[k] = r
     return r
@@ -101,7 +102,7 @@ class Player:
         rgb.putalpha(a)
         self.hi, self.up = rgb, f
 
-    def layer(self, scale, ex, ey, fade_bottom=None, side_fade=0):
+    def layer(self, scale, ex, ey, fade_bottom=None, side_fade=0, sweep=None):
         """Full-canvas RGBA layer with the player placed so the eyes land on (ex, ey).
         Uniform scale only: faces and jerseys are never distorted."""
         tw, th = max(1, round(self.w * scale)), max(1, round(self.h * scale))
@@ -121,6 +122,13 @@ class Player:
             xs = np.arange(W, dtype=np.float32)
             hf = np.clip((xs - x) / side_fade, 0, 1) * np.clip((x + tw - xs) / side_fade, 0, 1)
             a *= hf[None, :]
+        if sweep is not None and 0 < sweep < 1:                  # reflet lumineux qui balaie le joueur
+            xs = np.arange(W, dtype=np.float32)[None, :]
+            xr = xs + (_ys[:, None] - H / 2) * 0.45
+            c = lerp(-500, W + 500, sweep)
+            band = np.exp(-((xr - c) / 80) ** 2) * 70 * (a / 255)
+            rgb = arr[..., :3].astype(np.float32) + band[..., None]
+            arr[..., :3] = rgb.clip(0, 255).astype(np.uint8)
         arr[..., 3] = a.astype(np.uint8)
         return Image.fromarray(arr, 'RGBA')
 
@@ -347,138 +355,235 @@ def scene1(t):
         return _shatter.frame(t - T_SHATTER)
     return Image.new('RGB', (W, H), (0, 0, 0))
 
+# ================================================================== BOITE A OUTILS MOTION DESIGN
+def capline(name, size):
+    b = font(name, size).getbbox('H', anchor='ls')
+    return -b[1]
+
+def kinetic(can, s, name, size, col, x, y, tr, stagger=0.035, dur=0.45, align='c', track=0, alpha=1.0, scale=1.0):
+    """Typo cinetique : chaque lettre surgit de sous sa ligne de base (masque), en decale."""
+    if tr <= 0 or alpha <= 0.003: return
+    fill = col + (255,) if len(col) == 3 else col
+    if tr >= (len(s) - 1) * stagger + dur:
+        put(can, text(s, name, size, fill, track), x, y, scale, alpha, align); return
+    f = font(name, size)
+    asc, desc = f.getmetrics()
+    adv = [f.getlength(ch) for ch in s]
+    wid = sum(adv) + track * (len(s) - 1)
+    pad = int(size * 0.35)
+    base = pad + asc
+    img = Image.new('RGBA', (int(wid) + 2 * pad, base + int(desc * 0.35)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    xx = pad
+    for i, ch in enumerate(s):
+        k = e_expo(seg(tr, i * stagger, i * stagger + dur))
+        if k > 0: d.text((xx, base + (1 - k) * size * 1.15), ch, font=f, fill=fill, anchor='ls')
+        xx += adv[i] + track
+    put(can, (img, pad + wid / 2, base, pad, pad + wid), x, y, scale, alpha, align)
+
+def echo(can, s, name, size, col, x, y, tr, n=3, track=0, dur=0.6):
+    """Echos en contour qui s'ecartent une seule fois a l'impact."""
+    if tr < 0 or tr > dur: return
+    k = e_cub(tr / dur)
+    t_o = text(s, name, size, col + (255,), track, stroke=max(2, size // 70))
+    ch = capline(name, size)
+    for i in range(n):
+        sc = 1 + (0.08 + 0.09 * i) * k
+        put(can, t_o, x, y - ch / 2 + ch / 2 * sc, scale=sc, alpha=(1 - k) * (0.6 - 0.15 * i))
+
+def shape(can, pts, rgba):
+    xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+    x0, y0 = int(min(xs)) - 2, int(min(ys)) - 2
+    lay = Image.new('RGBA', (int(max(xs)) - x0 + 4, int(max(ys)) - y0 + 4), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).polygon([(px - x0, py - y0) for px, py in pts], fill=rgba)
+    comp(can, lay, x0, y0)
+
+def para(cx, cy, w, h, skew=0.35):
+    """Parallelogramme oblique centre en (cx, cy)."""
+    o = h / 2 * skew
+    return [(cx - w / 2 + o, cy - h / 2), (cx + w / 2 + o, cy - h / 2), (cx + w / 2 - o, cy + h / 2), (cx - w / 2 - o, cy + h / 2)]
+
+_stp = {}
+def stripes(can, t, speed, a, color=(255, 255, 255), period=64):
+    key = (color, a, period)
+    if key not in _stp:
+        ys, xs = np.mgrid[0:H, 0:W + period]
+        on = ((xs + ys) % period) < 2
+        arr = np.zeros((H, W + period, 4), np.uint8)
+        arr[..., :3] = color; arr[..., 3] = on * a
+        _stp[key] = Image.fromarray(arr, 'RGBA')
+    o = int(speed * t) % period
+    can.alpha_composite(_stp[key].crop((o, 0, o + W, H)))
+
+_rw = {}
+def rows(can, word, color, a, ys, t, speed, size=250):
+    """Rangees de mots en contour qui defilent en sens alternes (arriere-plan)."""
+    key = (word, color, size)
+    if key not in _rw:
+        f = font(ANTON, size)
+        unit = f.getlength(word) + size * 0.5
+        n = int((W * 2) / unit) + 2
+        asc, desc = f.getmetrics()
+        img = Image.new('RGBA', (int(unit * n), asc + desc), (0, 0, 0, 0))
+        d = ImageDraw.Draw(img)
+        for i in range(n):
+            d.text((i * unit, asc), word, font=f, anchor='ls', fill=(0, 0, 0, 0), stroke_width=2, stroke_fill=color + (255,))
+        _rw[key] = (img, unit)
+    img, unit = _rw[key]
+    for j, y in enumerate(ys):
+        o = (speed * t * (1 if j % 2 == 0 else -1)) % unit
+        comp(can, with_alpha(img.crop((int(o), 0, int(o) + W, img.height)), a), 0, y)
+
+_XR = None
+def bars(old, new, p, from_left, cols):
+    """Transition : barres obliques qui balaient l'ecran et devoilent la scene suivante."""
+    global _XR
+    if p <= 0: return old
+    if p >= 1: return new
+    if _XR is None:
+        _XR = np.arange(W, dtype=np.float32)[None, :] + (_ys[:, None] - H / 2) * 0.35
+    xr = _XR if from_left else (W - 1 - np.arange(W, dtype=np.float32))[None, :] + (_ys[:, None] - H / 2) * 0.35
+    e = lerp(-340, W + 340 + 230, p)
+    o = np.asarray(old.convert('RGB')).copy(); nw = np.asarray(new.convert('RGB'))
+    m = xr < e - 230
+    o[m] = nw[m]
+    for a0, a1, c in ((0, 70, cols[0]), (70, 100, (0, 0, 0)), (100, 150, cols[1]), (150, 230, (12, 12, 12))):
+        mb = (xr <= e - a0) & (xr > e - a1)
+        o[mb] = c
+    return Image.fromarray(o, 'RGB')
+
+# ================================================================== SCENE 1 : cadres de visee autour du chronometre
+def scene1_mg(t):
+    fr = scene1(t)
+    if t >= 5.0 or t < 0.15: return fr
+    b = cam(t); s = W / (b[2] - b[0])
+    x0, y0 = (FACE[0] - b[0]) * s, (FACE[1] - b[1]) * s
+    x1, y1 = (FACE[2] - b[0]) * s, (FACE[3] - b[1]) * s
+    k = e_expo(seg(t % 1.0, 0.0, 0.35))                        # se resserre a chaque seconde
+    m = 26 + 46 * (1 - k)
+    a = c01(seg(t, 0.15, 0.5))
+    can = fr.convert('RGBA')
+    L, th = 46, 5
+    col = (255, 255, 255, int(230 * a))
+    for cx, cy, sx, sy in ((x0 - m, y0 - m, 1, 1), (x1 + m, y0 - m, -1, 1), (x0 - m, y1 + m, 1, -1), (x1 + m, y1 + m, -1, -1)):
+        shape(can, [(cx, cy), (cx + sx * L, cy), (cx + sx * L, cy + sy * th), (cx, cy + sy * th)], col)
+        shape(can, [(cx, cy), (cx + sx * th, cy), (cx + sx * th, cy + sy * L), (cx, cy + sy * L)], col)
+    # reticule rouge : ligne horizontale qui se referme vers le chronometre
+    w = (W / 2) * (1 - e_cub(seg(t, 0.2, 4.9)))
+    yc = (y0 + y1) / 2
+    shape(can, [(0, yc - 1), (max(0, x0 - m - 30 - w * 0.0) * (1 - 0) , yc - 1), (max(0, x0 - m - 30), yc + 1), (0, yc + 1)], (226, 28, 38, int(160 * a)))
+    shape(can, [(min(W, x1 + m + 30), yc - 1), (W, yc - 1), (W, yc + 1), (min(W, x1 + m + 30), yc + 1)], (226, 28, 38, int(160 * a)))
+    return can.convert('RGB')
+
 # ================================================================== SCENE 2 : historique
 COLL, COLR = 290, 760
 def scene2(t):
     u = t - 6.0
     can = Image.new('RGBA', (W, H), (0, 0, 0, 255))
-    # lumiere du 5 / du 9 au moment de l'impact
-    g5 = 1 - seg(u, 0.6, 1.4) if u >= 0.6 else 0
-    g9 = 1 - seg(u, 1.6, 2.4) if u >= 1.6 else 0
+    stripes(can, t, 22, 16)
+    g5 = 1 - seg(u, 0.6, 1.6) if u >= 0.6 else 0
+    g9 = 1 - seg(u, 1.6, 2.6) if u >= 1.6 else 0
     if g5 > 0 or g9 > 0:
-        acc = np.zeros((H, W, 3), np.float32)
-        if g5 > 0: acc += glow(COLL, 1080, 420, (255, 255, 255), 0.16) * g5
-        if g9 > 0: acc += glow(COLR, 1080, 420, (255, 30, 30), 0.26) * g9
+        acc = np.asarray(can.convert('RGB')).astype(np.float32)
+        if g5 > 0: acc += glow(COLL, 1080, 420, (255, 255, 255), 0.18) * g5
+        if g9 > 0: acc += glow(COLR, 1080, 420, (255, 30, 30), 0.30) * g9
         can = Image.fromarray(acc.clip(0, 255).astype(np.uint8)).convert('RGBA')
-    d = ImageDraw.Draw(can)
+    # blocs obliques qui glissent derriere les chiffres
+    for t0, x, col, side in ((0.5, COLL, (34, 34, 36, 255), -1), (1.5, COLR, (92, 10, 16, 255), 1)):
+        k = e_expo(seg(u, t0, t0 + 0.45))
+        if k > 0: shape(can, para(x + side * 700 * (1 - k), 1095, 330, 380, 0.25), col)
     # titre
-    k = e_cub(seg(u, 0.05, 0.45))
-    tt = text('FACE-À-FACE', B8, 58, (215, 215, 215, 255), track=14)
-    put(can, tt, CX, 600 + 24 * (1 - k), alpha=k)
-    lw = 70 * k
-    d.line([(CX - 270 - lw, 579), (CX - 270, 579)], fill=RED, width=4)
-    d.line([(CX + 270, 579), (CX + 270 + lw, 579)], fill=RED, width=4)
-    # separateur
-    kd = e_expo(seg(u, 0.2, 0.75)); half = 300 * kd
-    d.line([(CX, 1020 - half), (CX, 1020 + half)], fill=(70, 70, 70), width=2)
-    # noms
+    kinetic(can, 'FACE-À-FACE', B8, 58, (215, 215, 215), CX, 600, u - 0.05, stagger=0.03, dur=0.4, track=14)
+    lw = 70 * e_expo(seg(u, 0.25, 0.7))
+    shape(can, [(CX - 270 - lw, 577), (CX - 270, 577), (CX - 270, 581), (CX - 270 - lw, 581)], RED + (255,))
+    shape(can, [(CX + 270, 577), (CX + 270 + lw, 577), (CX + 270 + lw, 581), (CX + 270, 581)], RED + (255,))
+    kd = e_expo(seg(u, 0.2, 0.75)); half = 330 * kd
+    shape(can, [(CX - 1, 1020 - half), (CX + 1, 1020 - half), (CX + 1, 1020 + half), (CX - 1, 1020 + half)], (90, 90, 90, 255))
     ns = min(fit('ÉTOILE ROUGE', ANTON, 400, 84), 84)
-    kn = e_expo(seg(u, 0.22, 0.75)); an = c01(seg(u, 0.22, 0.4))
-    put(can, text('ASVEL', ANTON, ns, WHITE + (255,)), COLL - 70 * (1 - kn), 820, alpha=an)
-    put(can, text('ÉTOILE ROUGE', ANTON, ns, WHITE + (255,)), COLR + 70 * (1 - kn), 820, alpha=an)
-    # chiffres : un impact par chiffre
+    kinetic(can, 'ASVEL', ANTON, ns, WHITE, COLL, 820, u - 0.25, stagger=0.04, dur=0.4)
+    kinetic(can, 'ÉTOILE ROUGE', ANTON, ns, WHITE, COLR, 820, u - 0.35, stagger=0.03, dur=0.4)
     for t0, col, x, ch in ((0.6, WHITE, COLL, '5'), (1.6, RED, COLR, '9')):
         if u < t0: continue
         k = e_expo(seg(u, t0, t0 + 0.24))
-        put(can, text(ch, ANTON, 430, col + (255,)), x, 1250 - 50 * (1 - k), scale=1.16 - 0.16 * k,
-            alpha=c01(seg(u, t0, t0 + 0.05)))
-        kv = e_cub(seg(u, t0 + 0.08, t0 + 0.4))
-        put(can, text('VICTOIRES', B8, 46, (175, 175, 175, 255), track=8), x, 1345 + 16 * (1 - kv), alpha=kv)
-    can = zoom(can, 1 + 0.035 * e_io(u / 4.0), CX, 1000)
-    out = darken(can, 1 - seg(u, 3.88, 4.0))
-    return out.convert('RGB')
+        put(can, text(ch, ANTON, 430, col + (255,)), x, 1250, scale=1.35 - 0.35 * k, alpha=c01(seg(u, t0, t0 + 0.04)))
+        echo(can, ch, ANTON, 430, col, x, 1250, u - t0 - 0.05)
+        kinetic(can, 'VICTOIRES', B8, 46, (180, 180, 180), x, 1345, u - t0 - 0.12, stagger=0.025, dur=0.35, track=8)
+    return zoom(can, 1 + 0.045 * e_io(u / 4.2), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 3 & 4 : portraits
-def wipe(can, u, from_left, bar_cols):
-    """Masque graphique lateral : un bord oblique balaie l'image, suivi de deux barres."""
-    k = e_expo(seg(u, 0.0, 0.55))
-    e = lerp(-420, W + 420, k)
-    xs = np.arange(W, dtype=np.float32)[None, :]
-    ys = _ys[:, None]
-    edge = e + (ys - H / 2) * 0.22
-    if from_left: m = xs < edge
-    else:
-        edge = W - e - (ys - H / 2) * 0.22; m = xs > edge
-    arr = np.asarray(can).copy()
-    arr[..., :3] = (arr[..., :3] * m[..., None]).astype(np.uint8)
-    can = Image.fromarray(arr, 'RGBA')
-    if k < 0.999:
-        d = ImageDraw.Draw(can)
-        sgn = 1 if from_left else -1
-        for off, wid, col in ((0, 16, bar_cols[0]), (-34, 6, bar_cols[1])):
-            xa = (e if from_left else W - e) + sgn * off
-            top, bot = xa + (0 - H / 2) * 0.22 * sgn, xa + (H / 2) * 0.22 * sgn
-            d.polygon([(top - wid / 2, 0), (top + wid / 2, 0), (bot + wid / 2, H), (bot - wid / 2, H)], fill=col)
-    return can
-
 def caption(can, u, name, align, x):
-    k = e_cub(seg(u, 0.7, 1.05))
-    sgn = -1 if align == 'l' else 1
-    d = ImageDraw.Draw(can)
-    bw = 90 * e_expo(seg(u, 0.65, 1.0))
-    if align == 'l': d.rectangle([x, 1357, x + bw, 1365], fill=RED)
-    else: d.rectangle([x - bw, 1357, x, 1365], fill=RED)
-    put(can, text(name, B8, 96, WHITE + (255,), track=3), x + sgn * 40 * (1 - k), 1460, alpha=k, align=align)
+    bw = 90 * e_expo(seg(u, 0.75, 1.1))
+    if align == 'l': shape(can, [(x, 1357), (x + bw, 1357), (x + bw, 1365), (x, 1365)], RED + (255,))
+    else: shape(can, [(x - bw, 1357), (x, 1357), (x, 1365), (x - bw, 1365)], RED + (255,))
+    kinetic(can, name, B8, 96, WHITE, x, 1460, u - 0.8, stagger=0.03, dur=0.4, align=align, track=3)
 
 def scene3(t):
     u = t - 10.0
-    can = bg(glow(540, 690, 620, (255, 255, 255), 0.20), level=e_cub(seg(u, 0.1, 0.8)))
+    can = bg(glow(540, 690, 620, (255, 255, 255), 0.20), level=e_cub(seg(u, 0.0, 0.7)))
+    stripes(can, t, 30, 12)
+    rows(can, 'ASVEL', (255, 255, 255), 0.10, [1000, 1290, 1580], t, 70)
+    # panneau oblique blanc translucide derriere le joueur
+    k = e_expo(seg(u, 0.1, 0.7))
+    shape(can, para(560 - 900 * (1 - k) + 25 * u, 980, 520, 1500, 0.30), (255, 255, 255, 22))
+    shape(can, para(820 - 1100 * (1 - e_expo(seg(u, 0.2, 0.8))) + 40 * u, 1100, 26, 1300, 0.30), RED + (255,))
     sz = fit('ASVEL', ANTON, 950, 520)
-    kt = e_expo(seg(u, 0.12, 0.7))
-    put(can, text('ASVEL', ANTON, sz, (245, 245, 245, 255)), 540 - 70 * (1 - kt) + 22 * e_io(u / 4), 492,
-        alpha=c01(seg(u, 0.12, 0.35)))
-    sc = lerp(3.42, 2.94, e_io(seg(u, 0.5, 3.2)))
-    can.alpha_composite(MILLS.layer(sc, 540 - 10 * e_io(u / 4), 770, fade_bottom=(1270, 1640)))
+    kinetic(can, 'ASVEL', ANTON, sz, (245, 245, 245), 540 + 18 * u, 492, u - 0.15, stagger=0.06, dur=0.55)
+    echo(can, 'ASVEL', ANTON, sz, (255, 255, 255), 540 + 18 * u, 492, u - 0.5, n=2)
+    sc = lerp(3.42, 2.94, e_io(seg(u, 0.4, 3.0)))
+    can.alpha_composite(MILLS.layer(sc, 540 - 160 * (1 - e_expo(seg(u, 0.0, 0.7))) - 12 * u, 770,
+                                    fade_bottom=(1270, 1640), sweep=seg(u, 1.0, 1.9)))
     can = darken(can, vgrad(1180, 1620, 1.0, 0.18))
     caption(can, u, 'PATTY MILLS', 'l', 92)
-    can = wipe(can, u, True, ((255, 255, 255), RED))
     return can.convert('RGB')
 
 def scene4(t):
     u = t - 14.0
-    can = bg(glow(540, 690, 620, (255, 25, 30), 0.30), level=e_cub(seg(u, 0.1, 0.8)))
+    can = bg(glow(540, 690, 620, (255, 25, 30), 0.30), level=e_cub(seg(u, 0.0, 0.7)))
+    stripes(can, t, -30, 12, (255, 60, 60))
+    rows(can, 'ÉTOILE ROUGE', (255, 40, 40), 0.13, [1000, 1290, 1580], t, -70)
+    k = e_expo(seg(u, 0.1, 0.7))
+    shape(can, para(520 + 900 * (1 - k) - 25 * u, 980, 520, 1500, -0.30), (255, 30, 40, 30))
+    shape(can, para(260 + 1100 * (1 - e_expo(seg(u, 0.2, 0.8))) - 40 * u, 1100, 26, 1300, -0.30), WHITE + (255,))
     sz = fit('ÉTOILE ROUGE', ANTON, 950, 400)
-    kt = e_expo(seg(u, 0.12, 0.7)); at = c01(seg(u, 0.12, 0.35))
-    dx = 70 * (1 - kt) - 22 * e_io(u / 4)
-    put(can, text('ÉTOILE ROUGE', ANTON, sz, RED + (255,)), 540 + dx, 418, alpha=at)
-    put(can, text('DE BELGRADE', B8, 74, (245, 245, 245, 255), track=14), 540 + dx, 500, alpha=at)
-    sc = lerp(3.72, 3.20, e_io(seg(u, 0.5, 3.2)))
-    can.alpha_composite(MONEKE.layer(sc, 540 + 10 * e_io(u / 4), 770, fade_bottom=(1270, 1640)))
+    kinetic(can, 'ÉTOILE ROUGE', ANTON, sz, RED, 540 - 18 * u, 418, u - 0.15, stagger=0.035, dur=0.5)
+    echo(can, 'ÉTOILE ROUGE', ANTON, sz, RED, 540 - 18 * u, 418, u - 0.5, n=2)
+    kinetic(can, 'DE BELGRADE', B8, 74, (245, 245, 245), 540 - 18 * u, 500, u - 0.45, stagger=0.03, dur=0.4, track=14)
+    sc = lerp(3.72, 3.20, e_io(seg(u, 0.4, 3.0)))
+    can.alpha_composite(MONEKE.layer(sc, 540 + 160 * (1 - e_expo(seg(u, 0.0, 0.7))) + 12 * u, 770,
+                                     fade_bottom=(1270, 1640), sweep=1 - seg(u, 1.0, 1.9) if u > 1.0 else None))
     can = darken(can, vgrad(1180, 1620, 1.0, 0.18))
     caption(can, u, 'CHIMA MONEKE', 'r', 905)
-    can = wipe(can, u, False, (RED, (255, 255, 255)))
     return can.convert('RGB')
 
 # ================================================================== SCENE 5 : montee en tension
-def shot(kind, v):
-    """v : 0..1 progression du plan. Leger changement d'echelle, jamais de deformation."""
-    z = 1 + 0.045 * v
+def shot(kind, v, t):
+    z = 1 + 0.06 * v
     if kind == 'black':
-        return Image.new('RGBA', (W, H), (0, 0, 0, 255))
+        can = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+        stripes(can, t, 160, 22, (255, 40, 40)); return can
     if kind.startswith('split'):
         tight = kind == 'split2'
         can = bg(glow(270, 760, 500, (255, 255, 255), 0.12), glow(810, 760, 500, (255, 25, 30), 0.22))
-        l = MILLS.layer((3.40 if tight else 2.80) * z, 290, 790)
-        r = MONEKE.layer((3.7 if tight else 3.05) * z, 790, 790)
+        l = MILLS.layer((3.40 if tight else 2.80) * z, 290 + 30 * v, 790)
+        r = MONEKE.layer((3.7 if tight else 3.05) * z, 790 - 30 * v, 790)
         xs = np.arange(W)[None, :]; edge = 540 + (_ys[:, None] - H / 2) * -0.10
         la = np.asarray(l).copy(); la[..., 3] = (la[..., 3] * (xs < edge - 3)).astype(np.uint8)
         ra = np.asarray(r).copy(); ra[..., 3] = (ra[..., 3] * (xs > edge + 3)).astype(np.uint8)
         can.alpha_composite(Image.fromarray(la)); can.alpha_composite(Image.fromarray(ra))
-        d = ImageDraw.Draw(can)
-        d.line([(540 + H / 2 * 0.10, 0), (540 - H / 2 * 0.10, H)], fill=RED, width=5)
+        shape(can, [(540 + H / 2 * 0.10 - 3, 0), (540 + H / 2 * 0.10 + 3, 0), (540 - H / 2 * 0.10 + 3, H), (540 - H / 2 * 0.10 - 3, H)], RED + (255,))
         return can
     if kind == 'mills_tight':
         can = bg(glow(540, 760, 560, (255, 255, 255), 0.14))
-        can.alpha_composite(MILLS.layer(3.63 * z, 540, 820)); return can
+        can.alpha_composite(MILLS.layer(3.63 * z, 540 - 20 * v, 820)); return can
     if kind == 'moneke_tight':
         can = bg(glow(540, 760, 560, (255, 25, 30), 0.26))
-        can.alpha_composite(MONEKE.layer(3.95 * z, 540, 820)); return can
+        can.alpha_composite(MONEKE.layer(3.95 * z, 540 + 20 * v, 820)); return can
     if kind == 'mills_side':
         can = bg(glow(380, 760, 560, (255, 255, 255), 0.14))
-        can.alpha_composite(MILLS.layer(3.22 * z, 360 + 30 * v, 800)); return can
+        can.alpha_composite(MILLS.layer(3.22 * z, 360 + 40 * v, 800)); return can
     if kind == 'moneke_side':
         can = bg(glow(700, 760, 560, (255, 25, 30), 0.26))
-        can.alpha_composite(MONEKE.layer(3.5 * z, 720 - 30 * v, 800)); return can
+        can.alpha_composite(MONEKE.layer(3.5 * z, 720 - 40 * v, 800)); return can
     raise ValueError(kind)
 
 CUTS = [(18.00, 'split'), (19.19, 'black'),
@@ -490,40 +595,40 @@ PHRASES = [(18.0, ['DEUX ÉQUIPES.'], [WHITE]),
            (22.0, ['UNE NOUVELLE', 'BATAILLE.'], [WHITE, RED])]
 LINE_TARGETS = [(18.0, 150), (20.0, 300), (22.0, 430), (23.62, 525)]
 
-def phrase_block(can, lines, cols, k, alpha):
-    size = min(fit(s, ANTON, 860, 230) for s in lines)
-    lh = size * 1.02
-    y0 = 1000 - (len(lines) - 1) * lh / 2 + size * 0.36
-    for i, (s, c) in enumerate(zip(lines, cols)):
-        put(can, text(s, ANTON, size, c + (255,)), CX, y0 + i * lh, scale=1.10 - 0.10 * k, alpha=alpha)
-
 def scene5(t):
     for i in range(len(CUTS) - 1):
         if CUTS[i][0] <= t < CUTS[i + 1][0]:
             a, kind = CUTS[i]; b = CUTS[i + 1][0]; break
-    can = shot(kind, (t - a) / (b - a))
+    can = shot(kind, (t - a) / (b - a), t)
     if kind != 'black': can = darken(can, 0.40)
-    # lignes qui rapprochent les deux camps
     L = 80.0
     for t0, tgt in LINE_TARGETS:
         if t >= t0: L = lerp(L, tgt, e_expo(seg(t, t0, t0 + 0.32)))
-    d = ImageDraw.Draw(can)
-    d.rectangle([0, 1236, L, 1242], fill=WHITE)
-    d.rectangle([W - L, 1236, W, 1242], fill=RED)
-    d.rectangle([0, 712, L * 0.8, 714], fill=RED)
-    d.rectangle([W - L * 0.8, 712, W, 714], fill=WHITE)
+    shape(can, [(0, 1236), (L, 1236), (L, 1242), (0, 1242)], WHITE + (255,))
+    shape(can, [(W - L, 1236), (W, 1236), (W, 1242), (W - L, 1242)], RED + (255,))
+    shape(can, [(0, 712), (L * 0.8, 712), (L * 0.8, 714), (0, 714)], RED + (255,))
+    shape(can, [(W - L * 0.8, 712), (W, 712), (W, 714), (W - L * 0.8, 714)], WHITE + (255,))
     for p0, lines, cols in reversed(PHRASES):
         if t >= p0:
-            phrase_block(can, lines, cols, e_expo(seg(t, p0, p0 + 0.26)), c01(seg(t, p0, p0 + 0.07))); break
-    return can.convert('RGB')
+            size = min(fit(s, ANTON, 860, 230) for s in lines)
+            lh = size * 1.02
+            y0 = 1000 - (len(lines) - 1) * lh / 2 + size * 0.36
+            for j, (s, c) in enumerate(zip(lines, cols)):
+                kinetic(can, s, ANTON, size, c, CX, y0 + j * lh, t - p0 - j * 0.12, stagger=0.028, dur=0.32)
+                echo(can, s, ANTON, size, c, CX, y0 + j * lh, t - p0 - j * 0.12 - 0.25, n=2, dur=0.45)
+            break
+    # coup de zoom sur chaque nouvelle phrase
+    p0 = max(p for p, _, _ in PHRASES if t >= p)
+    return zoom(can, 1 + 0.07 * (1 - e_expo(seg(t, p0, p0 + 0.35))), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 6 & 7 : face-a-face, revelation, affiche
 T_DARK, T_REVEAL, T_INFO, T_END = 25.9, 26.5, 28.0, 34.45
 
 def scene6a(t):
     u = t - 24.0
-    lv = 1 - e_io(seg(t, 24.6, T_DARK))
+    lv = 1 - e_io(seg(t, 24.7, T_DARK))
     can = bg(glow(280, 780, 520, (255, 255, 255), 0.13), glow(800, 780, 520, (255, 25, 30), 0.24))
+    stripes(can, t, 12, 10)
     k = e_io(u / 1.9)
     l = MILLS.layer(2.83, 250 + 45 * k, 820, fade_bottom=(1350, 1650))
     r = MONEKE.layer(3.08, 830 - 45 * k, 820, fade_bottom=(1350, 1650))
@@ -531,51 +636,60 @@ def scene6a(t):
     la = np.asarray(l).copy(); la[..., 3] = (la[..., 3] * np.clip((560 - xs) / 40, 0, 1)).astype(np.uint8)
     ra = np.asarray(r).copy(); ra[..., 3] = (ra[..., 3] * np.clip((xs - 520) / 40, 0, 1)).astype(np.uint8)
     can.alpha_composite(Image.fromarray(la)); can.alpha_composite(Image.fromarray(ra))
-    d = ImageDraw.Draw(can)
-    d.line([(540, 300), (540, 1500)], fill=(120, 18, 22), width=2)
+    hl = 700 * e_expo(seg(u, 0.0, 0.6))
+    shape(can, [(539, 900 - hl), (541, 900 - hl), (541, 900 + hl), (539, 900 + hl)], (200, 25, 30, 255))
     return darken(can, lv).convert('RGB')
 
 def poster(t, date_line):
     ur = t - T_REVEAL
     can = bg(glow(285, 420, 520, (255, 255, 255), 0.15), glow(800, 420, 520, (255, 25, 30), 0.26))
+    stripes(can, 0, 0, 9)
+    # formes obliques qui arrivent de cotes opposes, puis s'arretent net
+    k = e_expo(seg(ur, 0.0, 0.5))
+    shape(can, para(250 - 900 * (1 - k), 470, 300, 760, 0.3), (255, 255, 255, 20))
+    shape(can, para(830 + 900 * (1 - k), 470, 300, 760, 0.3), (226, 28, 38, 45))
     kp = e_expo(seg(ur, 0.0, 0.55))
-    l = MILLS.layer(2.53, 285 - 620 * (1 - kp), 335, fade_bottom=(600, 790))
-    r = MONEKE.layer(2.75, 805 + 620 * (1 - kp), 335, fade_bottom=(600, 790))
-    can.alpha_composite(l); can.alpha_composite(r)
-    # noms des equipes
-    kn = e_expo(seg(ur, 0.0, 0.34)); an = c01(seg(ur, 0.0, 0.08))
-    sc = 1.18 - 0.18 * kn
-    def P(s, f, size, col, y, track=0):
+    sw = seg(ur, 0.55, 1.25) if 0.55 < ur < 1.25 else None
+    can.alpha_composite(MILLS.layer(2.53, 285 - 620 * (1 - kp), 335, fade_bottom=(600, 790), sweep=sw))
+    can.alpha_composite(MONEKE.layer(2.75, 805 + 620 * (1 - kp), 335, fade_bottom=(600, 790), sweep=sw))
+    kn = e_expo(seg(ur, 0.0, 0.34))
+    sc = 1.14 - 0.14 * kn
+    def P(s, f, size, col, y, delay, track=0):
         yy = 1000 + (y - 1000) * sc
-        put(can, text(s, f, size, col + (255,), track), CX, yy, scale=sc, alpha=an)
-    P('ASVEL', ANTON, 190, WHITE, 985)
-    P('VS', ANTON, 60, RED, 1056, track=6)
+        kinetic(can, s, f, size, col, CX, yy, ur - delay, stagger=0.025, dur=0.3, track=track, scale=sc)
     er = fit('ÉTOILE ROUGE', ANTON, 640, 112)
-    P('ÉTOILE ROUGE', ANTON, er, WHITE, 1166)
-    P('DE BELGRADE', ANTON, er, WHITE, 1264)
-    # informations du match
+    P('ASVEL', ANTON, 190, WHITE, 985, 0.0)
+    P('VS', ANTON, 60, RED, 1056, 0.12, track=6)
+    P('ÉTOILE ROUGE', ANTON, er, WHITE, 1166, 0.08)
+    P('DE BELGRADE', ANTON, er, WHITE, 1264, 0.14)
+    echo(can, 'ASVEL', ANTON, 190, WHITE, CX, 985, ur - 0.2, n=3)
     if t >= T_INFO:
         ui = t - T_INFO
-        d = ImageDraw.Draw(can)
         hw = 210 * e_expo(seg(ui, 0.0, 0.3))
-        d.rectangle([CX - hw, 1298, CX + hw, 1302], fill=RED)
+        shape(can, [(CX - hw, 1298), (CX + hw, 1298), (CX + hw, 1302), (CX - hw, 1302)], RED + (255,))
         items = [(date_line, B8, 58, WHITE, 1372, 2), ('ASTROBALLE', B6, 50, (225, 225, 225), 1430, 6),
                  ('EUROLEAGUE', B8, 42, RED, 1480, 10), ('beIN SPORTS & EuroLeague TV', B6, 42, (225, 225, 225), 1528, 1)]
         for i, (s, f, size, col, y, tr) in enumerate(items):
-            k = e_cub(seg(ui, 0.06 + i * 0.08, 0.30 + i * 0.08))
-            put(can, text(s, f, size, col + (255,), track=tr), CX, y + 26 * (1 - k), alpha=k)
-        k = e_cub(seg(ui, 0.45, 0.75))
-        put(can, text('ASVEL_NEWS', B6, 30, (150, 150, 150, 255), track=4), CX, 1578, alpha=k)
+            kinetic(can, s, f, size, col, CX, y, ui - 0.06 - i * 0.09, stagger=0.012, dur=0.3, track=tr)
+        kinetic(can, 'ASVEL_NEWS', B6, 30, (150, 150, 150), CX, 1578, ui - 0.5, stagger=0.02, dur=0.3, track=4)
     arr = np.asarray(can.convert('RGB')).astype(np.float32)
-    fl = 0.32 * (1 - seg(ur, 0.0, 0.12))                           # flash d'impact, une seule fois
+    fl = 0.32 * (1 - seg(ur, 0.0, 0.12))
     arr = arr * (1 - fl) + 255 * fl
-    arr *= 1 - e_io(seg(t, T_END, 34.97))                          # extinction courte
+    arr *= 1 - e_io(seg(t, T_END, 34.97))
     return Image.fromarray(arr.clip(0, 255).astype(np.uint8), 'RGB')
 
 # ================================================================== timeline
+TRANS = [(10.0, scene2, scene3, True, ((255, 255, 255), RED)),
+         (14.0, scene3, scene4, False, (RED, (255, 255, 255))),
+         (18.0, scene4, scene5, True, ((255, 255, 255), RED))]
+
 def frame(i, date_line):
     t = i / FPS
-    if t < 6.0: return scene1(t)
+    for B, a, b, fl, cols in TRANS:
+        if B - 0.12 <= t < B + 0.36:
+            p = e_cub(seg(t, B - 0.12, B + 0.36))
+            return bars(a(t), b(max(t, B)), p, fl, cols)
+    if t < 6.0: return scene1_mg(t)
     if t < 10.0: return scene2(t)
     if t < 14.0: return scene3(t)
     if t < 18.0: return scene4(t)
@@ -595,7 +709,7 @@ if __name__ == '__main__':
         for i in idx: frame(i, date_line).save(os.path.join(out, f'f{i:04d}.png'))
         sys.exit()
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-                          '-r', str(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'slow', '-crf', '12',
+                          '-r', str(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'slow', '-crf', '14',
                           '-pix_fmt', 'yuv420p', out], stdin=subprocess.PIPE)
     for i in range(N):
         p.stdin.write(frame(i, date_line).tobytes())

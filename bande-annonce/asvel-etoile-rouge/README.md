@@ -5,7 +5,13 @@
 | `ASVEL_NEWS_ASVEL-EtoileRouge_13-octobre.mp4` | publication avant le jour du match (MARDI 13 OCTOBRE • 20H00) |
 | `ASVEL_NEWS_ASVEL-EtoileRouge_AUJOURDHUI.mp4` | publication le 13 octobre uniquement (AUJOURD’HUI • 20H00) |
 
-1080×1920, 30 i/s, 35,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 11,8 Mo, −15 LUFS, crête −1,2 dBFS.
+1080×1920, 30 i/s, 35,0 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 14,4 Mo, −15 LUFS, crête −1,2 dBFS.
+
+## Langage motion design
+Typo cinétique (chaque lettre surgit derrière un masque), échos en contour à chaque impact, blocs et panneaux obliques qui glissent,
+rangées de mots en contour qui défilent en fond, trames diagonales animées, reflet lumineux qui balaie les joueurs,
+transitions en barres obliques rouge/blanc (10 s, 14 s, 18 s), cadres de visée qui se resserrent sur le chronomètre à chaque seconde,
+coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et lisible.
 
 ## Déroulé
 | Temps | Scène |

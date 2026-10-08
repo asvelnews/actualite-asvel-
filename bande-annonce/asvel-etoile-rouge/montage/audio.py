@@ -99,7 +99,7 @@ for k in range(46):
 add(6.6, boom(72, 38, 1.3, 0.42), db(-6))
 add(7.6, boom(66, 34, 1.4, 0.48), db(-5))
 # transitions discretes vers les portraits
-for t0 in (9.72, 13.72):
+for t0 in (9.72, 13.72, 17.72):
     n = int(0.38 * SR); x = np.arange(n) / SR
     w = sosfilt(butter(2, [400, 3500], 'band', fs=SR, output='sos'), rng.standard_normal(n))
     add(t0, w * (x / 0.38) ** 2 * np.clip((0.38 - x) / 0.03, 0, 1) / 3, db(-24))
