@@ -4,7 +4,7 @@ import numpy as np, wave, sys
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
-DUR = 53.0
+DUR = 53.5
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 dry = np.zeros((N, 2))
@@ -149,18 +149,39 @@ for d in range(5):                       # one pulse per digit (5, 4, 3, 2, 1), 
     add(boom(0.9, 52, 34), d, 0.20 + 0.08 * d)
     add(tom(80 + 10 * d, 0.6), d, 0.18 + 0.06 * d, send=0.4)
 tt = 1.0; k = 0
-while tt < 4.85:                         # ticking, eighths then sixteenths
+while tt < 5.35:                         # ticking, eighths then sixteenths
     add(tick(), tt, 0.08 + 0.18 * (tt - 1) / 3.85, pan=(-0.3 if k % 2 == 0 else 0.3), send=0.2)
     tt += 0.25 if tt < 3.0 else 0.125; k += 1
 tt = 3.0
-while tt < 4.86:                         # snare build into the score
+while tt < 5.36:                         # snare build into the score
     x = (tt - 3.0) / 1.86
     add(snare(0.22), tt, 0.06 + 0.26 * x ** 1.6, send=0.25)
     tt += 0.125 if tt < 4.0 else 0.0625
-add(riser(2.9, 150, 5000), 2.0, 0.30, send=0.3)
-add(reverse_swell(0.8), 4.2, 0.35)
+add(riser(3.3, 150, 5000), 2.1, 0.30, send=0.3)
+add(reverse_swell(0.8), 4.7, 0.35)
 
-OFF = 5.0  # ---- everything below is in teaser-body time (body 0.0 = absolute 5.0 s) ----
+# ----- opening SFX (only place with sound effects): timer beeps + glass break -----
+def beep(f, d):
+    t = t_(d)
+    env = np.minimum(1, t / 0.004) * np.minimum(1, (d - t) / 0.02)
+    return (np.sin(2 * np.pi * f * t) + 0.25 * np.sin(2 * np.pi * 2 * f * t)) * env * 0.6
+def glass(d=1.4):
+    t = t_(d)
+    out = hp(rng.standard_normal(len(t)), 1800) * np.exp(-t * 26) * 0.9       # the crack
+    out += bp(rng.standard_normal(len(t)), 300, 3000) * np.exp(-t * 40) * 0.6  # body of the impact
+    for _ in range(90):                                                         # falling shards
+        at = rng.exponential(0.18); f = rng.uniform(2500, 9500)
+        i = int(at * SR)
+        if i >= len(t): continue
+        tt = t[: len(t) - i]
+        out[i:] += np.sin(2 * np.pi * f * tt + rng.random() * 6) * np.exp(-tt * rng.uniform(25, 60)) * rng.uniform(0.05, 0.22) * np.exp(-at * 2)
+    return out
+for k in range(5):
+    add(beep(1000, 0.11), float(k), 0.32)          # 00:05 .. 00:01
+add(beep(1000, 0.45), 5.0, 0.38)                   # 00:00
+add(glass(), 5.5, 1.8, send=0.25)                 # the glass breaks, on the score impact
+
+OFF = 5.5  # ---- everything below is in teaser-body time (body 0.0 = absolute 5.0 s) ----
 # 0.00 HOOK impact (score card appears)
 add(boom(3.2), 0.0, 1.0)
 add(braam(36, 2.6), 0.0, 0.55, send=0.35)
@@ -282,9 +303,9 @@ def duck(a, b, depth):
     i, j = int(a * SR), int(b * SR)
     ramp = np.ones(j - i) * depth
     mix[i:j] *= ramp[:, None]
-duck(4.88, 5.0, 0.25)    # suck-out before the score impact
-duck(12.86, 13.0, 0.25)
-duck(46.88, 47.0, 0.25)
+duck(5.40, 5.5, 0.35)    # suck-out before the score impact
+duck(13.36, 13.5, 0.25)
+duck(47.38, 47.5, 0.25)
 # end fade
 f = int(0.35 * SR)
 mix[-f:] *= np.linspace(1, 0, f)[:, None]

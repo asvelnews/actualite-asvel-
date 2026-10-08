@@ -4,33 +4,35 @@ import numpy as np, subprocess, sys, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1080, 1920, 30
-TOTAL = 53 * FPS
+TOTAL = int(53.5 * FPS)
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import opening
 F = lambda n, s: ImageFont.truetype(os.path.join(HERE, 'fonts', n), s)
 ANTON = 'Anton-Regular.ttf'; BARLOW_B = 'BarlowCondensed-Bold.ttf'; BARLOW_SB = 'BarlowCondensed-SemiBold.ttf'
 WHITE = (255, 255, 255); GREY = (150, 150, 150); LGREY = (190, 190, 190)
 X0 = 92  # left margin: everything left-aligned, far from TikTok's right rail
 
 # ---------- picture segments: (first frame, n frames, file) ----------
+# Times in the comments below are v5 times; v6 adds 0.5 s to all of them (longer opening).
 # v5: countdown + 11 actions (4 original clips, Pons, 2 actions from each of the 3 new clips); clip audio never used.
 # Order: shots -> rim finishes -> most spectacular (dunk of the 2nd new video last). Every cut on the 0.5-s beat grid.
-OFF = 150
-SEGS = [(0, 150, 'seg2/cd'),     #  0.0  countdown 5 -> 1
-        (300, 64, 'seg2/s1'),    # 10.0  Find the shooter: Mills sets up (0.8x)
-        (364, 41, 'seg2/s2'),    #       swish 13.0 (music drop)
-        (405, 75, 'seg3/n2a'),   # 13.5  new video 2, action A: #25 three, ball in 15.75
-        (480, 75, 'seg2/a'),     # 16.0  Tremont MVP: drive + pull-up, ball in 18.05
-        (555, 105, 'seg3/n3a'),  # 18.5  new video 3, action A: jump shot, ball in 21.3
-        (660, 75, 'seg2/c1'),    # 22.0  Mills -> Crowder corner three
-        (735, 30, 'seg2/c2'),    #       ball in 25.05
-        (765, 120, 'seg3/n3b'),  # 25.5  new video 3, action B: Mills pull-up, ball in 28.7
-        (885, 75, 'seg3/n1b'),   # 29.5  new video 1, action B: fast-break lay-up, ball in 30.95
-        (960, 90, 'seg3/n1a'),   # 32.0  new video 1, action A: drive + finish, ball in 34.5
-        (1050, 45, 'seg2/b'),    # 35.0  Yves Pons dunk 36.05
-        (1095, 30, 'seg2/d1'),   # 36.5  Touchdown: long pass
-        (1125, 90, 'seg2/d2'),   #       Sestina finish 39.0 + celebration
-        (1215, 105, 'seg3/n2b'), # 40.5  new video 2, action B: #25 DUNK 41.8 + landing + reaction
-        (1320, 90, 'seg2/m')]    # 44.0  Crowder roar under CETTE FOIS, CHEZ NOUS.   poster 47.0-53.0
+OFF = 165  # v6: timer 0-5.5 s (00:05 -> 00:00), shatter 5.5-6.0 s over the score card
+SEGS = [(315, 64, 'seg2/s1'),    # 10.0  Find the shooter: Mills sets up (0.8x)
+        (379, 41, 'seg2/s2'),    #       swish 13.0 (music drop)
+        (420, 75, 'seg3/n2a'),   # 13.5  new video 2, action A: #25 three, ball in 15.75
+        (495, 75, 'seg2/a'),     # 16.0  Tremont MVP: drive + pull-up, ball in 18.05
+        (570, 105, 'seg3/n3a'),  # 18.5  new video 3, action A: jump shot, ball in 21.3
+        (675, 75, 'seg2/c1'),    # 22.0  Mills -> Crowder corner three
+        (750, 30, 'seg2/c2'),    #       ball in 25.05
+        (780, 120, 'seg3/n3b'),  # 25.5  new video 3, action B: Mills pull-up, ball in 28.7
+        (900, 75, 'seg3/n1b'),   # 29.5  new video 1, action B: fast-break lay-up, ball in 30.95
+        (975, 90, 'seg3/n1a'),   # 32.0  new video 1, action A: drive + finish, ball in 34.5
+        (1065, 45, 'seg2/b'),    # 35.0  Yves Pons dunk 36.05
+        (1110, 30, 'seg2/d1'),   # 36.5  Touchdown: long pass
+        (1140, 90, 'seg2/d2'),   #       Sestina finish 39.0 + celebration
+        (1230, 105, 'seg3/n2b'), # 40.5  new video 2, action B: #25 DUNK 41.8 + landing + reaction
+        (1335, 90, 'seg2/m')]    # 44.0  Crowder roar under CETTE FOIS, CHEZ NOUS.   poster 47.0-53.0
 
 def read_seg(name, n):
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, name + '.mp4'),
@@ -140,8 +142,9 @@ def pygame_rule(img, y, a):
 
 # ---------- main ----------
 def frame_image(f, base):
-    if f < OFF: return Image.fromarray(base).convert('RGBA')      # countdown: real footage, untouched
+    if f < OFF: return opening.timer_frame(f)                    # red digital timer 00:05 -> 00:00
     r = f - OFF
+    if r < 15: return opening.shatter(r, hook(r), opening.timer_frame(150))   # glass breaks, score revealed
     if r < 75: return hook(r)
     if r < 150: return rappel(r)
     if r >= 1260: return rdv(r)
@@ -169,7 +172,7 @@ def main():
                             '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '17',
                             '-profile:v', 'high', '-level', '4.1', '-pix_fmt', 'yuv420p',
                             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '53', '-movflags', '+faststart', out],
+                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '53.5', '-movflags', '+faststart', out],
                            stdin=subprocess.PIPE)
     for f in range(TOTAL):
         enc.stdin.write(np.asarray(frame_image(f, base.get(f)).convert('RGB')).tobytes())
