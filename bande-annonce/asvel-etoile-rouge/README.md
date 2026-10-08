@@ -25,20 +25,22 @@ coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et 
 | 18–24 s | DEUX ÉQUIPES. / UN MATCH. / UN SEUL REPARTIRA AVEC LA VICTOIRE. |
 | 24–25 s | Les deux portraits face à face, extinction |
 | 25–26,5 s | ARE / YOU / READY? dans le noir, quasi-silence |
-| 26,5–32,6 s | Entrée de basse : clips de Patty Mills (gros plan, tir en suspension, pénétration ; gestes clés ralentis ×0,5) |
+| 26,5–32,6 s | Entrée de basse : clips de Patty Mills (gros plan, tir dans le coin, tir en suspension ; gestes clés ralentis ×0,5) |
 | 32,6–38,75 s | Transition rouge, clips de Chima Moneke (pénétration et finition, gros plan puis tir filmé sous le panier) |
 | 38,75–45,5 s | Affiche du match (infos à 39,75 s, stable ≥ 5 s), dernier impact à 44,9 s, extinction |
 
 ### Clips utilisés (vidéos fournies, son d'origine coupé)
-| Bloc | Fichier | Plage source |
-|---|---|---|
-| Mills 1 | Patty_Mills_Cholet_TikTok_nettoye | 15,57–16,37 s (gros plan) |
-| Mills 2 | Patty_Mills_TikTok_sans_son | 13,45–15,60 s (ralenti 14,10–14,70) |
-| Mills 3 | Patty_Mills_TikTok_sans_son | 6,80–8,85 s (ralenti 7,60–8,10) |
-| Moneke 1 | Moneke_Fenerbahce_TikTok | 0,90–3,25 s (ralenti 2,20–2,70) |
-| Moneke 2 | Moneke_Olympiacos_TikTok | 5,30–8,58 s |
+Chaque action est recadrée serré sur le joueur (panneau 1080×800, zoom ≈ 1,7×) avec un suivi programmé image par image.
 
-Seule la bande d'image nette (16:9) est utilisée, recadrée en 1080×520 ; les caches flous du bas de la vidéo 2 de Mills sont exclus du cadre.
+| Bloc | Fichier | Plage source | Action |
+|---|---|---|---|
+| Mills 1 | Patty_Mills_Cholet_TikTok_nettoye | 15,57–16,37 s | gros plan de Patty Mills |
+| Mills 2 | Patty_Mills_TikTok_sans_son | 5,00–6,70 s (ralenti 5,25–5,75) | tir dans le coin, ballon jusqu'au cercle |
+| Mills 3 | Patty_Mills_TikTok_sans_son | 13,45–15,60 s (ralenti 14,15–14,75) | tir en suspension par-dessus le n°1, filet |
+| Moneke 1 | Moneke_Fenerbahce_TikTok | 0,90–3,25 s (ralenti 2,00–2,60) | pénétration et finition au cercle |
+| Moneke 2 | Moneke_Olympiacos_TikTok | 5,30–8,58 s | gros plan puis tir filmé sous le panier |
+
+Seule la bande d'image nette (16:9) est utilisée ; les caches flous du bas de la vidéo 2 de Mills sont exclus du cadre.
 Les clips ne sont pas versionnés : `CLIPS_DIR=<dossier> python3 montage/render.py ...`
 
 ## Son
