@@ -1,10 +1,10 @@
 """Original trailer score for the ASVEL - Roanne teaser (procedural synthesis, 120 BPM, C minor).
-Writes music.wav (stereo 48 kHz, 28 s). This is the ONLY audio of the teaser (clip sound muted)."""
+Writes music.wav (stereo 48 kHz, 34 s: 5-s countdown + teaser). This is the ONLY audio of the teaser (clip sound muted)."""
 import numpy as np, wave, sys
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
-DUR = 28.0
+DUR = 34.0
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 dry = np.zeros((N, 2))
@@ -16,8 +16,9 @@ def lp(x, f, o=2): return sosfilt(butter(o, f, 'low', fs=SR, output='sos'), x, a
 def hp(x, f, o=2): return sosfilt(butter(o, f, 'high', fs=SR, output='sos'), x, axis=0)
 def bp(x, lo, hi, o=2): return sosfilt(butter(o, [lo, hi], 'band', fs=SR, output='sos'), x, axis=0)
 
+OFF = 0.0  # time offset applied to every event (the teaser body starts after the 5-s countdown)
 def add(sig, at, gain=1.0, pan=0.0, send=0.0):
-    i = int(at * SR)
+    i = int((at + OFF) * SR)
     if sig.ndim == 1:
         l, r = np.cos((pan + 1) * np.pi / 4), np.sin((pan + 1) * np.pi / 4)
         sig = np.stack([sig * l * 1.414, sig * r * 1.414], 1)
@@ -138,7 +139,29 @@ def drone(d):
 # ---------------- arrangement ----------------
 B = 0.5  # beat (120 BPM)
 
-# 0.00 HOOK impact
+# ===== COUNTDOWN 0-5 s (absolute): the music rises digit by digit =====
+cd = drone(5.0)
+cd *= np.linspace(0.25, 1.0, len(cd)) ** 1.5
+add(cd, 0.0, 0.45)
+for d in range(5):                       # one pulse per digit (5, 4, 3, 2, 1), louder each time
+    g = 0.30 + 0.12 * d
+    add(kick(0.45), d, g)
+    add(boom(0.9, 52, 34), d, 0.20 + 0.08 * d)
+    add(tom(80 + 10 * d, 0.6), d, 0.18 + 0.06 * d, send=0.4)
+tt = 1.0; k = 0
+while tt < 4.85:                         # ticking, eighths then sixteenths
+    add(tick(), tt, 0.08 + 0.18 * (tt - 1) / 3.85, pan=(-0.3 if k % 2 == 0 else 0.3), send=0.2)
+    tt += 0.25 if tt < 3.0 else 0.125; k += 1
+tt = 3.0
+while tt < 4.86:                         # snare build into the score
+    x = (tt - 3.0) / 1.86
+    add(snare(0.22), tt, 0.06 + 0.26 * x ** 1.6, send=0.25)
+    tt += 0.125 if tt < 4.0 else 0.0625
+add(riser(2.9, 150, 5000), 2.0, 0.30, send=0.3)
+add(reverse_swell(0.8), 4.2, 0.35)
+
+OFF = 5.0  # ---- everything below is in teaser-body time (body 0.0 = absolute 5.0 s) ----
+# 0.00 HOOK impact (score card appears)
 add(boom(3.2), 0.0, 1.0)
 add(braam(36, 2.6), 0.0, 0.55, send=0.35)
 add(noise_hit(1.5, 60, 4000, 4), 0.0, 0.35, send=0.5)
@@ -204,10 +227,10 @@ for b in np.arange(8.0, 20.0, B):
         add(hat(), b + B / 4, 0.07, pan=-0.3)
         if beat_in_bar == 2: add(kick(), b + 0.25, 0.5)
 # musical accents follow the edit: baskets get a hit, cuts a light pulse
-for at in (10.55, 14.08, 15.55, 18.6):
+for at in (10.55, 14.05, 15.55, 18.5):
     add(boom(1.4, 60, 32), at, 0.55)
     add(noise_hit(0.7, 150, 7000, 7), at, 0.22, send=0.6)
-for at in (11.1, 13.5, 14.5, 16.1, 17.1):
+for at in (11.0, 13.5, 14.5, 16.0, 17.0):
     add(boom(0.8, 55, 38), at, 0.28)
 # tom fill + riser into the message
 for i, tt in enumerate(np.arange(19.0, 20.0, 0.125)):
@@ -232,14 +255,14 @@ add(reverse_swell(0.8), 22.15, 0.4)
 add(boom(3.5, 64, 26), 23.0, 1.0)
 add(braam(36, 3.4, 1.0), 23.0, 0.6, send=0.45)
 add(noise_hit(1.6, 60, 6000, 3.5), 23.0, 0.35, send=0.7)
-add(pad([36, 43, 48, 51, 55], 3.6, 600), 23.1, 0.30, send=0.4)
-for b in np.arange(24.0, 26.4, 0.5):
+add(pad([36, 43, 48, 51, 55], 4.9, 600), 23.1, 0.30, send=0.4)
+for b in np.arange(24.0, 27.9, 0.5):
     add(bass_note(24, 0.4), b, 0.30)
     add(tick(), b + 0.25, 0.08)
 # final button + short resonance
-add(boom(1.6, 62, 30), 26.5, 1.0)
-add(braam(36, 1.5, 0.9), 26.5, 0.5, send=0.6)
-add(noise_hit(1.2, 80, 6000, 4), 26.5, 0.3, send=0.8)
+add(boom(1.6, 62, 30), 28.0, 1.0)
+add(braam(36, 1.5, 0.9), 28.0, 0.5, send=0.6)
+add(noise_hit(1.2, 80, 6000, 4), 28.0, 0.3, send=0.8)
 
 # ---------------- reverb + master ----------------
 ir_len = int(2.2 * SR)
@@ -255,8 +278,9 @@ def duck(a, b, depth):
     i, j = int(a * SR), int(b * SR)
     ramp = np.ones(j - i) * depth
     mix[i:j] *= ramp[:, None]
-duck(7.86, 8.0, 0.25)
-duck(22.88, 23.0, 0.25)
+duck(4.88, 5.0, 0.25)    # suck-out before the score impact
+duck(12.86, 13.0, 0.25)
+duck(27.88, 28.0, 0.25)
 # end fade
 f = int(0.35 * SR)
 mix[-f:] *= np.linspace(1, 0, f)[:, None]

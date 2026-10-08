@@ -4,7 +4,7 @@ import numpy as np, subprocess, sys, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1080, 1920, 30
-TOTAL = 28 * FPS
+TOTAL = 34 * FPS
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n, s: ImageFont.truetype(os.path.join(HERE, 'fonts', n), s)
 ANTON = 'Anton-Regular.ttf'; BARLOW_B = 'BarlowCondensed-Bold.ttf'; BARLOW_SB = 'BarlowCondensed-SemiBold.ttf'
@@ -12,16 +12,18 @@ WHITE = (255, 255, 255); GREY = (150, 150, 150); LGREY = (190, 190, 190)
 X0 = 92  # left margin: everything left-aligned, far from TikTok's right rail
 
 # ---------- picture segments: (first frame, n frames, file) ----------
-# v2: all 5 clips, every basket shown to its conclusion; clip audio is never used.
-SEGS = [(150, 64, 's1'),   # Find the shooter: Mills sets up (0.8x)
-        (214, 41, 's2'),   #   ball flight, swish at 8.0 s, held
-        (255, 78, 'a'),    # Tremont Waters: drive, pull-up, ball in at 10.55 s
-        (333, 72, 'c1'),   # Mills -> Crowder: pass, corner three
-        (405, 30, 'c2'),   #   ball drops in at 14.1 s
-        (435, 48, 'b'),    # Yves Pons: drive + dunk at 15.55 s
-        (483, 30, 'd1'),   # Touchdown: full-court pass, catch
-        (513, 87, 'd2'),   #   Sestina finish (ball in 18.6 s) + celebration, one continuous take
-        (600, 90, 'm')]    # Crowder roar under the message
+# v3: 5-s retro countdown (5 -> 1) first, then the v2 edit shifted by 5 s; clip audio is never used.
+OFF = 150  # countdown frames; cards below are written in frames relative to the end of the countdown
+SEGS = [(0, 150, 'cd'),    # countdown 5-4-3-2-1 (source 5.04-10.04 s), centred 9:16 crop, no "0"
+        (300, 64, 's1'),   # Find the shooter: Mills sets up (0.8x)
+        (364, 41, 's2'),   #   ball flight, swish at 13.0 s, held to 13.5
+        (405, 75, 'a'),    # Tremont Waters: drive, pull-up, ball in at 15.55 s, cut 16.0
+        (480, 75, 'c1'),   # Mills -> Crowder: pass, corner three
+        (555, 30, 'c2'),   #   ball drops in at 19.05 s, cut 19.5
+        (585, 45, 'b'),    # Yves Pons: drive + dunk at 20.55 s, cut 21.0
+        (630, 30, 'd1'),   # Touchdown: full-court pass, catch
+        (660, 90, 'd2'),   #   Sestina finish (ball in 23.5 s) + celebration, one continuous take
+        (750, 90, 'm')]    # Crowder roar under the message (25-28 s)
 
 def read_seg(name, n):
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg2', name + '.mp4'),
@@ -71,7 +73,7 @@ def card_canvas(): return Image.new('RGBA', (W, H), (0, 0, 0, 255))
 
 # ---------- cards ----------
 def hook(f):
-    img = card_canvas(); a = appear(f, 0, 3)
+    img = card_canvas(); a = 1.0  # score on screen from the very first frame after the "1"
     # rows: [tile] ROANNE / 73 — 71 / [tile] ASVEL / date line
     big = F(ANTON, 168); score = F(ANTON, 300); sub = F(BARLOW_B, 58)
     ts = 150
@@ -118,23 +120,27 @@ def message(img, f):
     draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 630, 4))    # 21.00
 
 def rdv(f):
+    # end card 28.0-34.0 s: large type, clear hierarchy, all inside TikTok's safe area (x 92-912, y < 1460)
     img = card_canvas()
-    title = F(ANTON, 150); line = F(ANTON, 112); handle = F(BARLOW_B, 54)
-    ts = 132
-    a0 = appear(f, 690, 4); a1 = appear(f, 697, 4); a2 = appear(f, 704, 4); a3 = appear(f, 711, 4)  # all in by 23.83 s
-    y = 430
+    a0 = appear(f, 690, 4); a1 = appear(f, 696, 4); a2 = appear(f, 702, 4); a3 = appear(f, 708, 4); a4 = appear(f, 714, 4)
+    ts = 150
+    y = 255
     img.alpha_composite(fade_rgba(tile(ASVEL_BOX, ts), a0), (X0, y))
-    img.alpha_composite(fade_rgba(tile(ROANNE_BOX, ts), a0), (X0 + ts + 26, y))
-    y += ts + 50
-    draw_text(img, (X0, y), 'ASVEL – ROANNE', fit(ANTON, 'ASVEL – ROANNE', 800, 150), WHITE, alpha=a0)
-    y += 215
+    img.alpha_composite(fade_rgba(tile(ROANNE_BOX, ts), a0), (X0 + ts + 28, y))
+    y += ts + 30
+    draw_text(img, (X0 - 4, y), 'ASVEL – ROANNE', fit(ANTON, 'ASVEL – ROANNE', 860, 200), WHITE, alpha=a0)
+    y += 255
     pygame_rule(img, y, a1)
-    y += 40
-    draw_text(img, (X0, y), 'DIMANCHE 11 OCTOBRE', fit(ANTON, 'DIMANCHE 11 OCTOBRE', 800, 112), WHITE, alpha=a1)
-    y += 150
-    draw_text(img, (X0, y), '19H · ASTROBALLE', fit(ANTON, '19H · ASTROBALLE', 800, 112), WHITE, alpha=a2)
+    y += 38
+    draw_text(img, (X0, y), 'DIMANCHE 11 OCTOBRE', fit(ANTON, 'DIMANCHE 11 OCTOBRE', 820, 140), WHITE, alpha=a1)
+    y += 165
+    draw_text(img, (X0, y), '19H · ASTROBALLE', fit(ANTON, '19H · ASTROBALLE', 820, 140), WHITE, alpha=a2)
     y += 205
-    draw_text(img, (X0 + 2, y), 'ASVEL_NEWS', handle, GREY, track=6, alpha=a3)
+    draw_text(img, (X0 + 2, y), 'EN DIRECT SUR', F(BARLOW_B, 62), LGREY, track=5, alpha=a3)
+    y += 78
+    draw_text(img, (X0, y), 'LA CHAÎNE L’ÉQUIPE ET DAZN', fit(ANTON, 'LA CHAÎNE L’ÉQUIPE ET DAZN', 820, 100), WHITE, alpha=a3)
+    y += 150
+    draw_text(img, (X0 + 2, y), 'ASVEL_NEWS', F(BARLOW_B, 64), LGREY, track=6, alpha=a4)   # all in by 28.6 s
     return img
 
 def pygame_rule(img, y, a):
@@ -143,11 +149,13 @@ def pygame_rule(img, y, a):
 
 # ---------- main ----------
 def frame_image(f, base):
-    if f < 75: return hook(f)
-    if f < 150: return rappel(f)
-    if f >= 690: return rdv(f)
+    if f < OFF: return Image.fromarray(base).convert('RGBA')      # countdown: real footage, untouched
+    r = f - OFF
+    if r < 75: return hook(r)
+    if r < 150: return rappel(r)
+    if r >= 690: return rdv(r)
     img = Image.fromarray(base).convert('RGBA')
-    if f >= 600: message(img, f)
+    if r >= 600: message(img, r)
     return img
 
 def main():
@@ -170,7 +178,7 @@ def main():
                             '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '17',
                             '-profile:v', 'high', '-level', '4.1', '-pix_fmt', 'yuv420p',
                             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '28', '-movflags', '+faststart', out],
+                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '34', '-movflags', '+faststart', out],
                            stdin=subprocess.PIPE)
     for f in range(TOTAL):
         enc.stdin.write(np.asarray(frame_image(f, base.get(f)).convert('RGB')).tobytes())

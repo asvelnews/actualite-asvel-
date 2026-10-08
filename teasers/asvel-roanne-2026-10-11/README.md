@@ -1,25 +1,27 @@
 # Teaser TikTok : ASVEL – Roanne (dim. 11 octobre 2026, 19h, Astroballe)
 
-- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 28,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,9 dBTP
+- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 34,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,8 dBTP
 - `couverture-lheure-de-la-revanche.jpg` : couverture tirée d'un vrai plan (célébration de Jae Crowder)
 
-## Version 2
-- Les 5 vidéos fournies sont présentes, avec une action complète de chacune. Yves Pons est ajouté.
-- Le son d'origine de toutes les vidéos est coupé : on n'entend que la musique.
-- Chaque panier est montré jusqu'au ballon dans le filet, suivi de quelques images avant la coupe.
+## Version 3
+- Compte à rebours rétro 5 → 1 en ouverture (1 s par chiffre, sans l'intro rouge ni le « 0 »), recadré au centre en 9:16 plein cadre, sans bande ni flou.
+- Les 5 vidéos sont présentes, chaque panier est montré jusqu'au filet, puis environ 0,5 s avant la coupe. Les coupes tombent sur la grille musicale.
+- Le son d'origine de toutes les vidéos est coupé, compte à rebours compris : on n'entend que la musique.
+- Carton final agrandi, avec les diffuseurs, entièrement affiché de 28,8 s à 34 s.
 
 ## Déroulé
-| Temps | Partie | Image | Panier visible |
+| Temps | Partie | Image | Panier → coupe |
 |---|---|---|---|
-| 0–2,5 s | Accroche | ROANNE 73 — 71 ASVEL · 19 SEPTEMBRE · SUPERCOUPE | – |
-| 2,5–5 s | Rappel | DEUX DUELS. / DEUX DÉFAITES. / ON N’A PAS OUBLIÉ. | – |
-| 5–8,5 s | Attente | Find the shooter : Patty Mills prépare (0,8×), tire, swish | 8,0 s (démarrage de la musique) |
-| 8,5–11,1 s | Montée | Tremont Waters : pénétration, tir, ballon dans le filet | 10,55 s |
-| 11,1–14,5 s | Montée | Mills → Crowder : passe, tir à 3 pts, ballon dans le filet | 14,05 s |
-| 14,5–16,1 s | Montée | Yves Pons : pénétration et dunk, réception | 15,5 s |
-| 16,1–20 s | Sommet | Touchdown : passe longue, Nate Sestina finit (plan continu), célébration | 18,55 s |
-| 20–23 s | Message | Crowder rugit : CETTE FOIS, / CHEZ NOUS. | – |
-| 23–28 s | Rendez-vous | ASVEL – ROANNE / DIMANCHE 11 OCTOBRE / 19H · ASTROBALLE / ASVEL_NEWS (tout visible dès 23,83 s) | – |
+| 0–5 s | Décompte | 5 · 4 · 3 · 2 · 1 (film rétro fourni), musique en montée | – |
+| 5–7,5 s | Accroche | ROANNE 73 — 71 ASVEL · 19 SEPTEMBRE · SUPERCOUPE (impact) | – |
+| 7,5–10 s | Rappel | DEUX DUELS. / DEUX DÉFAITES. / ON N’A PAS OUBLIÉ. | – |
+| 10–13,5 s | Attente | Find the shooter : Patty Mills prépare (0,8×), tire, swish | 13,0 → 13,5 s |
+| 13,5–16 s | Montée | Tremont Waters : pénétration, tir, ballon dans le filet | 15,55 → 16,0 s |
+| 16–19,5 s | Montée | Mills → Crowder : passe, tir à 3 pts, ballon dans le filet | 19,05 → 19,5 s |
+| 19,5–21 s | Montée | Yves Pons : pénétration et dunk | 20,55 → 21,0 s |
+| 21–25 s | Sommet | Touchdown : passe longue, Nate Sestina finit (plan continu), célébration | 23,5 s |
+| 25–28 s | Message | Crowder rugit : CETTE FOIS, / CHEZ NOUS. | – |
+| 28–34 s | Rendez-vous | ASVEL – ROANNE / DIMANCHE 11 OCTOBRE / 19H · ASTROBALLE / EN DIRECT SUR / LA CHAÎNE L’ÉQUIPE ET DAZN / ASVEL_NEWS | – |
 
 ## Musique
 Composition instrumentale originale, synthétisée en code (`montage/music.py`, sans IA ni échantillon
