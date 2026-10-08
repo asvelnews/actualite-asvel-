@@ -591,8 +591,8 @@ CUTS = [(18.00, 'split'), (19.19, 'black'),
         (22.00, 'moneke_side'), (22.24, 'mills_side'), (22.55, 'moneke_tight'), (22.85, 'mills_tight'),
         (23.16, 'black'), (23.46, 'split'), (23.77, 'black'), (24.0, None)]
 PHRASES = [(18.0, ['DEUX ÉQUIPES.'], [WHITE]),
-           (20.0, ['UNE VICTOIRE', 'À PRENDRE.'], [WHITE, RED]),
-           (22.0, ['UNE NOUVELLE', 'BATAILLE.'], [WHITE, RED])]
+           (20.0, ['UN MATCH.'], [WHITE]),
+           (22.0, ['UN SEUL REPARTIRA', 'AVEC LA VICTOIRE.'], [WHITE, RED])]
 LINE_TARGETS = [(18.0, 150), (20.0, 300), (22.0, 430), (23.62, 525)]
 
 def scene5(t):
