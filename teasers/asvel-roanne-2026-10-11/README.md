@@ -1,10 +1,16 @@
 # Teaser TikTok : ASVEL – Roanne (dim. 11 octobre 2026, 19h, Astroballe)
 
-- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 53,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,0 dBTP
+- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 53,5 s, H.264 High (3,8 Mb/s) + AAC 160 kb/s, −14 LUFS, crête −1,8 dBTP, 26 Mo
 - `couverture-affiche-asvel-roanne.jpg` : affiche finale avec les deux joueurs (1080×1920), utilisable comme couverture TikTok
 - `couverture-lheure-de-la-revanche.jpg` : ancienne couverture, tirée d'un vrai plan (célébration de Jae Crowder)
 
-## Version 5 (actuelle)
+## Version 6 (finale)
+- **Ouverture :** minuteur numérique rouge 00:05 → 00:00 sur fond noir (afficheur 7 segments dessiné en code). À 00:00, la vitre éclate depuis le centre en 0,5 s (5,5–6,0 s) et révèle le score ROANNE 73–71 ASVEL. Effet de compositing classique (éclats de Voronoï), sans IA.
+- **Son de l'ouverture :** un bip par seconde, un bip long à 00:00 et un bris de vitre à 5,5 s sur l'impact musical. Ces sons sont synthétisés et n'apparaissent que dans l'ouverture.
+- **Voix off :** abandonnée à la demande de l'utilisateur, faute d'enregistrement humain. On n'entend que la musique.
+- **Reste du montage :** identique à la v5, décalé de 0,5 s (toutes les heures du tableau v5 + 0,5 s). L'affiche finale reste affichée de 47,5 à 53,5 s.
+
+## Version 5
 Trois nouvelles vidéos (ssstwitter.com_…660014, …682799, …700795), deux actions réussies chacune. Le montage contient 11 actions, toutes jusqu'au ballon dans le filet, sans aucun son d'origine.
 
 | Temps | Contenu | Source | Panier |
