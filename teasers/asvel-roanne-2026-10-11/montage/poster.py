@@ -59,7 +59,7 @@ def draw(d, xy, s, font, fill, track=0):
 
 def build():
     canvas = Image.new('RGBA', (W, H), (0, 0, 0, 255))
-    EYE_Y, EM = 345, 88          # same eye line, same eye-to-mouth distance for both faces
+    EYE_Y, EM = 322, 88          # same eye line, same eye-to-mouth distance for both faces
     asvel = clean_cutout(os.path.join(IMG, '2.webp'))
     darius = clean_cutout(os.path.join(IMG, '3.webp'))
     # ASVEL player left (frontal); Darius Johnson right, his photo's cut right edge sits on the frame edge
@@ -68,22 +68,23 @@ def build():
     assert ox + round(darius.width * s) >= W, 'Darius cut edge must sit outside the frame'
     # bust crop: fade to black under the chests (hides the photos' cut bottoms), black info zone below
     g = np.zeros((H, W), np.float32)
-    y0, y1 = 790, 960
+    y0, y1 = 760, 930
     ramp = np.clip((np.arange(H) - y0) / (y1 - y0), 0, 1) ** 1.4
     g[:] = ramp[:, None]
     shade = Image.new('RGBA', (W, H), (0, 0, 0, 0)); shade.putalpha(Image.fromarray((g * 255).astype(np.uint8)))
     canvas.alpha_composite(shade)
-    # ---- information zone (y 935-1500): left-aligned, away from TikTok's right rail and bottom caption
+    # ---- information zone: left-aligned, away from TikTok's right rail and bottom caption
     d = ImageDraw.Draw(canvas)
     t = fit(ANTON, 'ASVEL – ROANNE', 818, 230)
-    draw(d, (X0 - 6, 905), 'ASVEL – ROANNE', t, WHITE)
-    d.rectangle([X0, 1135, X0 + 130, 1142], fill=WHITE)
+    draw(d, (X0 - 6, 868), 'ASVEL – ROANNE', t, WHITE)
+    d.rectangle([X0, 1098, X0 + 130, 1105], fill=WHITE)
     l1 = fit(ANTON, 'DIMANCHE 11 OCTOBRE · 19H', 800, 104)
-    draw(d, (X0, 1160), 'DIMANCHE 11 OCTOBRE · 19H', l1, WHITE)
-    draw(d, (X0, 1272), 'ASTROBALLE', F(ANTON, l1.size), WHITE)
-    l3 = fit(BARLOW_B, 'EN DIRECT SUR LA CHAÎNE L’ÉQUIPE ET DAZN', 800, 60)
-    draw(d, (X0 + 2, 1400), 'EN DIRECT SUR LA CHAÎNE L’ÉQUIPE ET DAZN', l3, LGREY)
-    draw(d, (X0 + 2, 1466), 'ASVEL_NEWS', F(BARLOW_B, 52), GREY, track=6)
+    draw(d, (X0, 1122), 'DIMANCHE 11 OCTOBRE · 19H', l1, WHITE)
+    draw(d, (X0, 1232), 'ASTROBALLE', F(ANTON, l1.size), WHITE)
+    draw(d, (X0 + 2, 1362), 'EN DIRECT SUR', F(BARLOW_B, 54), LGREY, track=4)
+    l3 = fit(ANTON, 'LA CHAÎNE L’ÉQUIPE ET DAZN', 800, 84)
+    draw(d, (X0, 1420), 'LA CHAÎNE L’ÉQUIPE ET DAZN', l3, WHITE)
+    draw(d, (X0 + 2, 1514), 'ASVEL_NEWS', F(BARLOW_B, 52), GREY, track=6)
     return canvas.convert('RGB')
 
 if __name__ == '__main__':

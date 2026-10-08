@@ -1,10 +1,10 @@
 """Original trailer score for the ASVEL - Roanne teaser (procedural synthesis, 120 BPM, C minor).
-Writes music.wav (stereo 48 kHz, 34 s: 5-s countdown + teaser). This is the ONLY audio of the teaser (clip sound muted)."""
+Writes music.wav (stereo 48 kHz, 53 s: 5-s countdown + teaser). This is the ONLY audio of the teaser (clip sound muted)."""
 import numpy as np, wave, sys
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
-DUR = 34.0
+DUR = 53.0
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 dry = np.zeros((N, 2))
@@ -202,67 +202,71 @@ while tt < 7.78:
 add(riser(2.6), 5.2, 0.32, send=0.3)
 add(reverse_swell(0.9), 7.1, 0.35)
 
-# ===== 8.0 DROP on the Mills swish =====
+# ===== 8.0 DROP on the Find-the-shooter swish (body time; absolute = body + 5) =====
 add(boom(2.0), 8.0, 1.0)
 add(braam(36, 1.8), 8.0, 0.5, send=0.3)
 add(noise_hit(1.0, 80, 6000, 5), 8.0, 0.35, send=0.6)
 
-# groove 8 -> 20 (6 bars of 2 s)
-chords = [([48, 51, 55, 60], 36), ([44, 48, 51, 56], 32), ([51, 55, 58, 63], 39),
-          ([46, 50, 53, 58], 34), ([48, 51, 55, 60], 36), ([43, 47, 50, 55], 31)]
+# groove body 8 -> 38 (15 bars of 2 s), then a half-bar fill to the message at 39
+prog = [([48, 51, 55, 60], 36), ([44, 48, 51, 56], 32), ([51, 55, 58, 63], 39), ([46, 50, 53, 58], 34)]
 pat = [0, 0, 12, 0, 0, 0, 7, 0, 0, 0, 12, 0, 3, 0, 7, 0]
-for bi, (ch, root) in enumerate(chords):
+for bi in range(15):
     bs = 8.0 + 2.0 * bi
-    add(pad(ch, 2.1, 1000 + bi * 160), bs, 0.30 + bi * 0.012, send=0.35)
+    ch, root = prog[bi % 4] if bi < 14 else ([43, 47, 50, 55], 31)
+    add(pad(ch, 2.1, 950 + bi * 70), bs, 0.28 + bi * 0.006, send=0.35)
     for i in range(16):
         add(bass_note(root + pat[i], 0.14), bs + i * B / 4, 0.42 if i % 4 == 0 else 0.28)
-for b in np.arange(8.0, 20.0, B):
-    beat_in_bar = int(round((b - 8.0) / B)) % 4
-    if b >= 19.0: break                      # tom fill takes the last bar half
-    if beat_in_bar in (0, 2): add(kick(), b, 0.75)
-    if beat_in_bar in (1, 3): add(snare(), b, 0.5, send=0.35)
-    if b >= 11.0:
-        add(hat(), b + B / 2, 0.12, pan=0.3)
-    if b >= 14.5:
+# phase 1 shots (body 8-24.5): kick/snare + 8th hats; phase 2 finishes (24.5-35.5): 16th hats + extra kicks;
+# phase 3 final dunk (35.5-38): full kit
+for b in np.arange(8.0, 38.0, B):
+    beat = int(round((b - 8.0) / B)) % 4
+    if beat in (0, 2): add(kick(), b, 0.75)
+    if beat in (1, 3): add(snare(), b, 0.5 if b < 24.5 else 0.56, send=0.35)
+    if b >= 10.0: add(hat(), b + B / 2, 0.11, pan=0.3)
+    if b >= 24.5:
         add(hat(), b + B / 4, 0.07, pan=-0.3)
-        if beat_in_bar == 2: add(kick(), b + 0.25, 0.5)
-# musical accents follow the edit: baskets get a hit, cuts a light pulse
-for at in (10.55, 14.05, 15.55, 18.5):
-    add(boom(1.4, 60, 32), at, 0.55)
-    add(noise_hit(0.7, 150, 7000, 7), at, 0.22, send=0.6)
-for at in (11.0, 13.5, 14.5, 16.0, 17.0):
-    add(boom(0.8, 55, 38), at, 0.28)
-# tom fill + riser into the message
-for i, tt in enumerate(np.arange(19.0, 20.0, 0.125)):
+        if beat == 2: add(kick(), b + 0.25, 0.5)
+    if b >= 35.5:
+        add(hat(), b + 3 * B / 4, 0.07, pan=-0.2)
+        if beat == 0: add(kick(), b + 0.25, 0.45)
+# accents on every basket, light pulses on the cuts (all in body time)
+for at in (10.75, 13.05, 16.3, 20.05, 23.7, 25.95, 29.5, 31.05, 34.0):
+    add(boom(1.4, 60, 32), at, 0.5)
+    add(noise_hit(0.7, 150, 7000, 7), at, 0.2, send=0.6)
+for at in (8.5, 11.0, 13.5, 17.0, 20.5, 24.5, 27.0, 30.0, 31.5):
+    add(boom(0.8, 55, 38), at, 0.26)
+add(riser(2.0, 300, 6000), 34.8, 0.22, send=0.3)          # lift into the final dunk
+add(boom(2.0, 64, 30), 36.8, 0.85)                         # the dunk (abs 41.8)
+add(braam(36, 1.6, 0.9), 36.8, 0.35, send=0.5)
+add(noise_hit(1.0, 80, 7000, 5), 36.8, 0.3, send=0.7)
+for i, tt in enumerate(np.arange(38.0, 39.0, 0.125)):      # tom fill into the message
     add(tom(150 - i * 8, 0.45), tt, 0.35 + i * 0.03, pan=(-0.4 + 0.1 * i), send=0.3)
-add(riser(1.4, 400, 6000), 18.6, 0.22, send=0.3)
 
-# ===== 20.0 MESSAGE: pull back =====
-add(boom(2.6, 58, 28), 20.0, 0.9)
-add(braam(36, 2.6, 0.5), 20.0, 0.35, send=0.5)
-add(pad([48, 51, 55, 60, 63], 2.9, 700), 20.0, 0.34, send=0.5)
-for b in np.arange(20.0, 22.6, 1.0):
+# ===== 39.0 MESSAGE: pull back =====
+add(boom(2.6, 58, 28), 39.0, 0.9)
+add(braam(36, 2.6, 0.5), 39.0, 0.35, send=0.5)
+add(pad([48, 51, 55, 60, 63], 2.9, 700), 39.0, 0.34, send=0.5)
+for b in np.arange(39.0, 41.6, 1.0):
     add(kick(0.4), b, 0.45)
     add(kick(0.35), b + 0.22, 0.28)
-tt = 21.0; k = 0
-while tt < 22.8:
-    add(tick(), tt, 0.14 + 0.1 * (tt - 21) / 1.8, pan=(-0.3 if k % 2 == 0 else 0.3))
+tt = 40.0; k = 0
+while tt < 41.8:
+    add(tick(), tt, 0.14 + 0.1 * (tt - 40) / 1.8, pan=(-0.3 if k % 2 == 0 else 0.3))
     tt += B / 2; k += 1
-add(riser(1.8, 150, 5000), 21.05, 0.30, send=0.3)
-add(reverse_swell(0.8), 22.15, 0.4)
+add(riser(1.8, 150, 5000), 40.05, 0.30, send=0.3)
+add(reverse_swell(0.8), 41.15, 0.4)
 
-# ===== 23.0 RENDEZ-VOUS =====
-add(boom(3.5, 64, 26), 23.0, 1.0)
-add(braam(36, 3.4, 1.0), 23.0, 0.6, send=0.45)
-add(noise_hit(1.6, 60, 6000, 3.5), 23.0, 0.35, send=0.7)
-add(pad([36, 43, 48, 51, 55], 4.9, 600), 23.1, 0.30, send=0.4)
-for b in np.arange(24.0, 27.9, 0.5):
+# ===== 42.0 POSTER (abs 47-53) =====
+add(boom(3.5, 64, 26), 42.0, 1.0)
+add(braam(36, 3.4, 1.0), 42.0, 0.6, send=0.45)
+add(noise_hit(1.6, 60, 6000, 3.5), 42.0, 0.35, send=0.7)
+add(pad([36, 43, 48, 51, 55], 4.9, 600), 42.1, 0.30, send=0.4)
+for b in np.arange(43.0, 46.9, 0.5):
     add(bass_note(24, 0.4), b, 0.30)
     add(tick(), b + 0.25, 0.08)
-# final button + short resonance
-add(boom(1.6, 62, 30), 28.0, 1.0)
-add(braam(36, 1.5, 0.9), 28.0, 0.5, send=0.6)
-add(noise_hit(1.2, 80, 6000, 4), 28.0, 0.3, send=0.8)
+add(boom(1.6, 62, 30), 47.0, 1.0)
+add(braam(36, 1.5, 0.9), 47.0, 0.5, send=0.6)
+add(noise_hit(1.2, 80, 6000, 4), 47.0, 0.3, send=0.8)
 
 # ---------------- reverb + master ----------------
 ir_len = int(2.2 * SR)
@@ -280,7 +284,7 @@ def duck(a, b, depth):
     mix[i:j] *= ramp[:, None]
 duck(4.88, 5.0, 0.25)    # suck-out before the score impact
 duck(12.86, 13.0, 0.25)
-duck(27.88, 28.0, 0.25)
+duck(46.88, 47.0, 0.25)
 # end fade
 f = int(0.35 * SR)
 mix[-f:] *= np.linspace(1, 0, f)[:, None]

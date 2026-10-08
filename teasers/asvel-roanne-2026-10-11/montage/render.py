@@ -4,7 +4,7 @@ import numpy as np, subprocess, sys, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1080, 1920, 30
-TOTAL = 34 * FPS
+TOTAL = 53 * FPS
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n, s: ImageFont.truetype(os.path.join(HERE, 'fonts', n), s)
 ANTON = 'Anton-Regular.ttf'; BARLOW_B = 'BarlowCondensed-Bold.ttf'; BARLOW_SB = 'BarlowCondensed-SemiBold.ttf'
@@ -12,21 +12,28 @@ WHITE = (255, 255, 255); GREY = (150, 150, 150); LGREY = (190, 190, 190)
 X0 = 92  # left margin: everything left-aligned, far from TikTok's right rail
 
 # ---------- picture segments: (first frame, n frames, file) ----------
-# v3: 5-s retro countdown (5 -> 1) first, then the v2 edit shifted by 5 s; clip audio is never used.
-OFF = 150  # countdown frames; cards below are written in frames relative to the end of the countdown
-SEGS = [(0, 150, 'cd'),    # countdown 5-4-3-2-1 (source 5.04-10.04 s), centred 9:16 crop, no "0"
-        (300, 64, 's1'),   # Find the shooter: Mills sets up (0.8x)
-        (364, 41, 's2'),   #   ball flight, swish at 13.0 s, held to 13.5
-        (405, 75, 'a'),    # Tremont Waters: drive, pull-up, ball in at 15.55 s, cut 16.0
-        (480, 75, 'c1'),   # Mills -> Crowder: pass, corner three
-        (555, 30, 'c2'),   #   ball drops in at 19.05 s, cut 19.5
-        (585, 45, 'b'),    # Yves Pons: drive + dunk at 20.55 s, cut 21.0
-        (630, 30, 'd1'),   # Touchdown: full-court pass, catch
-        (660, 90, 'd2'),   #   Sestina finish (ball in 23.5 s) + celebration, one continuous take
-        (750, 90, 'm')]    # Crowder roar under the message (25-28 s)
+# v5: countdown + 11 actions (4 original clips, Pons, 2 actions from each of the 3 new clips); clip audio never used.
+# Order: shots -> rim finishes -> most spectacular (dunk of the 2nd new video last). Every cut on the 0.5-s beat grid.
+OFF = 150
+SEGS = [(0, 150, 'seg2/cd'),     #  0.0  countdown 5 -> 1
+        (300, 64, 'seg2/s1'),    # 10.0  Find the shooter: Mills sets up (0.8x)
+        (364, 41, 'seg2/s2'),    #       swish 13.0 (music drop)
+        (405, 75, 'seg3/n2a'),   # 13.5  new video 2, action A: #25 three, ball in 15.75
+        (480, 75, 'seg2/a'),     # 16.0  Tremont MVP: drive + pull-up, ball in 18.05
+        (555, 105, 'seg3/n3a'),  # 18.5  new video 3, action A: jump shot, ball in 21.3
+        (660, 75, 'seg2/c1'),    # 22.0  Mills -> Crowder corner three
+        (735, 30, 'seg2/c2'),    #       ball in 25.05
+        (765, 120, 'seg3/n3b'),  # 25.5  new video 3, action B: Mills pull-up, ball in 28.7
+        (885, 75, 'seg3/n1b'),   # 29.5  new video 1, action B: fast-break lay-up, ball in 30.95
+        (960, 90, 'seg3/n1a'),   # 32.0  new video 1, action A: drive + finish, ball in 34.5
+        (1050, 45, 'seg2/b'),    # 35.0  Yves Pons dunk 36.05
+        (1095, 30, 'seg2/d1'),   # 36.5  Touchdown: long pass
+        (1125, 90, 'seg2/d2'),   #       Sestina finish 39.0 + celebration
+        (1215, 105, 'seg3/n2b'), # 40.5  new video 2, action B: #25 DUNK 41.8 + landing + reaction
+        (1320, 90, 'seg2/m')]    # 44.0  Crowder roar under CETTE FOIS, CHEZ NOUS.   poster 47.0-53.0
 
 def read_seg(name, n):
-    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, 'seg2', name + '.mp4'),
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(HERE, name + '.mp4'),
                           '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
     fr = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
     if len(fr) < n:  # pad by holding last frame (never needed by more than 1 frame)
@@ -116,8 +123,8 @@ def gradient_top(img, h=760, strength=0.82):
 def message(img, f):
     gradient_top(img)
     big = F(ANTON, 176)
-    draw_text(img, (X0, 250), 'CETTE FOIS,', big, WHITE, alpha=appear(f, 608, 4))   # 20.27
-    draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 630, 4))    # 21.00
+    draw_text(img, (X0, 250), 'CETTE FOIS,', big, WHITE, alpha=appear(f, 1178, 4))   # 44.27
+    draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 1200, 4))    # 45.00
 
 _POSTER = None
 def rdv(f):
@@ -137,9 +144,9 @@ def frame_image(f, base):
     r = f - OFF
     if r < 75: return hook(r)
     if r < 150: return rappel(r)
-    if r >= 690: return rdv(r)
+    if r >= 1260: return rdv(r)
     img = Image.fromarray(base).convert('RGBA')
-    if r >= 600: message(img, r)
+    if r >= 1170: message(img, r)
     return img
 
 def main():
@@ -162,7 +169,7 @@ def main():
                             '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '17',
                             '-profile:v', 'high', '-level', '4.1', '-pix_fmt', 'yuv420p',
                             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '34', '-movflags', '+faststart', out],
+                            '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', '53', '-movflags', '+faststart', out],
                            stdin=subprocess.PIPE)
     for f in range(TOTAL):
         enc.stdin.write(np.asarray(frame_image(f, base.get(f)).convert('RGB')).tobytes())

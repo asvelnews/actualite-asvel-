@@ -1,8 +1,33 @@
 # Teaser TikTok : ASVEL – Roanne (dim. 11 octobre 2026, 19h, Astroballe)
 
-- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 34,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,8 dBTP
+- `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 53,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,0 dBTP
 - `couverture-affiche-asvel-roanne.jpg` : affiche finale avec les deux joueurs (1080×1920), utilisable comme couverture TikTok
 - `couverture-lheure-de-la-revanche.jpg` : ancienne couverture, tirée d'un vrai plan (célébration de Jae Crowder)
+
+## Version 5 (actuelle)
+Trois nouvelles vidéos (ssstwitter.com_…660014, …682799, …700795), deux actions réussies chacune. Le montage contient 11 actions, toutes jusqu'au ballon dans le filet, sans aucun son d'origine.
+
+| Temps | Contenu | Source | Panier |
+|---|---|---|---|
+| 0–5 s | Décompte 5 → 1 | Film rétro (5,04–10,04 s) | – |
+| 5–10 s | Score 73–71, DEUX DUELS. / DEUX DÉFAITES. / ON N’A PAS OUBLIÉ. | Cartons | – |
+| 10–13,5 s | Patty Mills, tir à 3 pts | Find the shooter | 13,0 s |
+| 13,5–16 s | N°25, tir extérieur | Vidéo 2 · 5,22–7,70 s | 15,75 s |
+| 16–18,5 s | Tremont Waters, pull-up | TREMONT MVP | 18,05 s |
+| 18,5–22 s | Tir extérieur | Vidéo 3 · 9,18–12,68 s | 21,3 s |
+| 22–25,5 s | Mills → Crowder, corner 3 | MILLS CROWDER CONNEXION | 25,05 s |
+| 25,5–29,5 s | Patty Mills, tir | Vidéo 3 · 30,62–34,62 s | 28,7 s |
+| 29,5–32 s | Lay-up en contre-attaque | Vidéo 1 · 20,40–22,90 s | 30,95 s |
+| 32–35 s | Pénétration et finition | Vidéo 1 · 10,34–13,33 s | 34,5 s |
+| 35–36,5 s | Yves Pons, dunk | Yves Pons | 36,05 s |
+| 36,5–40,5 s | Passe longue, finition de Nate Sestina | TOUCHDOWN | 39,0 s |
+| 40,5–44 s | **Dunk du n°25** (approche, impulsion, dunk, retombée) | Vidéo 2 · 14,25–17,75 s | 41,8 s |
+| 44–47 s | CETTE FOIS, / CHEZ NOUS. sur la célébration de Crowder | MILLS CROWDER CONNEXION | – |
+| 47–53 s | Affiche avec les deux joueurs (6 s) | Photos fournies | – |
+
+- Doublons : l'action de « Find the shooter » figure aussi dans la vidéo 3 (≈ 19–27 s). Ce passage n'est pas utilisé. Le tir de Mills retenu (30,6–34,6 s) est une autre action.
+- Nouvelles vidéos (720×900) : recadrage 506×900 pleine hauteur, mis à l'échelle sans déformation. Un suivi par coupe ou panoramique lent garde le joueur, le ballon et le cercle visibles.
+- Toutes les coupes tombent sur la grille musicale (120 BPM, 0,5 s). Les durées sont ajustées sur la préparation de l'action, jamais sur la conclusion.
 
 ## Version 4
 - Le carton final est remplacé par une affiche (28–34 s, entièrement affichée pendant 6 s, avec la musique seule). Elle sert aussi de couverture.
