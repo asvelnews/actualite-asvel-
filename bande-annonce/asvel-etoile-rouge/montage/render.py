@@ -700,7 +700,7 @@ PW, PH, PY = 1080, 520, 930                     # panneau video : 1080 x 520 cen
 # (source, debut, fin, ralenti (debut, fin, facteur) ou None)
 MILLS_CLIPS = [('M1', 15.57, 16.37, None), ('M2', 13.45, 15.60, (14.10, 14.70, 0.5)), ('M2', 6.80, 8.85, (7.60, 8.10, 0.5))]
 MONEKE_CLIPS = [('K1', 0.90, 3.25, (2.20, 2.70, 0.5)), ('K2', 5.30, 8.58, None)]
-T_MILLS, T_MONEKE = 26.51, 32.61
+T_MILLS, T_MONEKE = 26.5, 32.61
 
 def _plan(clips, t0, t1):
     """Liste (debut, fin, source, fonction temps local -> temps source) ; le dernier clip s'ajuste a la fin du bloc."""
@@ -734,7 +734,7 @@ def _decode(src, a, b):
 
 def clip_frame(src, a, b, ts):
     fr, base = _decode(src, a, b)
-    x = (min(ts, b) - base) * 30
+    x = max(0.0, (min(ts, b) - base) * 30)
     i = int(x); k = x - i
     i = min(i, len(fr) - 1); j = min(i + 1, len(fr) - 1)
     if k < 0.05 or i == j: return Image.fromarray(fr[i])
@@ -780,7 +780,9 @@ TRANS = [(32.61, clips, clips, False, (RED, (255, 255, 255))),
          (18.0, scene4, scene5, True, ((255, 255, 255), RED))]
 
 def frame(i, date_line):
-    t = i / FPS
+    return frame_t(i / FPS, date_line)
+
+def frame_t(t, date_line):
     for B, a, b, fl, cols in TRANS:
         if B - 0.12 <= t < B + 0.36:
             p = e_cub(seg(t, B - 0.12, B + 0.36))
