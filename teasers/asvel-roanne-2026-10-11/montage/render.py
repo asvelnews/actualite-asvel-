@@ -119,29 +119,13 @@ def message(img, f):
     draw_text(img, (X0, 250), 'CETTE FOIS,', big, WHITE, alpha=appear(f, 608, 4))   # 20.27
     draw_text(img, (X0, 470), 'CHEZ NOUS.', big, WHITE, alpha=appear(f, 630, 4))    # 21.00
 
+_POSTER = None
 def rdv(f):
-    # end card 28.0-34.0 s: large type, clear hierarchy, all inside TikTok's safe area (x 92-912, y < 1460)
-    img = card_canvas()
-    a0 = appear(f, 690, 4); a1 = appear(f, 696, 4); a2 = appear(f, 702, 4); a3 = appear(f, 708, 4); a4 = appear(f, 714, 4)
-    ts = 150
-    y = 255
-    img.alpha_composite(fade_rgba(tile(ASVEL_BOX, ts), a0), (X0, y))
-    img.alpha_composite(fade_rgba(tile(ROANNE_BOX, ts), a0), (X0 + ts + 28, y))
-    y += ts + 30
-    draw_text(img, (X0 - 4, y), 'ASVEL – ROANNE', fit(ANTON, 'ASVEL – ROANNE', 860, 200), WHITE, alpha=a0)
-    y += 255
-    pygame_rule(img, y, a1)
-    y += 38
-    draw_text(img, (X0, y), 'DIMANCHE 11 OCTOBRE', fit(ANTON, 'DIMANCHE 11 OCTOBRE', 820, 140), WHITE, alpha=a1)
-    y += 165
-    draw_text(img, (X0, y), '19H · ASTROBALLE', fit(ANTON, '19H · ASTROBALLE', 820, 140), WHITE, alpha=a2)
-    y += 205
-    draw_text(img, (X0 + 2, y), 'EN DIRECT SUR', F(BARLOW_B, 62), LGREY, track=5, alpha=a3)
-    y += 78
-    draw_text(img, (X0, y), 'LA CHAÎNE L’ÉQUIPE ET DAZN', fit(ANTON, 'LA CHAÎNE L’ÉQUIPE ET DAZN', 820, 100), WHITE, alpha=a3)
-    y += 150
-    draw_text(img, (X0 + 2, y), 'ASVEL_NEWS', F(BARLOW_B, 64), LGREY, track=6, alpha=a4)   # all in by 28.6 s
-    return img
+    # end card 28.0-34.0 s = the players poster (poster.py), on screen in full from its first frame
+    global _POSTER
+    if _POSTER is None:
+        _POSTER = Image.open(os.path.join(HERE, 'poster.png')).convert('RGBA')
+    return _POSTER.copy()
 
 def pygame_rule(img, y, a):
     d = ImageDraw.Draw(img)

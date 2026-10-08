@@ -1,7 +1,15 @@
 # Teaser TikTok : ASVEL – Roanne (dim. 11 octobre 2026, 19h, Astroballe)
 
 - `teaser-asvel-roanne-tiktok.mp4` : 1080×1920, 30 i/s, 34,0 s, H.264 High + AAC 192 kb/s, −14 LUFS, crête −1,8 dBTP
-- `couverture-lheure-de-la-revanche.jpg` : couverture tirée d'un vrai plan (célébration de Jae Crowder)
+- `couverture-affiche-asvel-roanne.jpg` : affiche finale avec les deux joueurs (1080×1920), utilisable comme couverture TikTok
+- `couverture-lheure-de-la-revanche.jpg` : ancienne couverture, tirée d'un vrai plan (célébration de Jae Crowder)
+
+## Version 4
+- Le carton final est remplacé par une affiche (28–34 s, entièrement affichée pendant 6 s, avec la musique seule). Elle sert aussi de couverture.
+- Joueur de l'ASVEL à gauche, Darius Johnson à droite, recadrés au buste. Les visages ont la même taille et les yeux sont sur la même ligne (y = 345).
+- Seules les photos fournies sont utilisées. Chaque photo reçoit seulement une mise à l'échelle uniforme, sans retournement ni retouche des visages ou des maillots.
+- Le détourage est nettoyé (`montage/poster.py`) : les traits blancs et le halo clair au bord de la silhouette sont retirés. Cela touche 0,65 % des pixels de Darius et 0,25 % de ceux du joueur de l'ASVEL, uniquement sur le contour.
+- Textes : ASVEL – ROANNE / DIMANCHE 11 OCTOBRE · 19H / ASTROBALLE / EN DIRECT SUR LA CHAÎNE L’ÉQUIPE ET DAZN / ASVEL_NEWS. Ils occupent x 88–897 et y 935–1517, à distance du rail droit et de la légende TikTok.
 
 ## Version 3
 - Compte à rebours rétro 5 → 1 en ouverture (1 s par chiffre, sans l'intro rouge ni le « 0 »), recadré au centre en 9:16 plein cadre, sans bande ni flou.
@@ -21,7 +29,7 @@
 | 19,5–21 s | Montée | Yves Pons : pénétration et dunk | 20,55 → 21,0 s |
 | 21–25 s | Sommet | Touchdown : passe longue, Nate Sestina finit (plan continu), célébration | 23,5 s |
 | 25–28 s | Message | Crowder rugit : CETTE FOIS, / CHEZ NOUS. | – |
-| 28–34 s | Rendez-vous | ASVEL – ROANNE / DIMANCHE 11 OCTOBRE / 19H · ASTROBALLE / EN DIRECT SUR / LA CHAÎNE L’ÉQUIPE ET DAZN / ASVEL_NEWS | – |
+| 28–34 s | Rendez-vous | Affiche avec les deux joueurs : ASVEL – ROANNE / DIMANCHE 11 OCTOBRE · 19H / ASTROBALLE / EN DIRECT SUR LA CHAÎNE L’ÉQUIPE ET DAZN / ASVEL_NEWS | – |
 
 ## Musique
 Composition instrumentale originale, synthétisée en code (`montage/music.py`, sans IA ni échantillon
