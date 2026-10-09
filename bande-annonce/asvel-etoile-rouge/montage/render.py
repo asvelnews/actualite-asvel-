@@ -739,6 +739,7 @@ def _plan(clips, t0, t_end=None):
 _PM = _plan(MILLS_CLIPS, T_MILLS)
 T_MONEKE = _PM[-1][1]
 PLAN = _PM + _plan(MONEKE_CLIPS, T_MONEKE, T_REVEAL)
+CLIP_CUTS = [c[0] for c in PLAN[1:] if abs(c[0] - T_MONEKE) > 1e-6]   # debuts de clip (hors debut de bloc)
 
 _vc = {}
 def _decode(src, a, b):
@@ -806,6 +807,13 @@ def frame(i, date_line):
     return frame_t(i / FPS, date_line)
 
 def frame_t(t, date_line):
+    # transition a chaque changement de clip : balayage en barres obliques, sens et couleurs alternes
+    for k, B in enumerate(CLIP_CUTS):
+        if B - 0.10 <= t < B + 0.22:
+            p = e_cub(seg(t, B - 0.10, B + 0.22))
+            mills = B < T_MONEKE
+            cols = [((255, 255, 255), RED), (RED, (255, 255, 255))][k % 2] if mills else [(RED, (255, 255, 255)), ((255, 255, 255), RED)][k % 2]
+            return bars(clips(min(t, B - 0.001)), clips(max(t, B)), p, k % 2 == 0, cols)
     for B, a, b, fl, cols in TRANS:
         if B - 0.12 <= t < B + 0.36:
             p = e_cub(seg(t, B - 0.12, B + 0.36))

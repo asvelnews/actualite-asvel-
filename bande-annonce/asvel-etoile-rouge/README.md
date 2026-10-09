@@ -30,7 +30,8 @@ coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et 
 | 93,36–100,5 s | Affiche du match sur un temps fort (infos à 94,36 s, stable ≥ 5 s), dernier impact, extinction |
 
 ### Clips utilisés (vidéos fournies, son d'origine coupé)
-Toutes les actions des 4 vidéos, dans leur durée d'origine (de coupe à coupe), panneau 1080×700 recadré ×1,46 sur l'action.
+Toutes les actions des 4 vidéos, dans leur durée d’origine (de coupe à coupe), panneau 1080×700 recadré ×1,46 sur l’action.
+À chaque changement de clip : balayage en barres obliques rouge/blanc (0,32 s, sens alterné), flash et coup de zoom.
 Ordre et plages : `MILLS_CLIPS` et `MONEKE_CLIPS` dans `montage/render.py`. Seule exception : la dernière action de Moneke
 (Olympiacos, 8,63–14,97 s) démarre à 11,97 s pour que l'affiche tombe sur le temps fort de la musique.
 Les clips ne sont pas versionnés : `CLIPS_DIR=<dossier> python3 montage/render.py ...`
