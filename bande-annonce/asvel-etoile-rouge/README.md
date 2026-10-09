@@ -4,6 +4,8 @@
 |---|---|
 | `ASVEL_NEWS_ASVEL-EtoileRouge_13-octobre.mp4` | publication avant le jour du match (MARDI 13 OCTOBRE • 20H00) |
 | `ASVEL_NEWS_ASVEL-EtoileRouge_AUJOURDHUI.mp4` | publication le 13 octobre uniquement (AUJOURD’HUI • 20H00) |
+| `illustration-asvel-etoile-rouge.jpg` | image d’illustration 1600×900 (article, partage) (`montage/illustration.py`) |
+| `couverture-asvel-etoile-rouge.jpg` | couverture verticale 1080×1920 (TikTok) : affiche finale |
 | `ASVEL_NEWS_Teaser_RDV-lundi-12-octobre.mp4` | teaser 18 s : BANDE-ANNONCE COMPLÈTE / RENDEZ-VOUS LUNDI 12 OCTOBRE (`montage/teaser.py`) |
 
 1080×1920, 30 i/s, 106,45 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 29,8 Mo, −14 LUFS, crête −1 dBFS.
