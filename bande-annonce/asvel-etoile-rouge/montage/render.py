@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, '..', 'sources')
 FONTS = os.path.join(HERE, 'fonts')
-W, H, FPS, DUR = 1080, 1920, 30, 98.64
+W, H, FPS, DUR = 1080, 1920, 30, 106.45
 N = int(round(FPS * DUR))
 CX = 525                      # axe central legerement decale a gauche (rail TikTok a droite)
 RED = (226, 28, 38)
@@ -622,7 +622,7 @@ def scene5(t):
     return zoom(can, 1 + 0.07 * (1 - e_expo(seg(t, p0, p0 + 0.35))), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 6 & 7 : face-a-face, revelation, affiche
-T_DARK, READY_END, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 91.5, 92.5, 98.09   # revelation sur un temps fort (musique 104,40 s)
+T_DARK, READY_END, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 100.31, 101.31, 105.9   # revelation sur un temps fort (musique 111,38 s)
 
 def scene6a(t):
     u = t - 24.0
@@ -715,7 +715,8 @@ MONEKE_CLIPS = [C('K2', 0.00, 3.87),                                            
                 C('K1', 5.03, 8.37), C('K1', 8.43, 11.67), C('K1', 11.73, 16.07), C('K1', 16.13, 20.85),
                 C('K2', 4.23, 8.57),
                 C('K2', 8.63, 14.97)]                                                  # le debut s'ajuste pour finir a la revelation
-T_MILLS = 26.5
+T_CARD_M = 26.5                                  # carte de presentation de Patty Mills (4,5 s)
+T_MILLS = 31.0
 
 def _dur(a, b, slow):
     if slow: s0, s1, f = slow; return (s0 - a) + (s1 - s0) / f + (b - s1)
@@ -737,7 +738,8 @@ def _plan(clips, t0, t_end=None):
         out.append((t, t + d, src, fmap, a, b, track)); t += d
     return out
 _PM = _plan(MILLS_CLIPS, T_MILLS)
-T_MONEKE = _PM[-1][1]
+T_CARD_K = _PM[-1][1]                            # carte de presentation de Chima Moneke (4,5 s)
+T_MONEKE = T_CARD_K + 4.5
 PLAN = _PM + _plan(MONEKE_CLIPS, T_MONEKE, T_REVEAL)
 CLIP_CUTS = [c[0] for c in PLAN[1:] if abs(c[0] - T_MONEKE) > 1e-6]   # debuts de clip (hors debut de bloc)
 
@@ -797,8 +799,64 @@ def clips(t):
     echo(can, name, ANTON, sz, WHITE if mills else RED, CX, 500, ub - 0.3, n=2)
     return can.convert('RGB')
 
+# ================================================================== CARTES : presentation des deux joueurs
+GOLD, BRONZE, SILVER = (214, 175, 55), (176, 112, 62), (235, 235, 235)
+CARDS = {
+    'mills': dict(player='MILLS', scale=1.95, glowc=(255, 255, 255), glowk=0.17, rowcol=(255, 255, 255), word='MILLS',
+                  side='D’UN CÔTÉ', title='UN CHAMPION NBA', name='PATTY MILLS', big='1 020', sub='MATCHS EN NBA',
+                  items=[(GOLD, 'CHAMPION NBA 2014', 'SAN ANTONIO SPURS'), (BRONZE, 'MÉDAILLE DE BRONZE', 'JO DE TOKYO 2020'),
+                         (SILVER, 'NBA SPORTSMANSHIP AWARD', '2022'), (GOLD, 'CHAMPION D’OCÉANIE', '2007 · 2011 · 2013 · 2015')]),
+    'moneke': dict(player='MONEKE', scale=2.12, glowc=(255, 25, 30), glowk=0.30, rowcol=(255, 40, 40), word='MONEKE',
+                   side='DE L’AUTRE CÔTÉ', title='UN CHAMPION DE FRANCE', name='CHIMA MONEKE', big='MVP',
+                   sub='BASKETBALL CHAMPIONS LEAGUE 2022',
+                   items=[(GOLD, 'CHAMPION DE FRANCE 2023', 'MONACO'), (GOLD, 'COUPE DE FRANCE 2023', 'MONACO'),
+                          (SILVER, 'CINQ MAJEUR', 'CHAMPIONS LEAGUE 2022'), (SILVER, 'CINQ MAJEUR', 'CHAMPIONNAT ESPAGNOL 2022')]),
+}
+
+def player_card(t, t0, key):
+    c = CARDS[key]; u = t - t0
+    mills = key == 'mills'; sg = 1 if mills else -1
+    can = bg(glow(540, 760, 620, c['glowc'], c['glowk']))
+    stripes(can, t, 40 * sg, 12, (255, 255, 255) if mills else (255, 60, 60))
+    rows(can, c['word'], c['rowcol'], 0.08, [560, 820], t, 90 * sg, size=250)
+    k = e_expo(seg(u, 0.0, 0.5))
+    shape(can, para(540 + sg * (900 * (1 - k) - 20 * u), 760, 460, 760, 0.30 * sg), c['glowc'] + (22,))
+    kinetic(can, c['side'], B8, 52, RED if mills else WHITE, CX, 300, u, stagger=0.03, dur=0.3, track=14)
+    ts = fit(c['title'], ANTON, 900, 150)
+    kinetic(can, c['title'], ANTON, ts, WHITE if mills else RED, CX, 445, u - 0.1, stagger=0.03, dur=0.35)
+    echo(can, c['title'], ANTON, ts, WHITE if mills else RED, CX, 445, u - 0.35, n=2)
+    kp = e_expo(seg(u, 0.0, 0.6))
+    P = MILLS if mills else MONEKE
+    can.alpha_composite(P.layer(c['scale'] * (1 - 0.03 * e_io(u / 4.5)), 540 - sg * 300 * (1 - kp), 600, fade_bottom=(900, 1040),
+                                sweep=(seg(u, 0.7, 1.5) if mills else 1 - seg(u, 0.7, 1.5)) if 0.7 < u < 1.5 else None))
+    kinetic(can, c['name'], ANTON, 110, WHITE, CX, 1040, u - 0.45, stagger=0.03, dur=0.35)
+    t1 = 0.9
+    if u >= t1:
+        k = e_expo(seg(u, t1, t1 + 0.25))
+        put(can, text(c['big'], ANTON, 190, RED + (255,)), CX, 1250, scale=1.3 - 0.3 * k, alpha=c01(seg(u, t1, t1 + 0.05)))
+        echo(can, c['big'], ANTON, 190, RED, CX, 1250, u - t1 - 0.05)
+    ss = min(56, fit(c['sub'], B8, 880, 56, track=8))
+    kinetic(can, c['sub'], B8, ss, WHITE, CX, 1316, u - 1.05, stagger=0.015, dur=0.3, track=8)
+    for i, (col, a, b) in enumerate(c['items']):
+        ti = 1.4 + i * 0.2
+        y = 1395 + i * 60
+        k = e_expo(seg(u, ti, ti + 0.3))
+        if k <= 0: continue
+        x = 120 - 60 * (1 - k)
+        shape(can, para(x + 12, y - 15, 24, 24, 0.3), col + (int(255 * k),))
+        sz = min(42, fit(a + '  ·  ' + b, B8, 820, 42))
+        put(can, text(a, B8, sz, WHITE + (255,), track=1), x + 44, y, alpha=k, align='l')
+        wa = sum(font(B8, sz).getlength(ch) for ch in a) + (len(a) - 1)
+        put(can, text('·  ' + b, B6, sz, (200, 200, 200, 255), track=1), x + 44 + wa + 18, y, alpha=k, align='l')
+    return can.convert('RGB')
+
+def mills_card(t): return player_card(t, T_CARD_M, 'mills')
+def moneke_card(t): return player_card(t, T_CARD_K, 'moneke')
+
 # ================================================================== timeline
-TRANS = [(T_MONEKE, clips, clips, False, (RED, (255, 255, 255))),
+TRANS = [(T_CARD_K, clips, lambda t: moneke_card(t), False, (RED, (255, 255, 255))),
+         (T_MONEKE, lambda t: moneke_card(t), clips, False, (RED, (255, 255, 255))),
+         (T_MILLS, lambda t: mills_card(t), clips, True, ((255, 255, 255), RED)),
          (10.0, scene2, scene3, True, ((255, 255, 255), RED)),
          (14.0, scene3, scene4, False, (RED, (255, 255, 255))),
          (18.0, scene4, scene5, True, ((255, 255, 255), RED))]
@@ -817,7 +875,7 @@ def frame_t(t, date_line):
     for B, a, b, fl, cols in TRANS:
         if B - 0.12 <= t < B + 0.36:
             p = e_cub(seg(t, B - 0.12, B + 0.36))
-            return bars(a(min(t, B - 0.001) if a is b else t), b(max(t, B)), p, fl, cols)
+            return bars(a(min(t, B - 0.001)), b(max(t, B)), p, fl, cols)
     if t < 6.0: return scene1_mg(t)
     if t < 10.0: return scene2(t)
     if t < 14.0: return scene3(t)
@@ -825,6 +883,8 @@ def frame_t(t, date_line):
     if t < 24.0: return scene5(t)
     if t < T_DARK: return scene6a(t)
     if t < READY_END: return ready(t)
+    if t < T_MILLS: return mills_card(t)
+    if T_CARD_K <= t < T_MONEKE: return moneke_card(t)
     if t < T_REVEAL: return clips(t)
     return poster(t, date_line)
 
