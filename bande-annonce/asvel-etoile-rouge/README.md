@@ -6,7 +6,7 @@
 | `ASVEL_NEWS_ASVEL-EtoileRouge_AUJOURDHUI.mp4` | publication le 13 octobre uniquement (AUJOURD’HUI • 20H00) |
 | `ASVEL_NEWS_Teaser_RDV-lundi-12-octobre.mp4` | teaser 18 s : BANDE-ANNONCE COMPLÈTE / RENDEZ-VOUS LUNDI 12 OCTOBRE (`montage/teaser.py`) |
 
-1080×1920, 30 i/s, 100,5 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 28 Mo, −14 LUFS, crête −1 dBFS.
+1080×1920, 30 i/s, 98,64 s, H.264 High + AAC 192 kb/s 48 kHz, ≈ 28 Mo, −14 LUFS, crête −1 dBFS.
 
 ## Langage motion design
 Typo cinétique (chaque lettre surgit derrière un masque), échos en contour à chaque impact, blocs et panneaux obliques qui glissent,
@@ -14,7 +14,7 @@ rangées de mots en contour qui défilent en fond, trames diagonales animées, r
 transitions en barres obliques rouge/blanc (10 s, 14 s, 18 s), cadres de visée qui se resserrent sur le chronomètre à chaque seconde,
 coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et lisible.
 
-## Déroulé (1 min 40)
+## Déroulé (1 min 38)
 | Temps | Scène |
 |---|---|
 | 0–5 s | Panier réel (N&B), chiffres rouges 5·4·3·2·1 dans le boîtier du chronomètre, cadres de visée |
@@ -25,19 +25,19 @@ coups de zoom sur les phrases. L'affiche finale se construit puis reste fixe et 
 | 18–24 s | DEUX ÉQUIPES. / UN MATCH. / UN SEUL REPARTIRA AVEC LA VICTOIRE. |
 | 24–25 s | Les deux portraits face à face, extinction |
 | 25–26,5 s | ARE / YOU / READY? dans le noir, quasi-silence |
-| 26,5–61,0 s | Entrée de basse : les 10 actions de Patty Mills (toutes celles des 2 vidéos fournies, en entier) |
-| 61,0–93,36 s | Transition rouge, les 8 actions de Chima Moneke (toutes celles des 2 vidéos fournies) |
-| 93,36–100,5 s | Affiche du match sur un temps fort (infos à 94,36 s, stable ≥ 5 s), dernier impact, extinction |
+| 26,5–57,1 s | Entrée de basse : les 9 actions de Patty Mills (vidéos fournies, en entier ; le tir de Jae Crowder de la vidéo de Cholet, 10,23–14,14 s, est retiré) |
+| 57,1–91,5 s | Transition rouge, les 8 actions de Chima Moneke (toutes celles des 2 vidéos fournies) |
+| 91,5–98,64 s | Affiche du match sur un temps fort (infos à 92,5 s, stable ≥ 5 s), dernier impact, extinction |
 
 ### Clips utilisés (vidéos fournies, son d'origine coupé)
 Toutes les actions des 4 vidéos, dans leur durée d’origine (de coupe à coupe), panneau 1080×700 recadré ×1,46 sur l’action.
 À chaque changement de clip : balayage en barres obliques rouge/blanc (0,32 s, sens alterné), flash et coup de zoom.
 Ordre et plages : `MILLS_CLIPS` et `MONEKE_CLIPS` dans `montage/render.py`. Seule exception : la dernière action de Moneke
-(Olympiacos, 8,63–14,97 s) démarre à 11,97 s pour que l'affiche tombe sur le temps fort de la musique.
+(Olympiacos, 8,63–14,97 s) démarre à 9,92 s pour que l'affiche tombe sur le temps fort de la musique.
 Les clips ne sont pas versionnés : `CLIPS_DIR=<dossier> python3 montage/render.py ...`
 
 ## Son
-Musique fournie (« MONTAGEM ALLUVIA – Slowed + Reverb ») à partir de 3,10 s : l’entrée de basse (29,6 s) lance les clips à 26,5 s ; le creux du morceau (87,86–97,66 s) est sauté sur un temps, l’affiche tombe sur l’impact de 106,26 s.
+Musique fournie (« MONTAGEM ALLUVIA – Slowed + Reverb ») à partir de 3,10 s : l’entrée de basse (29,6 s) lance les clips à 26,5 s ; le creux du morceau (87,86–97,66 s) est sauté sur un temps, l’affiche tombe sur l’impact de 104,40 s.
 Automation volume + passe-bas : quasi-silence filtré au compteur, tension filtrée sur l'historique, montée sur les portraits,
 crescendo sur les phrases, coupure puis ~0,6 s quasi silencieuse, reprise pleine sur l'affiche, extinction.
 Effets synthétisés (`montage/audio.py`) : bourdonnement, bips, basse pulsée, buzzer, impacts, fissure, verre, deux souffles de transition.

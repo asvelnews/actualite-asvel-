@@ -10,7 +10,7 @@ from scipy import ndimage as nd
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, '..', 'sources')
 FONTS = os.path.join(HERE, 'fonts')
-W, H, FPS, DUR = 1080, 1920, 30, 100.5
+W, H, FPS, DUR = 1080, 1920, 30, 98.64
 N = int(round(FPS * DUR))
 CX = 525                      # axe central legerement decale a gauche (rail TikTok a droite)
 RED = (226, 28, 38)
@@ -622,7 +622,7 @@ def scene5(t):
     return zoom(can, 1 + 0.07 * (1 - e_expo(seg(t, p0, p0 + 0.35))), CX, 1000).convert('RGB')
 
 # ================================================================== SCENES 6 & 7 : face-a-face, revelation, affiche
-T_DARK, READY_END, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 93.36, 94.36, 99.95   # revelation sur un temps fort (musique 106,26 s)
+T_DARK, READY_END, T_REVEAL, T_INFO, T_END = 25.0, 26.5, 91.5, 92.5, 98.09   # revelation sur un temps fort (musique 104,40 s)
 
 def scene6a(t):
     u = t - 24.0
@@ -707,7 +707,7 @@ MILLS_CLIPS = [C('M1', 15.57, 16.37, None, [(15.57, 340), (16.37, 420)]),       
                C('M2', 4.45, 6.75, None, [(4.45, 690), (4.9, 650), (5.3, 620), (5.9, 610), (6.3, 700), (6.75, 720)]),  # tir dans le coin
                C('M2', 8.93, 13.07),
                C('M2', 17.43, 21.85),
-               C('M1', 0.00, 5.28), C('M1', 5.33, 10.17), C('M1', 10.23, 14.14), C('M1', 14.20, 15.55),
+               C('M1', 0.00, 5.28), C('M1', 5.33, 10.17), C('M1', 14.20, 15.55),   # 10,23-14,14 retire : tir de Jae Crowder
                C('M2', 13.10, 15.60, (14.15, 14.75, 0.5), [(13.1, 260), (13.45, 280), (14.2, 330), (14.6, 390), (14.85, 430),
                                                          (15.05, 690), (15.6, 680)])]    # final : tir en suspension sur le n.1
 MONEKE_CLIPS = [C('K2', 0.00, 3.87),                                                   # gros plan puis tir filme sous le panier
