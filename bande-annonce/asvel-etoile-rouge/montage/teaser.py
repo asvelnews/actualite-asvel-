@@ -12,10 +12,11 @@ TD = 18.0
 N = int(TD * FPS)
 T_CARD = 12.3
 # (debut teaser, fin teaser, temps bande-annonce correspondant au debut)
+T_JUMP = next(c0 for c0, c1, src, f, a, b, tr in R.PLAN if src == 'M2' and b == 15.60)
 SEGS = [(0.0, 6.0, 0.0),        # chronometre 5 -> 0, bris de verre
         (6.0, 7.5, 25.0),       # ARE YOU READY?
-        (7.5, 9.9, 27.30),      # Patty Mills : tir en suspension (sur l'entree de basse)
-        (9.9, T_CARD, 32.55)]   # transition rouge, Chima Moneke : penetration et finition
+        (7.5, 9.9, T_JUMP + 0.35),   # Patty Mills : tir en suspension (sur l'entree de basse)
+        (9.9, T_CARD, R.T_MONEKE - 0.06)]   # transition rouge, Chima Moneke
 
 def card(t):
     u = t - T_CARD

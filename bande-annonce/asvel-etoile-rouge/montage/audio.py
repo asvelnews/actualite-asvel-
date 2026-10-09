@@ -6,7 +6,8 @@ import numpy as np
 import scipy.io.wavfile as wav
 from scipy.signal import butter, sosfiltfilt, sosfilt, fftconvolve
 
-SR, DUR = 48000, 46.0
+SR = 48000
+DUR = 46.0 if TEASER else 100.5
 N = int(SR * DUR)
 OFFSET = 3.10            # t (bande-annonce) = t (musique) - 3,10 s : l'entree de basse (29,60 s) tombe a 26,50 s
 T = np.arange(N) / SR
@@ -18,7 +19,15 @@ def db(x): return 10 ** (x / 20)
 sr, m = wav.read(sys.argv[1])
 assert sr == SR
 m = m.astype(np.float32) / 32768
-m = m[int(OFFSET * SR):int(OFFSET * SR) + N]
+if TEASER:
+    m = m[int(OFFSET * SR):int(OFFSET * SR) + N]
+else:
+    # on saute le creux du morceau (87,86 -> 97,66 s, raccord sur le temps) : la musique reste puissante sur tous les clips
+    A, B, XF = 87.86, 97.66, int(0.02 * SR)
+    p1 = m[int(OFFSET * SR):int(A * SR)]
+    p2 = m[int(B * SR):int(B * SR) + N - len(p1) + XF]
+    r = np.linspace(0, 1, XF)[:, None]
+    m = np.concatenate([p1[:-XF], p1[-XF:] * (1 - r) + p2[:XF] * r, p2[XF:]])[:N]
 CUTS = [200, 400, 700, 1200, 2500, 5000]
 vers = [sosfiltfilt(butter(4, c, 'low', fs=SR, output='sos'), m, axis=0) for c in CUTS] + [m]
 LOGC = np.log([*CUTS, 20000])
@@ -28,7 +37,7 @@ AUTO = [(0.0, -80, 200), (0.8, -60, 200), (5.0, -24, 220), (5.05, -34, 220), (5.
         (6.0, -18, 700), (9.9, -14, 2500),
         (10.0, -8, 20000), (14.0, -6, 20000), (18.0, -4, 20000), (23.9, -0.5, 20000),
         (24.0, -1, 20000), (25.4, -21, 700), (25.85, -62, 400), (26.49, -80, 400),
-        (26.505, 0, 20000), (45.45, 0, 20000), (45.97, -80, 20000), (46.0, -80, 20000)]
+        (26.505, 0, 20000), (DUR - 0.55, 0, 20000), (DUR - 0.03, -80, 20000), (DUR, -80, 20000)]
 at = np.array([a[0] for a in AUTO]); ag = np.array([a[1] for a in AUTO]); ac = np.log([a[2] for a in AUTO])
 gain = db(np.interp(T, at, ag))
 lc = np.interp(T, at, ac)
@@ -100,7 +109,7 @@ for k in range(46):
 add(6.6, boom(72, 38, 1.3, 0.42), db(-6))
 add(7.6, boom(66, 34, 1.4, 0.48), db(-5))
 # transitions discretes vers les portraits
-for t0 in (9.72, 13.72, 17.72) + (() if TEASER else (32.40,)):
+for t0 in (9.72, 13.72, 17.72) + (() if TEASER else (60.80,)):
     n = int(0.38 * SR); x = np.arange(n) / SR
     w = sosfilt(butter(2, [400, 3500], 'band', fs=SR, output='sos'), rng.standard_normal(n))
     add(t0, w * (x / 0.38) ** 2 * np.clip((0.38 - x) / 0.03, 0, 1) / 3, db(-24))
@@ -115,10 +124,10 @@ for t0, g in ((25.05, -17), (25.36, -15), (25.67, -13)):
 add(26.5, boom(85, 30, 2.4, 0.75), db(-3))
 add(26.5, noise_burst(1.6, 200, 5000, 0.001, 0.35), db(-12))
 # dernier impact sur l'affiche, puis extinction
-T_CARD = 31.3 if TEASER else 38.75
+T_CARD = 31.3 if TEASER else 93.36
 add(T_CARD, boom(85, 30, 2.0, 0.6), db(-4))          # affiche du match / carton RENDEZ-VOUS
 add(T_CARD, noise_burst(1.2, 200, 5000, 0.001, 0.3), db(-14))
-if not TEASER: add(44.90, boom(78, 34, 0.84, 0.4), db(-6))           # dernier impact, puis extinction
+if not TEASER: add(99.35, boom(78, 34, 0.84, 0.4), db(-6))           # dernier impact, puis extinction
 
 # reverberation legere sur les effets
 ir_n = int(1.3 * SR)
