@@ -3,7 +3,7 @@
 Format : 1080×1920 vertical, 30 FPS, 60 s, MP4 H.264 + AAC 320 kb/s, son à -14 LUFS.
 
 ## Fichiers
-- `out/TEASER_REAL-MADRID_vs_LDLC-ASVEL_60s.mp4` : version finale de 60 s, avec le final « les cinq joueurs entrent dans l'arène ».
+- `out/TEASER_REAL-MADRID_vs_LDLC-ASVEL.mp4` : version 2 (refonte complète), 60 s, H.264 à 11 Mb/s.
 - `out/bande-son_musique_sfx.wav` : musique et effets mixés.
 - `out/bande-son_sfx_seuls.wav` : effets seuls, pour poser un titre de la bibliothèque Instagram.
 - `assets/` : les 3 photos authentiques fournies et les deux détourages (`*_cut.png`).
@@ -17,7 +17,7 @@ Format : 1080×1920 vertical, 30 FPS, 60 s, MP4 H.264 + AAC 320 kb/s, son à -14
 Lancer :
    ```
    python3 audio.py out/bande-son_musique_sfx.wav out/bande-son_sfx_seuls.wav
-   python3 render.py out/TEASER_REAL-MADRID_vs_LDLC-ASVEL_60s.mp4 out/bande-son_musique_sfx.wav
+   python3 render.py out/TEASER_brut.mp4 out/bande-son_musique_sfx.wav
    ```
    Dépendances : Python 3, Pillow, numpy, scipy, opencv-python-headless, ffmpeg.
 
