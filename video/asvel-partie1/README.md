@@ -38,7 +38,7 @@ Aucune image de Barcelone 1996, de Rome 1997 ou de l'Astroballe n'est utilisée.
 La version actuelle utilise une **voix de synthèse provisoire** pour caler le
 montage. Pour poser la vraie voix :
 
-1. Enregistrer chaque phrase dans `voix/<id>.wav`. Les identifiants (`s1_01`, `s1_02`, etc.) et leur texte sont dans `narration.py`. Un fichier manquant garde la voix de synthèse.
+1. Enregistrer chaque phrase dans `voix/<id>.wav` (la prise ElevenLabs de la séquence 1 est rangée dans `voix_elevenlabs_sequence1/` : renommer ce dossier en `voix/` pour la réutiliser). Les identifiants (`s1_01`, `s1_02`, etc.) et leur texte sont dans `narration.py`. Un fichier manquant garde la voix de synthèse.
 2. Lancer :
 
    ```bash
