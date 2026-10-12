@@ -2,8 +2,13 @@ import sys, numpy as np, cv2
 from PIL import Image
 from scipy import ndimage as ndi
 src, out, prev = sys.argv[1:4]
+THR = int(sys.argv[4]) if len(sys.argv) > 4 else 251
+# seuil plus large au-dessus d'une ligne (cheveux), plus serré en dessous (maillot blanc)
+THR_TOP = int(sys.argv[5]) if len(sys.argv) > 5 else THR
+SPLIT_Y = int(sys.argv[6]) if len(sys.argv) > 6 else 0
 im = Image.open(src).convert('RGB'); rgb = np.asarray(im).astype(np.float32); a = rgb.astype(np.int16)
-near = (a.min(2) >= 251) & ((a.max(2)-a.min(2)) <= 6)
+thr = np.where(np.arange(a.shape[0])[:, None] < SPLIT_Y, THR_TOP, THR)
+near = (a.min(2) >= thr) & ((a.max(2)-a.min(2)) <= (14 if THR_TOP < THR else 6))
 lab, n = ndi.label(near)
 edge = set(np.unique(np.concatenate([lab[0], lab[:,0], lab[:,-1]]))) - {0}
 bg = ndi.binary_opening(np.isin(lab, list(edge)), iterations=1)

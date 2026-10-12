@@ -1,14 +1,14 @@
 """Bande-son du teaser Real Madrid vs LDLC ASVEL (50 s).
 Musique originale entièrement synthétisée (oscillateurs, enveloppes, filtres) :
 aucun sample externe, aucun droit tiers, aucune IA générative.
-Sortie : music_sfx.wav (mix complet) + sfx_only.wav (effets seuls).
+Durée 60 s. Sortie : music_sfx.wav (mix complet) + sfx_only.wav (effets seuls).
 Tempo 120 BPM : tous les repères de montage tombent sur la grille de 0,5 s."""
 import sys, numpy as np
 from scipy import signal
 from scipy.io import wavfile
 
 SR = 48000
-DUR = 50.0
+DUR = 60.0
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 
@@ -192,33 +192,99 @@ for i, bt in enumerate(np.arange(40.0, 41.75, 0.125)):
 for bt in [39.25, 39.75, 40.25]:
     add(sfx, bt, impact(0.8, 100, 45, 0.2), 0.18)
 
-# ================= SCÈNE 6/7 : 42–50 drop final =================
+# ================= 42–43 : impact VICTOIRE, la musique explose puis s'éteint =================
 add(sfx, 42.0, impact(3.5, 110, 28, 0.7), 1.0)
-add(music, 42.0, brass_stab(Dm + [62], 1.4, 0.28))
+add(music, 42.0, brass_stab(Dm + [62], 1.4, 0.30))
+add(music, 42.0, tom(65, 0.9, 0.6)); add(music, 42.5, tom(90, 0.6, 0.4))
+
+# ---------- bruitages du final : pas, foule ----------
+def step(gain=1.0, bright=1.0):
+    t = t_(0.25)
+    thud = np.sin(2 * np.pi * np.cumsum(95 * (1 + 0.5 * np.exp(-t * 60))) / SR) * np.exp(-t * 28)
+    click = hp(rng.standard_normal(len(t)), 1500) * np.exp(-t * 90) * 0.35 * bright
+    return (thud + click) * gain
+
+def squeak(gain=0.08):
+    d = rng.uniform(0.05, 0.09); t = t_(d); f = rng.uniform(1800, 2600) * (1 + 0.25 * t / d)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / d) * gain
+
+def smooth_noise(n, rate):
+    k = max(2, int(n / SR * rate)); pts = rng.standard_normal(k)
+    return np.interp(np.linspace(0, k - 1, n), np.arange(k), pts)
+
+def crowd(d):
+    """Ambiance de salle : rumeur large bande modulée + applaudissements (bruit filtré)."""
+    n = int(d * SR); out = np.zeros(n)
+    for fc in (300, 520, 850, 1300, 2000, 3000):
+        layer = bp(rng.standard_normal(n), fc * 0.7, fc * 1.4, 2)
+        out += layer * (0.6 + 0.4 * np.tanh(smooth_noise(n, 2.0))) / np.sqrt(fc / 300)
+    claps = np.zeros(n)
+    for c in rng.uniform(0, d, int(d * 120)):
+        i = int(c * SR); L = int(0.012 * SR)
+        if i + L < n: claps[i:i + L] += rng.standard_normal(L) * np.exp(-np.arange(L) / (0.003 * SR)) * rng.uniform(0.2, 1)
+    out += hp(claps, 1200) * 0.6
+    return out / (np.abs(out).max() + 1e-9)
+
+corridor = buf()
+# 43–50.5 : pas de cinq joueurs dans le couloir, de plus en plus proches
+for p in range(5):
+    tt = 43.15 + rng.uniform(0, 0.5); per = rng.uniform(0.52, 0.6)
+    while tt < 50.6:
+        near = min(1.0, max(0.0, (tt - 43.0) / 7.0))
+        add(corridor, tt, step(0.18 + 0.32 * near, 0.6 + 0.6 * near), pan=(-0.6 + 0.3 * p))
+        if rng.random() < 0.12: add(corridor, tt + 0.05, squeak(0.05 + 0.05 * near), pan=(-0.6 + 0.3 * p))
+        tt += per + rng.uniform(-0.03, 0.03)
+corridor = reverb(corridor, 1.9, 0.45)          # résonance du tunnel
+sfx += corridor
+
+# foule : monte de 47 à 53, se tait presque sur le silence de 53 s, revient à 55
+cr = crowd(13.0); env = np.zeros(len(cr)); tl = np.arange(len(cr)) / SR + 47.0
+env = np.interp(tl, [47, 48, 52.9, 53.0, 54.9, 55.15, 56.0, 59.0, 60], [0, 0.10, 0.42, 0.10, 0.12, 0.35, 0.45, 0.30, 0])
+add(sfx, 47.0, cr * env)
+
+# 43–47 : musique presque silencieuse (bourdon grave + nappe lointaine)
+add(music, 43.0, lp(saw(midi(26), 4.6, 0.002), 140) * env_adsr(int(4.6 * SR), 1.0, 0, 1, 0.6, 4.6), 0.10)
+add(music, 43.5, pad([62, 65, 69], 4.0, 600, 0.03))
+# 47–53 : l'entrée — montée collective
+add(sfx, 47.0, whoosh(1.0, 200, 2500, 0.18))
+add(music, 47.0, pad(Dm, 2.0, 700, 0.08)); add(music, 49.0, pad(Bb, 2.0, 900, 0.09)); add(music, 51.0, pad(C, 2.0, 1200, 0.10))
+add(music, 47.0, lp(saw(midi(26), 6.0, 0.003), 220) * np.linspace(0.3, 1, int(6.0 * SR)), 0.22)
+strings_ostinato(50, 47.0, 53.0, 0.25, 0.10, 600, 3000)
+for i, bt in enumerate(np.arange(48.0, 53.0, 0.5)):
+    add(music, bt, tom(70 if i % 2 == 0 else 95, 0.7, 0.25 + 0.03 * i))
+for i, bt in enumerate(np.arange(52.0, 53.0, 0.125)):
+    add(music, bt, tom(100, 0.25, 0.15 + 0.03 * i))
+add(music, 50.0, riser(3.0, 0.30))
+# 53–56 : face-à-face (coupure, puis impacts sur chaque phrase)
+add(sfx, 53.25, impact(1.8, 95, 32, 0.4), 0.55)
+add(sfx, 54.2, impact(1.6, 110, 40, 0.35), 0.5)
+add(music, 54.2, lp(saw(midi(26), 1.0, 0.003), 220) * np.linspace(0.3, 1, int(1.0 * SR)), 0.2)
+add(music, 54.6, riser(0.6, 0.25))
+add(sfx, 55.15, impact(2.0, 120, 34, 0.6), 0.8)
+add(music, 55.15, brass_stab(Bb + [62], 0.8, 0.26)); add(music, 55.15, tom(65, 0.8, 0.55))
+add(music, 55.5, tom(90, 0.5, 0.45)); add(music, 55.75, tom(90, 0.5, 0.5))
+# 56–60 : révélation
+add(sfx, 55.92, whoosh(0.25, 800, 8000, 0.25))
+add(sfx, 56.0, impact(3.5, 110, 26, 0.8), 1.0)
+add(music, 56.0, brass_stab(Dm + [62, 69], 1.8, 0.30))
+add(music, 56.0, pad(Dm, 4.0, 1300, 0.10))
 pattern = [0, 0.75, 1.0, 1.5, 1.75]
-for bar_start in [42.0, 44.0, 46.0]:
+for bar_start in [56.0, 58.0]:
     for p in pattern:
-        add(music, bar_start + p, tom(65 if p in (0, 1.0) else 90, 0.7, 0.55))
-for i, (bt, ch) in enumerate([(43.5, Bb), (45.0, F), (46.0, C), (47.0, A)]):
-    add(music, bt, brass_stab(ch + [ch[1] + 12], 0.9, 0.22))
-strings_ostinato(50, 42.0, 48.0, 0.125, 0.09, 2000, 3500)
-add(music, 42.0, pad(Dm, 4.0, 1200, 0.10))
-add(music, 46.0, pad(Bb, 2.0, 1200, 0.10))
-add(music, 48.0, pad(A, 2.0, 1000, 0.10))
-add(sfx, 43.4, whoosh(0.3, 800, 8000, 0.25))
-add(sfx, 43.5, impact(2.0, 140, 40, 0.6), 0.7)
-add(sfx, 44.85, whoosh(0.3, 800, 8000, 0.2))
-add(sfx, 45.0, impact(3.0, 100, 30, 0.6), 0.8)
-add(sfx, 48.0, impact(2.0, 90, 30, 0.5), 0.75)
-add(music, 48.0, brass_stab(Dm + [62, 69], 1.8, 0.30))
+        add(music, bar_start + p, tom(65 if p in (0, 1.0) else 90, 0.7, 0.5))
+strings_ostinato(50, 56.0, 59.0, 0.125, 0.08, 2500, 3500)
+add(music, 58.0, brass_stab(A + [61, 64], 1.6, 0.26))
+add(sfx, 58.0, impact(2.0, 90, 30, 0.5), 0.6)
 
 # ---------- mix ----------
 cut = int(34.0 * SR)
 music = reverb(music, 2.6, 0.28)
 music[cut:int(34.25 * SR)] = 0                       # arrêt brutal à 34 s
 music[cut:int(37 * SR)] *= 0                         # silence dramatique (la reverb ne déborde pas)
+music[int(53.0 * SR):int(53.25 * SR)] = 0            # la musique s'arrête une fraction de seconde
+music[int(53.25 * SR):int(54.2 * SR)] *= 0.25
 sfx = reverb(sfx, 1.4, 0.12)
-fade = np.ones(N); fs = int(48.6 * SR); fade[fs:] = np.linspace(1, 0, N - fs) ** 1.5
+fade = np.ones(N); fs = int(59.0 * SR); fade[fs:] = np.linspace(1, 0, N - fs) ** 1.5
 mix = (music * 0.9 + sfx) * fade[:, None]
 sfx_out = sfx * fade[:, None]
 def master(x):

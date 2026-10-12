@@ -1,4 +1,4 @@
-"""Teaser Instagram Reels — REAL MADRID vs LDLC ASVEL (EuroLeague, 15/10/2026).
+"""Teaser Instagram Reels (60 s) — REAL MADRID vs LDLC ASVEL (EuroLeague, 15/10/2026).
 Motion design 100 % montage classique : photos authentiques, logos officiels,
 typographie, zooms, fondus, flashs. Aucune génération d'image.
 
@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-W, H, FPS, DUR = 1080, 1920, 30, 50.0
+W, H, FPS, DUR = 1080, 1920, 30, 60.0
 BLACK, WHITE, GREY, GOLD = (5, 5, 5), (245, 245, 245), (150, 150, 150), (201, 162, 74)
 AMBER = (255, 172, 20)
 
@@ -350,49 +350,107 @@ def scene6(t):  # 34–43 suspense
     watermark_top(c) if t < 42 else None
     return c
 
-def final_layout(c, t, a0):
-    """Affiche finale (≥ 4 s à l'écran)."""
-    def o(d): return clamp((t - (a0 + d)) / 0.35)
-    def r(d): return 26 * (1 - ease_out((t - (a0 + d)) / 0.4))
-    paste(c, text_img('EUROLEAGUE', 'oswb', 44, GOLD, tracking=0.4), W / 2, 330 + r(0.0), o(0.0))
-    paste(c, text_img('REAL MADRID', 'anton', 128, WHITE, tracking=0.03), W / 2, 830 + r(0.15), o(0.15))
-    paste(c, text_img('VS', 'anton', 70, GOLD, tracking=0.1), W / 2, 948 + r(0.25), o(0.25))
-    paste(c, text_img('LDLC ASVEL', 'anton', 128, WHITE, tracking=0.03), W / 2, 1065 + r(0.35), o(0.35))
-    ln = Image.new('RGBA', (520, 3), GOLD + (255,)); paste(c, ln, W / 2, 1180, o(0.5) * 0.9)
-    paste(c, text_img('JEUDI 15 OCTOBRE 2026', 'oswb', 66, WHITE, tracking=0.08), W / 2, 1255 + r(0.55), o(0.55))
-    paste(c, text_img('21H00', 'anton', 120, GOLD, tracking=0.06), W / 2, 1375 + r(0.65), o(0.65))
-    paste(c, text_img('MOVISTAR ARENA • MADRID', 'oswb', 52, WHITE, tracking=0.1), W / 2, 1495 + r(0.75), o(0.75))
-    paste(c, text_img('ASVEL_NEWS', 'oswb', 40, GREY, tracking=0.3), W / 2, 1640, o(0.95))
+# ================================================================== FINAL : LES CINQ JOUEURS ENTRENT DANS L'ARÈNE
+# Repères mesurés sur chaque photo source : centre des yeux (x, y) et distance yeux–menton (px).
+# L'échelle de chaque joueur est réglée pour que les visages aient une taille cohérente.
+# Rien n'est animé à l'intérieur des photos : seuls le cadrage, l'opacité et la luminosité changent.
+SQUAD = [  # fichier, oeil_x, oeil_y, yeux→menton, cible, x écran, y des yeux, plan
+    ('besson_cut.png',  643, 256, 235,  94, 125, 690, 'outer'),
+    ('crowder_cut.png', 421, 120,  56,  94, 955, 690, 'outer'),
+    ('joueur1_cut.png', 576, 208, 170, 102, 330, 705, 'inner'),
+    ('waters_cut.png',  621, 237, 235, 102, 750, 705, 'inner'),
+    ('mills_cut.png',   412, 120,  54, 110, 540, 725, 'front'),
+]
+TOP_CROPPED = {'besson_cut.png', 'waters_cut.png'}   # cheveux coupés au bord haut de la photo source
 
 @functools.lru_cache(None)
-def final_bg():
-    bg = arena_base().filter(ImageFilter.GaussianBlur(6)); c = solid(BLACK)
-    c.alpha_composite(_fade(bg, 0.22)); c.alpha_composite(vignette()); return c
+def squad_tier(tier):
+    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    for f, ex, ey, ec, target, x, y, tr in SQUAD:
+        if tr != tier: continue
+        im = Image.open(P('assets', f)).convert('RGBA')
+        if f in TOP_CROPPED:   # adoucit la coupe nette du haut de la photo source
+            al = np.asarray(im.getchannel('A')).astype(np.float32).copy(); k = 18
+            al[:k] *= np.linspace(0, 1, k)[:, None]; im.putalpha(Image.fromarray(al.astype(np.uint8)))
+        s = target / ec
+        im = im.resize((max(1, int(im.width * s)), max(1, int(im.height * s))), Image.LANCZOS)
+        if s > 1.2:   # photos en pied, plus petites : léger renforcement de netteté seulement
+            rgb = im.convert('RGB').filter(ImageFilter.UnsharpMask(1.2, 40, 2)); rgb.putalpha(im.getchannel('A')); im = rgb
+        _safe_composite(layer, im, int(x - ex * s), int(y - ey * s))
+    return layer
 
-def scene7(t):  # 43–50 final
-    c = final_bg().copy() if t >= 44.8 else solid(BLACK)
-    if t < 44.8:
-        p = ease_out((t - 43.0) / 0.5)
-        paste(c, logo('rm', 340), 270 - 300 * (1 - p), 960, p)
-        paste(c, logo('asvel', 340), 810 + 300 * (1 - p), 960, p)
-        if t >= 43.5:
-            q = ease_out((t - 43.5) / 0.2)
-            paste(c, text_img('VS', 'anton', 200, WHITE, tracking=0.05), W / 2, 960, q, 1.0 + 0.6 * (1 - q))
-        if 43.5 <= t < 43.62: overlay(c, (255, 255, 255), 1 - (t - 43.5) / 0.12)
-        c = shake(c, t, 43.5, 12, 0.3)
-    else:
-        k = ease_in_out((t - 44.8) / 0.4)
-        size = int(340 + (240 - 340) * k)
-        paste(c, logo('rm', size), 270 + (250 - 270) * k, 960 + (560 - 960) * k)
-        paste(c, logo('asvel', size), 810 + (830 - 810) * k, 960 + (560 - 960) * k)
-        vs_o = 1 - k
-        paste(c, text_img('VS', 'anton', 200, WHITE, tracking=0.05), W / 2, 960 + (560 - 960) * k, vs_o)
-        final_layout(c, t, 45.0)
-        if 45.0 <= t < 45.1: overlay(c, (255, 255, 255), 0.6 * (1 - (t - 45.0) / 0.1))
-    overlay(c, BLACK, ease_in_out((t - 49.4) / 0.6))
+@functools.lru_cache(None)
+def squad_dark(tier):
+    lay = squad_tier(tier); d = Image.new('RGBA', lay.size, (8, 8, 8, 255)); d.putalpha(lay.getchannel('A')); return d
+
+def squad_layer(t):
+    """Apparition progressive : silhouette sombre → photo réelle, du centre vers l'extérieur."""
+    out = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    for tier, t0, dim in [('outer', 44.6, 0.86), ('inner', 44.0, 0.94), ('front', 43.4, 1.0)]:
+        o = ease_in_out((t - t0) / 0.9)
+        if o <= 0: continue
+        light = ease_in_out((t - t0 - 0.5) / 1.6) * dim
+        im = Image.blend(squad_dark(tier), squad_tier(tier), light) if light < 0.999 else squad_tier(tier)
+        out.alpha_composite(_fade(im, o) if o < 0.999 else im)
+    return out
+
+@functools.lru_cache(None)
+def tunnel_bg():
+    c = solid(BLACK); c.alpha_composite(glow(W // 2, 760, 700, 900, 0.07)); return c
+
+@functools.lru_cache(None)
+def arena_dark():
+    c = arena_base().copy(); c.alpha_composite(vgrad(0, H, 0.38, 0.38)); c.alpha_composite(vignette()); return c
+
+def squad_cam(t):
+    """Caméra virtuelle : poussée lente dans le tunnel, puis avancée collective vers le parquet."""
+    if t < 47: s, dy = 1.0 + 0.04 * ease_out((t - 43.0) / 4.0), 0
+    elif t < 53: k = ease_in_out((t - 47.0) / 6.0); s, dy = 1.04 + 0.08 * k, 50 * k
+    else: s, dy = 1.12 + 0.015 * clamp((t - 53.0) / 3.0), 50
+    return s, dy
+
+def scene7(t):  # 43–56 tunnel, entrée, face-à-face
+    bg = tunnel_bg().copy()
+    if t >= 47.0:
+        mix = ease_in_out((t - 47.0) / 1.5)
+        ar = zoomed(arena_dark(), 1.0 + 0.08 * clamp((t - 47.0) / 9.0), W / 2, 900)
+        bg = Image.blend(bg, ar, mix) if mix < 0.999 else ar
+    s, dy = squad_cam(t)
+    grp = zoomed(squad_layer(t), s, W / 2, 720)
+    c = bg; _safe_composite(c, grp, 0, int(dy))
+    c.alpha_composite(vgrad(1270, 1530, 0.0, 1.0))
+    if t < 43.3: overlay(c, BLACK, 1 - (t - 43.0) / 0.3)
+    title(c, t, 'DEUX ÉQUIPES.', 53.25, 54.12, 1610, 140, pop=True, fin=0.15, fout=0.1)
+    title(c, t, 'UN SEUL TERRAIN.', 54.2, 55.08, 1610, 140, pop=True, fin=0.15, fout=0.1)
+    o = win(t, 55.15, 56.0, 0.06, 0.0); p = ease_out((t - 55.15) / 0.2)
+    paste(c, fit_text('UNE SEULE REPARTIRA', 'anton', 100, WHITE), W / 2, 1560, o, 1 + 0.12 * (1 - p))
+    paste(c, fit_text('AVEC LA VICTOIRE.', 'anton', 150, GOLD), W / 2, 1690, o, 1 + 0.18 * (1 - p))
+    c = shake(c, t, 55.15, 12, 0.35)
+    if t < 53.0: watermark_top(c)
+    if t >= 55.92: overlay(c, (255, 255, 255), ease_in_out((t - 55.92) / 0.08))
     return c
 
-SCENES = [(0, 7, scene1), (7, 14, scene2), (14, 20, scene3), (20, 27, scene4), (27, 34, scene5), (34, 43, scene6), (43, 50.1, scene7)]
+def scene8(t):  # 56–60 révélation
+    c = solid(BLACK); a0 = 56.0
+    def o(d): return clamp((t - (a0 + d)) / 0.3)
+    def r(d): return 24 * (1 - ease_out((t - (a0 + d)) / 0.35))
+    lp_ = ease_out((t - a0) / 0.35)
+    paste(c, logo('rm', 250), 290 - 120 * (1 - lp_), 650, lp_)
+    paste(c, logo('asvel', 250), 790 + 120 * (1 - lp_), 650, lp_)
+    paste(c, text_img('EUROLEAGUE', 'oswb', 46, GOLD, tracking=0.4), W / 2, 400 + r(0.05), o(0.05))
+    paste(c, text_img('REAL MADRID', 'anton', 130, WHITE, tracking=0.03), W / 2, 915 + r(0.15), o(0.15))
+    paste(c, text_img('VS', 'anton', 72, GOLD, tracking=0.1), W / 2, 1032 + r(0.22), o(0.22))
+    paste(c, text_img('LDLC ASVEL', 'anton', 130, WHITE, tracking=0.03), W / 2, 1150 + r(0.3), o(0.3))
+    ln = Image.new('RGBA', (520, 3), GOLD + (255,)); paste(c, ln, W / 2, 1265, o(0.4) * 0.9)
+    paste(c, text_img('JEUDI 15 OCTOBRE 2026', 'oswb', 68, WHITE, tracking=0.08), W / 2, 1340 + r(0.45), o(0.45))
+    paste(c, fit_text('21H00 • MOVISTAR ARENA', 'anton', 96, GOLD, maxw=980, tracking=0.03), W / 2, 1450 + r(0.55), o(0.55))
+    paste(c, text_img('ASVEL_NEWS', 'oswb', 40, GREY, tracking=0.3), W / 2, 1620, o(0.7))
+    if t < 56.15: overlay(c, (255, 255, 255), 1 - (t - 56.0) / 0.15)
+    overlay(c, BLACK, ease_in_out((t - 59.4) / 0.6))
+    return c
+
+SCENES = [(0, 7, scene1), (7, 14, scene2), (14, 20, scene3), (20, 27, scene4), (27, 34, scene5), (34, 43, scene6),
+          (43, 56, scene7), (56, 60.1, scene8)]
 def frame(t):
     for a, b, f in SCENES:
         if a <= t < b: return f(t)
