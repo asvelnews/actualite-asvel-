@@ -150,7 +150,7 @@ def _fond():
 
 FOND = _fond()
 _rng = np.random.default_rng(3)
-GRAIN = [(_rng.standard_normal((H, W, 1)) * 0.012).astype(np.float32) for _ in range(6)]
+GRAIN = [(_rng.standard_normal((H, W, 1)) * 0.005).astype(np.float32) for _ in range(6)]
 
 
 # ───────────────────────── photographies ─────────────────────────
@@ -615,7 +615,7 @@ def main():
     cmd = ["ffmpeg", "-y", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-ss", str(t0), "-t", str(t1 - t0), "-i", audio,
-           "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+           "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-pix_fmt", "yuv420p",
            "-tune", "film",
            "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", sortie]
     ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)
