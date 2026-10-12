@@ -3,14 +3,18 @@
 Format : 1080×1920 vertical, 30 FPS, 50 s, MP4 H.264 + AAC 320 kb/s, son à -14 LUFS.
 
 ## Fichiers
-- `out/TEASER_MAQUETTE_sans-logos.mp4` : version maquette. Les logos sont remplacés par des cadres « LOGO À FOURNIR ».
+- `out/TEASER_REAL-MADRID_vs_LDLC-ASVEL.mp4` : version finale, avec les logos officiels.
 - `out/bande-son_musique_sfx.wav` : musique et effets mixés.
 - `out/bande-son_sfx_seuls.wav` : effets seuls, pour poser un titre de la bibliothèque Instagram.
 - `assets/` : les 3 photos authentiques fournies et les deux détourages (`*_cut.png`).
 
-## Version finale avec les logos
-1. Déposer les logos officiels en PNG transparent : `logos/real-madrid.png` et `logos/ldlc-asvel.png`.
-2. Lancer :
+## Logos
+- `logos/*_source.webp` : les fichiers officiels fournis.
+- `logos/real-madrid.png` : l'écusson tel quel (déjà transparent).
+- `logos/ldlc-asvel.png` : le logo monochrome passé en blanc pour le fond noir (version inversée). Le dessin n'est pas modifié.
+
+## Refaire le rendu
+Lancer :
    ```
    python3 audio.py out/bande-son_musique_sfx.wav out/bande-son_sfx_seuls.wav
    python3 render.py out/TEASER_REAL-MADRID_ASVEL.mp4 out/bande-son_musique_sfx.wav

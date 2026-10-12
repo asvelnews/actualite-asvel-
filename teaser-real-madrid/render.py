@@ -146,6 +146,7 @@ def player_scene(name):
     return c
 
 LOGO_FILES = {'rm': P('logos', 'real-madrid.png'), 'asvel': P('logos', 'ldlc-asvel.png')}
+LOGO_OPTICAL = {'asvel': 1.12}   # équilibre optique : le logo ASVEL est plus fin que l'écusson
 LOGO_NAMES = {'rm': 'REAL MADRID', 'asvel': 'LDLC ASVEL'}
 
 @functools.lru_cache(None)
@@ -153,6 +154,7 @@ def logo(key, size):
     f = LOGO_FILES[key]
     if os.path.exists(f):
         im = Image.open(f).convert('RGBA'); bb = im.getbbox(); im = im.crop(bb) if bb else im
+        size = int(size * LOGO_OPTICAL.get(key, 1.0))
         s = size / max(im.size); return im.resize((max(1, int(im.width * s)), max(1, int(im.height * s))), Image.LANCZOS)
     # maquette : emplacement réservé, volontairement neutre (aucun faux logo)
     im = Image.new('RGBA', (size, size), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
