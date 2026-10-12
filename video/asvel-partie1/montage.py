@@ -183,9 +183,10 @@ def photo(cv, nom, x, y, w, h, zoom=1.0, cx=0.5, cy=0.5, o=1.0, recadre=None, bo
         return
     src = source(nom, recadre)
     sw, sh = src.size
+    zoom = max(1.0, zoom)
     bw, bh = sw / zoom, sh / zoom
-    x0 = min(max(cx * sw - bw / 2, 0), sw - bw)
-    y0 = min(max(cy * sh - bh / 2, 0), sh - bh)
+    x0 = max(0.0, min(cx * sw - bw / 2, sw - bw))
+    y0 = max(0.0, min(cy * sh - bh / 2, sh - bh))
     x, y = int(round(x)), int(round(y))
     im = src.resize((w, h), Image.BICUBIC, box=(x0, y0, x0 + bw, y0 + bh))
     poser(cv, ombre(w, h, bord), x - bord - 40, y - bord - 40, o * 0.9)
@@ -345,7 +346,8 @@ def sc_titre_1949(cv, t):
 def sc_equipe(t0, t1, z0, z1, c0, c1):
     def f(cv, t):
         w, h = 1290, int(1290 * 449 / 600)
-        p = lisse((t - t0) / (t1 - t0)) * 0.6 + 0.4 * (t - t0) / (t1 - t0)
+        u = min(1.0, max(0.0, (t - t0) / (t1 - t0)))
+        p = lisse(u) * 0.6 + 0.4 * u
         z = z0 + (z1 - z0) * p
         cx = c0[0] + (c1[0] - c0[0]) * p
         cy = c0[1] + (c1[1] - c0[1]) * p
