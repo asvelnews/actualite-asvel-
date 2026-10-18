@@ -1,46 +1,58 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Modèle de vol simplifié – Embraer ERJ 145 (version LR).
-// Toutes les valeurs produites sont des ESTIMATIONS, affichées comme telles.
+// Modèle de vol simplifié – ATR 42-600 (turbopropulseur régional, 48 sièges).
+// Simulation illustrative : valeurs d'un vol COMPARABLE, pas des trajets
+// réellement effectués ni des dépenses réelles de l'ASVEL.
+// Choix de l'appareil : compatible avec les quatre pistes retenues
+// (la plus courte : Cholet-Le Pontreau, 1 380 m × 30 m, LDA 03 ≈ 1 200 m).
+// Fiche ATR 42-600 (2022) : décollage 1 107 m (MTOW), atterrissage 966 m (MLW),
+// croisière maxi 535 km/h au FL240, consommation de croisière 620 kg/h.
 // Hypothèses (voir README) :
-// - Croisière : 780 km/h vraie (≈ Mach 0,72 au FL310 ; Mach 0,78 maxi constructeur).
+// - Croisière retenue : 520 km/h vraie.
 // - Distance parcourue = orthodromie × 1,05 (routes aériennes, procédures).
-// - Pénalité montée / descente / approche : +14 min sur le temps en vol.
-// - Vent moyen en altitude : 50 km/h d'ouest (270°), différencie aller et retour.
-// - Roulage : 12 min au départ de LYS, 8 min ailleurs ; 6 min / 5 min à l'arrivée.
-// - Consommation : 1 090 kg/h en vol (≈ 359 gal US/h, donnée courtier),
-//   6 kg/min au roulage ; densité Jet A-1 0,803 kg/L (référence Embraer).
+// - Pénalité montée / descente / approche : +12 min sur le temps en vol.
+// - Vent moyen en altitude : 40 km/h d'ouest (270°), différencie aller et retour.
+// - Roulage : 12 min au départ de LYS, 6 min à LIG, 4 min sur les petits
+//   terrains ; 6 / 4 / 3 min à l'arrivée.
+// - Consommation : 650 kg/h en vol (croisière ATR 620 kg/h + montée),
+//   2 kg/min au roulage ; densité Jet A-1 0,80 kg/L.
 // - Prix Jet A-1 : 1,20 à 1,80 €/L HT (tarifs publics Air BP 2026 relevés
 //   entre 1,60 et 1,92 €/L HT ; les opérateurs sous contrat paient moins).
-// - Affrètement (carburant INCLUS) : 5 000 à 7 500 € par heure bloc,
-//   minimum 1 h facturée par vol, + 0,75 h de repositionnement par vol,
-//   + 1 000 à 2 000 € de redevances aéroportuaires et d'assistance par vol,
-//   + 1 000 à 1 800 € d'immobilisation (attente du match, équipage) au retour.
+// - Affrètement (carburant INCLUS, jamais ajouté une seconde fois) :
+//   4 800 à 7 000 € par heure bloc (coût d'exploitation calculé ≈ 4 400 –
+//   5 200 €/h + marge opérateur), minimum 1 h facturée par vol,
+//   + 0,75 h de repositionnement par vol, + 800 à 1 600 € de redevances et
+//   d'assistance par vol, + 900 à 1 500 € d'immobilisation au retour.
 // ─────────────────────────────────────────────────────────────────────────────
 import {AIRPORTS, type AirportId, type LonLat} from '../data/tour';
 import {bearing, haversineKm} from './geo';
 
 export const AIRCRAFT = {
-	model: 'EMBRAER ERJ 145',
-	cruiseKmh: 780,
+	model: 'ATR 42-600',
+	seats: 48,
+	cruiseKmh: 520,
 	routeFactor: 1.05,
-	climbDescentMin: 14,
-	burnKgH: 1090,
-	taxiBurnKgMin: 6,
-	densityKgL: 0.803,
-	rotationKmh: 250,
-	touchdownKmh: 240,
+	climbDescentMin: 12,
+	burnKgH: 650,
+	taxiBurnKgMin: 2,
+	densityKgL: 0.8,
+	/** Vitesses au sol (km/h) : rotation ≈ 105 kt, toucher ≈ 100 kt */
+	rotationKmh: 195,
+	touchdownKmh: 185,
+	/** Roulage au décollage et distance d'arrêt après le toucher (km) */
+	takeoffRollKm: 0.9,
+	landingRollKm: 0.7,
 };
 
-const WIND = {fromDeg: 270, kmh: 50};
+const WIND = {fromDeg: 270, kmh: 40};
 const FUEL_EUR_L: [number, number] = [1.2, 1.8];
-const RATE_EUR_H: [number, number] = [5000, 7500];
+const RATE_EUR_H: [number, number] = [4800, 7000];
 const MIN_BILLED_H = 1;
 const REPOSITION_H = 0.75;
-const FEES_EUR: [number, number] = [1000, 2000];
-const NIGHT_STOP_EUR: [number, number] = [1000, 1800];
+const FEES_EUR: [number, number] = [800, 1600];
+const NIGHT_STOP_EUR: [number, number] = [900, 1500];
 
-const taxiOut = (a: AirportId) => (a === 'LYS' ? 12 : 8);
-const taxiIn = (a: AirportId) => (a === 'LYS' ? 6 : 5);
+const taxiOut = (a: AirportId) => (a === 'LYS' ? 12 : a === 'LIG' ? 6 : 4);
+const taxiIn = (a: AirportId) => (a === 'LYS' ? 6 : a === 'LIG' ? 4 : 3);
 
 export type Range = [number, number];
 const round100 = (x: number) => Math.round(x / 100) * 100;
@@ -67,6 +79,8 @@ export type FlightPlan = {
 	taxiInFuelL: number;
 	fuelCost: Range;
 	charter: Range;
+	/** Prix moyen estimé du trajet (milieu de la fourchette d'affrètement) */
+	charterMean: number;
 };
 
 export const planFlight = (from: AirportId, to: AirportId, direction: FlightPlan['direction'], number: string): FlightPlan => {
@@ -102,6 +116,7 @@ export const planFlight = (from: AirportId, to: AirportId, direction: FlightPlan
 		taxiInFuelL: (tIn * AIRCRAFT.taxiBurnKgMin) / AIRCRAFT.densityKgL,
 		fuelCost: r100(mul(FUEL_EUR_L, fuelL)),
 		charter,
+		charterMean: round100((charter[0] + charter[1]) / 2),
 	};
 };
 

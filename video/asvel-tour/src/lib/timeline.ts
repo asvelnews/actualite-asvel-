@@ -1,6 +1,6 @@
 import {Easing, interpolate} from 'remotion';
 import routesData from '../data/routes.json';
-import {AIRPORTS, GAMES, HOME_AIRPORT, PLACES, type AirportId, type Game, type LonLat, type PlaceId} from '../data/tour';
+import {AIRPORTS, GAMES, HOME_AIRPORT, PLACES, type AirportId, type Game, type LonLat, type PlaceId, type Runway} from '../data/tour';
 import {AIRCRAFT, makeProfile, planFlight, type FlightPlan} from './aviation';
 import {
 	MAP_CENTER,
@@ -29,7 +29,7 @@ const RESULT = 110;
 const UPCOMING = 210;
 const BASE_HOLD = 50;
 const CAM = 24; // transition caméra au début de chaque segment
-const FINAL = {zoom: 60, stats: 500};
+const FINAL = {zoom: 60, stats: 400, table: 380};
 
 const busFrames = (km: number) => Math.round(Math.min(Math.max(70 + km * 0.7, 80), 150));
 const airFrames = (km: number) => Math.round(105 + km * 0.12);
@@ -96,15 +96,15 @@ const projLine = (coords: LonLat[]) => makeLine(coords.map(project));
 
 // ── Construction d'un vol ───────────────────────────────────────────────────
 const runwayFor = (id: AirportId, headingWanted: number) => {
-	const rw = AIRPORTS[id].runway;
+	const rw: Runway = AIRPORTS[id].runway;
 	const e0 = rw.ends[0] as LonLat;
 	const e1 = rw.ends[1] as LonLat;
 	const h01 = bearing(e0, e1);
 	const h10 = bearing(e1, e0);
 	// Sens retenu : le plus proche de l'axe du vol (le vent réel déciderait du QFU)
 	return angleDiff(h01, headingWanted) <= angleDiff(h10, headingWanted)
-		? {threshold: e0, far: e1, heading: h01, id: rw.ids[0], lengthKm: rw.lengthM / 1000}
-		: {threshold: e1, far: e0, heading: h10, id: rw.ids[1], lengthKm: rw.lengthM / 1000};
+		? {threshold: e0, landing: (rw.landingThresholds?.[0] ?? e0) as LonLat, far: e1, heading: h01, id: rw.ids[0], lengthKm: rw.lengthM / 1000}
+		: {threshold: e1, landing: (rw.landingThresholds?.[1] ?? e1) as LonLat, far: e0, heading: h10, id: rw.ids[1], lengthKm: rw.lengthM / 1000};
 };
 
 const dirPx = (c: LonLat, heading: number): Pt => {
@@ -119,11 +119,11 @@ const buildFlight = (from: AirportId, to: AirportId, plan: FlightPlan) => {
 	const dep = runwayFor(from, gcHeading);
 	const arr = runwayFor(to, gcHeading);
 
-	const liftoff = destination(dep.threshold, dep.heading, 1.3); // roulage ≈ 1 300 m
+	const liftoff = destination(dep.threshold, dep.heading, AIRCRAFT.takeoffRollKm);
 	const climbOut = destination(dep.far, dep.heading, 5);
-	const faf = destination(arr.threshold, (arr.heading + 180) % 360, 8); // approche finale 8 km
-	const touchdown = destination(arr.threshold, arr.heading, 0.35);
-	const stop = destination(arr.threshold, arr.heading, 1.5);
+	const faf = destination(arr.landing, (arr.heading + 180) % 360, 8); // approche finale 8 km
+	const touchdown = destination(arr.landing, arr.heading, 0.3);
+	const stop = destination(touchdown, arr.heading, AIRCRAFT.landingRollKm);
 
 	const roll = projLine([dep.threshold, liftoff]);
 	const climb = projLine([liftoff, lerpLonLat(liftoff, dep.far, 0.5), dep.far, climbOut]);
@@ -146,7 +146,7 @@ const buildFlight = (from: AirportId, to: AirportId, plan: FlightPlan) => {
 			return {x: p.x - ((b.y - a.y) / n) * s, y: p.y + ((b.x - a.x) / n) * s};
 		}),
 	);
-	const approach = projLine([faf, arr.threshold, touchdown]);
+	const approach = projLine([faf, arr.landing, touchdown]);
 	const rollout = projLine([touchdown, stop]);
 	const all = makeLine([...roll.pts, ...climb.pts.slice(1), ...air.pts.slice(1), ...approach.pts.slice(1), ...rollout.pts.slice(1)]);
 
@@ -167,7 +167,8 @@ const buildFlight = (from: AirportId, to: AirportId, plan: FlightPlan) => {
 			arr: runwayView(arr),
 			air: fit([...climb.pts, ...air.pts, ...approach.pts], 860, 740, 1, 4),
 			// Approche : l'avion (au repère d'approche finale) et la piste dans le même cadre
-			app: fit([project(faf), project(arr.threshold), project(arr.far)], 700, 600, 1, 400),
+			// (inclut la fin de la descente pour garder l'avion à l'écran pendant la transition)
+			app: fit([along(air, 0.86), project(faf), project(arr.threshold), project(arr.far)], 700, 600, 1, 400),
 		},
 	};
 };
@@ -262,7 +263,8 @@ export const TOTAL_WINS = WINS.length;
 export const FINAL_T = {
 	zoom: built.tourEnd,
 	stats: built.tourEnd + FINAL.zoom,
-	end: built.tourEnd + FINAL.zoom + FINAL.stats,
+	table: built.tourEnd + FINAL.zoom + FINAL.stats,
+	end: built.tourEnd + FINAL.zoom + FINAL.stats + FINAL.table,
 };
 export const DURATION = FINAL_T.end;
 

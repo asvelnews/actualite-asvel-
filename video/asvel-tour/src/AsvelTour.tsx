@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {AbsoluteFill, continueRender, delayRender, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, continueRender, delayRender, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {MUSIC_FILE} from './data/tour';
 import {MapLayer} from './components/MapLayer';
 import {Markers} from './components/Markers';
 import {Banner, BottomPanel, Disclaimer, Final, Header, Intro, Strip} from './components/Overlay';
@@ -30,6 +31,9 @@ export const AsvelTour: React.FC = () => {
 			<Final />
 			<Disclaimer />
 			<Intro />
+			{MUSIC_FILE ? (
+				<Audio src={staticFile(MUSIC_FILE)} volume={(f) => interpolate(f, [0, 30, DURATION - 60, DURATION - 1], [0, 0.9, 0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} />
+			) : null}
 		</AbsoluteFill>
 	);
 };

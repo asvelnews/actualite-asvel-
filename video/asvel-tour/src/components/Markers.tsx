@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {AIRPORTS, PLACES, scoreLine, TEAM, type Game, type LonLat} from '../data/tour';
+import {AIRPORT_LABEL_SIDE, AIRPORTS, GAMES, PLACES, scoreLine, TEAM, type AirportId, type Game, type LonLat} from '../data/tour';
 import {project} from '../lib/geo';
 import {FINAL_T, HEIGHT, RESULTS, UPCOMINGS, WIDTH, cameraAt, toScreen, type ResultSeg, type UpcomingSeg, type View} from '../lib/timeline';
 import {C, FONT_TEXT, FONT_TITLE} from '../theme';
@@ -137,7 +137,7 @@ const Card: React.FC<{s: CardSeg}> = ({s}) => {
 /** Repères fixes : Lyon, base lyonnaise, aéroports, salles. */
 const Places: React.FC<{view: View; frame: number}> = ({view, frame}) => {
 	// Repères atténués dans la vue finale compacte pour laisser la place aux résultats
-	const reveal = interpolate(frame, [60, 110], [0, 1], clamp) * (1 - 0.75 * compactAt(frame));
+	const reveal = interpolate(frame, [60, 110], [0, 1], clamp) * (1 - compactAt(frame));
 	const near = interpolate(view.k, [1.6, 3.2], [0, 1], clamp);
 	const lyon = toScreen(project([4.8357, 45.764]), view);
 	const base = toScreen(project(PLACES.BASE.coords as LonLat), view);
@@ -152,18 +152,50 @@ const Places: React.FC<{view: View; frame: number}> = ({view, frame}) => {
 	return (
 		<g opacity={reveal}>
 			{pill(lyon.x - 120, lyon.y - 4, 'LYON', C.white, 1 - near, 'lyon')}
-			{Object.values(AIRPORTS).map((ap) => {
+			{(Object.keys(AIRPORTS) as AirportId[]).map((id) => {
+				const ap = AIRPORTS[id];
 				const p = toScreen(project(ap.arp as LonLat), view);
 				// LYS se confond avec Lyon en vue France entière : affiché dès le zoom régional
-				const o = ap.iata === 'LYS' ? near : 1;
+				const o = id === 'LYS' ? near : 1;
+				const text = `${ap.iata} · ${ap.name.toUpperCase()}`;
+				const w = text.length * 8.4 + 16;
+				const x0 = AIRPORT_LABEL_SIDE[id] > 0 ? p.x + 14 : p.x - 14 - w;
 				return (
-					<g key={ap.iata} opacity={o}>
+					<g key={id} opacity={o}>
 						<circle cx={p.x} cy={p.y} r={11} fill="#0B1118" stroke={C.white} strokeWidth={2} />
 						<g transform={`translate(${p.x - 8} ${p.y - 8})`}>
 							<Plane size={16} color={C.white} />
 						</g>
-						{pill(p.x, p.y, ap.iata, C.white, 1, `l${ap.iata}`)}
+						<rect x={x0} y={p.y - 12} width={w} height={24} rx={7} fill="rgba(7,11,16,0.85)" stroke={C.white} strokeOpacity={0.6} strokeWidth={1.2} />
+						<text x={x0 + 8} y={p.y + 5.5} fontFamily={FONT_TITLE} fontWeight={700} fontSize={15} letterSpacing={0.6} fill={C.white}>
+							{text}
+						</text>
 					</g>
+				);
+			})}
+			{/* Villes des matchs extérieurs, en grandes lettres */}
+			{GAMES.filter((g) => g.cityLabel).map((g) => {
+				const p = toScreen(project(PLACES[g.arena].coords as LonLat), view);
+				const k = 1 - 0.4 * compactAt(frame);
+				return (
+					<text
+						key={g.arena}
+						x={p.x + g.cityLabel!.dx * k}
+						y={p.y + g.cityLabel!.dy * k}
+						textAnchor="middle"
+						dominantBaseline="central"
+						fontFamily={FONT_TITLE}
+						fontWeight={800}
+						fontSize={64 * k}
+						letterSpacing={3 * k}
+						fill={C.white}
+						stroke={C.bg}
+						strokeWidth={9 * k}
+						strokeLinejoin="round"
+						paintOrder="stroke"
+					>
+						{PLACES[g.arena].city.toUpperCase()}
+					</text>
 				);
 			})}
 			<g opacity={near}>

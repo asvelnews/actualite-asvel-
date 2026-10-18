@@ -275,7 +275,7 @@ const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 			<div style={{display: 'flex', alignItems: 'center', gap: 18, marginTop: 6}}>
 				<div>
 					<div style={{fontSize: 50, fontWeight: 800, lineHeight: 1}}>{from.iata}</div>
-					<Label>{from.name.toUpperCase()}</Label>
+					<Label>{from.name.toUpperCase()} · PISTE {s.depRunway}</Label>
 				</div>
 				<div style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 					<div style={{fontSize: 26, fontWeight: 800, color, fontVariantNumeric: 'tabular-nums'}}>{Math.round(st.f * 100)} %</div>
@@ -285,7 +285,7 @@ const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 				</div>
 				<div style={{textAlign: 'right'}}>
 					<div style={{fontSize: 50, fontWeight: 800, lineHeight: 1}}>{to.iata}</div>
-					<Label>{to.name.toUpperCase()}</Label>
+					<Label>{to.name.toUpperCase()} · PISTE {s.arrRunway}</Label>
 				</div>
 			</div>
 			<div style={{display: 'flex', gap: 10, marginTop: 10}}>
@@ -299,13 +299,13 @@ const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 				{dir === 'ALLER' ? (
 					<>
 						<Cell label="AFFRÈTEMENT VOL ALLER" value={fmtK(rangeAt(p.charter, count))} size={30} sub="carburant inclus" color={C.win} flex={1.25} />
-						<Cell label="PISTES" value={`${s.depRunway} → ${s.arrRunway}`} size={30} sub={`${from.iata} → ${to.iata}`} flex={0.7} />
+						<Cell label="PRIX MOYEN ESTIMÉ" value={`≈ ${fmt(p.charterMean * count)} €`} size={30} sub="vol comparable" color={C.win} flex={0.95} />
 					</>
 				) : (
 					<>
-						<Cell label="VOL ALLER" value={fmtK(aller.charter)} size={27} sub="affrètement" flex={1} />
-						<Cell label="VOL RETOUR" value={fmtK(rangeAt(p.charter, count))} size={27} sub="affrètement" flex={1} />
-						<Cell label="TOTAL A/R" value={fmtK(rangeAt(sumRanges([aller.charter, retour!.charter]), count))} size={27} sub="carburant inclus" color={C.win} flex={1.05} />
+						<Cell label="VOL ALLER" value={fmtK(aller.charter)} size={27} sub={`moyenne ≈ ${fmt(aller.charterMean)} €`} flex={1} />
+						<Cell label="VOL RETOUR" value={fmtK(rangeAt(p.charter, count))} size={27} sub={`moyenne ≈ ${fmt(p.charterMean)} €`} flex={1} />
+						<Cell label="TOTAL A/R" value={fmtK(rangeAt(sumRanges([aller.charter, retour!.charter]), count))} size={27} sub={`moyenne ≈ ${fmt(aller.charterMean + retour!.charterMean)} €`} color={C.win} flex={1.05} />
 					</>
 				)}
 			</div>
@@ -468,6 +468,8 @@ export const Final: React.FC = () => {
 	const cnt = (i: number) => interpolate(frame, [t0 + i * 14, t0 + i * 14 + 45], [0, 1], {...clamp, easing: (x) => 1 - (1 - x) ** 3});
 	const titleO = interpolate(frame, [FINAL_T.zoom, FINAL_T.zoom + 20], [0, 1], clamp);
 	const titleOut = interpolate(frame, [t0 - 20, t0], [1, 0], clamp);
+	const statsOut = interpolate(frame, [FINAL_T.table - 20, FINAL_T.table], [1, 0], clamp);
+	if (frame >= FINAL_T.table) return <FlightsTable />;
 	const tile = (i: number, children: React.ReactNode, style: React.CSSProperties = {}) => (
 		<div style={{opacity: ap(i), transform: `translateY(${(1 - ap(i)) * 40}px)`, background: C.panel, border: `2px solid ${C.panelEdge}`, borderRadius: 16, padding: '10px 16px', boxSizing: 'border-box', ...style}}>{children}</div>
 	);
@@ -492,7 +494,7 @@ export const Final: React.FC = () => {
 					</div>
 				</div>
 			) : null}
-			<div style={{position: 'absolute', left: SIDE, width: INNER, top: 960, display: 'flex', flexDirection: 'column', gap: 12, fontFamily: FONT_TITLE, color: C.white}}>
+			<div style={{position: 'absolute', left: SIDE, width: INNER, top: 960, display: 'flex', flexDirection: 'column', gap: 12, fontFamily: FONT_TITLE, color: C.white, opacity: statsOut}}>
 				<div style={{display: 'flex', gap: 12}}>
 					{[
 						{v: streak, t: plural(streak, 'VICTOIRE CONSÉCUTIVE', 'VICTOIRES CONSÉCUTIVES'), I: <Flame size={40} />},
@@ -559,12 +561,78 @@ export const Final: React.FC = () => {
 	);
 };
 
+/** Tableau des 6 vols : distance, durée, kérosène, prix moyen estimé. */
+const FlightsTable: React.FC = () => {
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
+	const t = FINAL_T.table;
+	const head = spring({frame: frame - t, fps, config: {damping: 15}});
+	const cols = '1.5fr 1fr 0.9fr 1fr 1.1fr';
+	const cell: React.CSSProperties = {fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap'};
+	return (
+		<div style={{position: 'absolute', left: SIDE, width: INNER, top: 960, fontFamily: FONT_TITLE, color: C.white}}>
+			<div style={{opacity: head, transform: `translateY(${(1 - head) * 30}px)`}}>
+				<div style={{display: 'flex', alignItems: 'baseline', gap: 14}}>
+					<div style={{fontSize: 44, fontWeight: 800, letterSpacing: 1}}>LES {FLIGHTS.length} VOLS SIMULÉS</div>
+					<div style={{fontSize: 28, fontWeight: 700, color: C.muted}}>{AIRCRAFT.model}</div>
+				</div>
+				<Label color={C.upcoming}>VALEURS D'UN VOL COMPARABLE · ESTIMATIONS, PAS LES DÉPENSES RÉELLES DE L'ASVEL</Label>
+				<div style={{display: 'grid', gridTemplateColumns: cols, marginTop: 12, padding: '0 16px'}}>
+					{['TRAJET', 'DISTANCE', 'DURÉE', 'KÉROSÈNE', 'PRIX MOYEN'].map((h) => (
+						<Label key={h}>{h}</Label>
+					))}
+				</div>
+			</div>
+			<div style={{display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6}}>
+				{FLIGHTS.map((f, i) => {
+					const p = spring({frame: frame - t - 14 - i * 9, fps, config: {damping: 15}});
+					const color = f.plan.direction === 'ALLER' ? C.win : C.white;
+					return (
+						<div
+							key={i}
+							style={{
+								display: 'grid',
+								gridTemplateColumns: cols,
+								alignItems: 'center',
+								height: 62,
+								padding: '0 16px',
+								borderRadius: 12,
+								background: C.panel,
+								borderLeft: `6px solid ${color}`,
+								opacity: p,
+								transform: `translateX(${(1 - p) * -50}px)`,
+								fontSize: 34,
+								fontWeight: 800,
+							}}
+						>
+							<div style={{...cell, display: 'flex', alignItems: 'center', gap: 10}}>
+								<span style={{color, fontSize: 20, letterSpacing: 1}}>{f.plan.direction}</span>
+								{AIRPORTS[f.plan.from].iata} → {AIRPORTS[f.plan.to].iata}
+							</div>
+							<div style={cell}>{formatKm(f.plan.gcKm)}</div>
+							<div style={cell}>{formatDuration(f.plan.airborneMin)}</div>
+							<div style={cell}>{fmt(f.plan.fuelL)} L</div>
+							<div style={{...cell, color: C.win}}>≈ {fmt(f.plan.charterMean)} €</div>
+						</div>
+					);
+				})}
+			</div>
+			<div style={{marginTop: 10, opacity: spring({frame: frame - t - 80, fps, config: {damping: 15}})}}>
+				<Label>
+					CET = CHOLET-LE PONTREAU · CQF = CALAIS-DUNKERQUE · LIG = LIMOGES-BELLEGARDE · LYS = LYON-SAINT-EXUPÉRY
+				</Label>
+			</div>
+		</div>
+	);
+};
+
 export const Disclaimer: React.FC = () => {
 	const frame = useCurrentFrame();
 	const o = interpolate(frame, [20, 50], [0, 1], clamp);
+	const inFlight = segAt(frame)?.kind === 'flight';
 	return (
 		<div style={{position: 'absolute', left: 0, right: 0, top: 1656, textAlign: 'center', fontFamily: FONT_TEXT, fontSize: 18, fontWeight: 500, color: C.muted, opacity: 0.85 * o, letterSpacing: 0.5}}>
-			{DISCLAIMER} · {ACCOUNT}
+			{inFlight ? 'Vol simulé à titre illustratif – valeurs d\'un vol comparable, pas les dépenses réelles de l\'ASVEL' : `${DISCLAIMER} · ${ACCOUNT}`}
 		</div>
 	);
 };

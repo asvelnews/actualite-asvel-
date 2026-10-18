@@ -2,36 +2,48 @@
 import React from 'react';
 import {C, FONT_TITLE} from '../theme';
 
-// ── Embraer ERJ 145, vue de dessus ──────────────────────────────────────────
+// ── ATR 42-600, vue de dessus ───────────────────────────────────────────────
 // Unités : mètres, nez vers +x, origine au centre de l'appareil.
-// Cotes de référence (Embraer) : longueur 29,87 m, envergure 20,04 m,
-// moteurs AE3007 en nacelles arrière, empennage en T.
-const FUSELAGE =
-	'M15 0C15-.62 14.3-1.14 12.7-1.14L-8.6-1.14C-11.2-1-13.6-.5-15-.16L-15 .16C-13.6.5-11.2 1-8.6 1.14L12.7 1.14C14.3 1.14 15 .62 15 0Z';
-const WINGS = 'M2.4 1.05L-1.4 9.85L-2.55 10.02L-2.45 1.05ZM2.4-1.05L-1.4-9.85L-2.55-10.02L-2.45-1.05Z';
-const STAB = 'M-11.7 0L-13.85 3.72L-14.85 3.78L-14.5 0L-14.85-3.78L-13.85-3.72Z';
-const FLAPS = 'M-2.45 1.6L-2.5 6.2M-2.45-1.6L-2.5-6.2';
-const AILERONS = 'M-2.5 6.6L-2.55 9.6M-2.5-6.6L-2.55-9.6';
+// Cotes de référence (ATR) : longueur 22,67 m, envergure 24,57 m, aile haute,
+// deux turbopropulseurs PW127 à hélices six pales (Ø 3,93 m), empennage en T,
+// train principal logé dans des carénages latéraux.
+const ATR_FUSELAGE =
+	'M11.35 0C11.35-.75 10.6-1.29 9.2-1.29L-4.8-1.29C-7.6-1.15-10-.62-11.3-.24L-11.3.24C-10 .62-7.6 1.15-4.8 1.29L9.2 1.29C10.6 1.29 11.35.75 11.35 0Z';
+const ATR_WINGS = 'M1.45 1.2L.95 12.2L-.45 12.28L-1.15 1.2ZM1.45-1.2L.95-12.2L-.45-12.28L-1.15-1.2Z';
+const ATR_STAB = 'M-9.5 0L-10.45 3.6L-11.15 3.65L-11.05 0L-11.15-3.65L-10.45-3.6Z';
+const ATR_FLAPS = 'M-1.12 1.6L-.7 8.4M-1.12-1.6L-.7-8.4';
+const ATR_AILERONS = 'M-.66 8.9L-.47 11.9M-.66-8.9L-.47-11.9';
+const PROP_R = 1.965;
 
-const Nacelle: React.FC<{side: 1 | -1}> = ({side}) => (
-	<g>
-		<rect x={-9.1} y={side > 0 ? 0.95 : -1.45} width={1.9} height={0.5} fill="#B9C3CC" />
-		<rect x={-10.4} y={side * 2.05 - 0.74} width={4.4} height={1.48} rx={0.72} fill="#D5DCE3" stroke="#59646F" strokeWidth={0.08} />
-		<ellipse cx={-6.05} cy={side * 2.05} rx={0.22} ry={0.6} fill="#20262D" />
-		<rect x={-10.55} y={side * 2.05 - 0.45} width={0.35} height={0.9} rx={0.15} fill="#3B444E" />
-	</g>
-);
+const AtrEngine: React.FC<{side: 1 | -1; propPhase: number}> = ({side, propPhase}) => {
+	const y = side * 4.1;
+	return (
+		<g>
+			{/* Nacelle */}
+			<path d={`M4.2 ${y - 0.42}Q4.55 ${y} 4.2 ${y + 0.42}L3.2 ${y + 0.62}L-2.7 ${y + 0.5}Q-3.3 ${y} -2.7 ${y - 0.5}L3.2 ${y - 0.62}Z`} fill="#E7ECF1" stroke="#5E6973" strokeWidth={0.07} />
+			<rect x={-1.4} y={y - 0.08} width={2.6} height={0.16} fill="#AEB8C2" />
+			{/* Disque d'hélice vu de dessus (flou de rotation) */}
+			<rect x={4.45} y={y - PROP_R} width={0.22} height={PROP_R * 2} rx={0.11} fill="#C9D2DB" opacity={0.35} />
+			{/* Six pales : projection animée sur le plan de vue */}
+			{Array.from({length: 6}, (_, i) => {
+				const l = PROP_R * Math.cos(propPhase + (i * Math.PI) / 3);
+				return <rect key={i} x={4.47} y={y + Math.min(0, l)} width={0.18} height={Math.abs(l)} fill="#1A2129" opacity={0.75} />;
+			})}
+			<ellipse cx={4.62} cy={y} rx={0.32} ry={0.3} fill={C.win} stroke="#0B0F14" strokeWidth={0.05} />
+		</g>
+	);
+};
 
-export const Erj145: React.FC<{lengthPx: number; gear: number; shadow?: boolean}> = ({lengthPx, gear, shadow}) => {
-	const s = lengthPx / 30;
+export const Atr42: React.FC<{lengthPx: number; gear: number; propPhase?: number; shadow?: boolean}> = ({lengthPx, gear, propPhase = 0, shadow}) => {
+	const s = lengthPx / 22.67;
 	if (shadow) {
 		return (
 			<g transform={`scale(${s})`} fill="#000">
-				<path d={FUSELAGE} />
-				<path d={WINGS} />
-				<path d={STAB} />
-				<rect x={-10.4} y={1.31} width={4.4} height={1.48} rx={0.72} />
-				<rect x={-10.4} y={-2.79} width={4.4} height={1.48} rx={0.72} />
+				<path d={ATR_FUSELAGE} />
+				<path d={ATR_WINGS} />
+				<path d={ATR_STAB} />
+				<rect x={-2.7} y={3.5} width={7.2} height={1.2} rx={0.5} />
+				<rect x={-2.7} y={-4.7} width={7.2} height={1.2} rx={0.5} />
 			</g>
 		);
 	}
@@ -39,29 +51,33 @@ export const Erj145: React.FC<{lengthPx: number; gear: number; shadow?: boolean}
 		<g transform={`scale(${s})`}>
 			{/* Train d'atterrissage (visible quand il est sorti) */}
 			<g opacity={gear} fill="#151A20">
-				<rect x={-3.55} y={2.1} width={1.2} height={0.75} rx={0.2} />
-				<rect x={-3.55} y={-2.85} width={1.2} height={0.75} rx={0.2} />
-				<rect x={10.9} y={-0.32} width={0.9} height={0.64} rx={0.2} />
+				<rect x={-0.9} y={1.5} width={1.1} height={0.55} rx={0.2} />
+				<rect x={-0.9} y={-2.05} width={1.1} height={0.55} rx={0.2} />
+				<rect x={8.6} y={-0.28} width={0.8} height={0.56} rx={0.2} />
 			</g>
-			<path d={WINGS} fill="#E3E8ED" stroke="#5E6973" strokeWidth={0.08} strokeLinejoin="round" />
-			<path d={FLAPS} stroke="#9AA5AF" strokeWidth={0.07} />
-			<path d={AILERONS} stroke="#9AA5AF" strokeWidth={0.07} />
-			{/* Saumons d'aile aux couleurs du club */}
-			<path d="M-1.4 9.85L-2.55 10.02L-2.53 9.3L-1.17 9.3Z" fill={C.win} />
-			<path d="M-1.4-9.85L-2.55-10.02L-2.53-9.3L-1.17-9.3Z" fill={C.win} />
-			<path d={FUSELAGE} fill="#F7F9FB" stroke="#5E6973" strokeWidth={0.09} />
+			<path d={ATR_FUSELAGE} fill="#F7F9FB" stroke="#5E6973" strokeWidth={0.08} />
+			{/* Carénages du train principal */}
+			<path d="M2.2 1.25Q.2 1.62-2.6 1.55L-2.6 1.25Z" fill="#DDE3E9" stroke="#5E6973" strokeWidth={0.06} />
+			<path d="M2.2-1.25Q.2-1.62-2.6-1.55L-2.6-1.25Z" fill="#DDE3E9" stroke="#5E6973" strokeWidth={0.06} />
 			{/* Bande dorsale verte et noire */}
-			<path d="M10.5-.32L-12.5-.22L-12.5.22L10.5.32Z" fill={C.win} />
-			<path d="M10.5-.1L-12.5-.06L-12.5.06L10.5.1Z" fill="#0B0F14" />
-			<Nacelle side={1} />
-			<Nacelle side={-1} />
-			<path d={STAB} fill="#E3E8ED" stroke="#5E6973" strokeWidth={0.08} strokeLinejoin="round" />
-			{/* Dérive vue de dessus */}
-			<path d="M-9.4 0L-14.75-.2L-14.95 0L-14.75.2Z" fill="#0B0F14" />
-			<path d="M-11.2-.12L-14.6-.17L-14.6.17L-11.2.12Z" fill={C.win} />
+			<path d="M8.6-.3L-9.6-.2L-9.6.2L8.6.3Z" fill={C.win} />
+			<path d="M8.6-.09L-9.6-.05L-9.6.05L8.6.09Z" fill="#0B0F14" />
+			{/* Aile haute (au-dessus du fuselage) */}
+			<path d={ATR_WINGS} fill="#E3E8ED" stroke="#5E6973" strokeWidth={0.07} strokeLinejoin="round" />
+			<rect x={-1.15} y={-1.2} width={2.6} height={2.4} fill="#E3E8ED" />
+			<path d={ATR_FLAPS} stroke="#9AA5AF" strokeWidth={0.06} />
+			<path d={ATR_AILERONS} stroke="#9AA5AF" strokeWidth={0.06} />
+			<path d="M.95 12.2L-.45 12.28L-.4 11.5L.98 11.5Z" fill={C.win} />
+			<path d="M.95-12.2L-.45-12.28L-.4-11.5L.98-11.5Z" fill={C.win} />
+			<AtrEngine side={1} propPhase={propPhase} />
+			<AtrEngine side={-1} propPhase={propPhase + 0.4} />
+			{/* Empennage en T */}
+			<path d="M-6.6 0L-11.15-.18L-11.3 0L-11.15.18Z" fill="#0B0F14" />
+			<path d={ATR_STAB} fill="#E3E8ED" stroke="#5E6973" strokeWidth={0.07} strokeLinejoin="round" />
+			<path d="M-9.6-.12L-11.05-.14L-11.05.14L-9.6.12Z" fill={C.win} />
 			{/* Pare-brise */}
-			<path d="M13.75-.78Q14.75 0 13.75.78L13.15.62Q13.85 0 13.15-.62Z" fill="#1A2633" />
-			<text x={4.5} y={0.25} fontFamily={FONT_TITLE} fontWeight={800} fontSize={0.62} fill="#0B0F14" textAnchor="middle" letterSpacing={0.05}>
+			<path d="M10.05-.92Q11.05 0 10.05.92L9.45.74Q10.15 0 9.45-.74Z" fill="#1A2633" />
+			<text x={5.6} y={0.24} fontFamily={FONT_TITLE} fontWeight={800} fontSize={0.6} fill="#0B0F14" textAnchor="middle" letterSpacing={0.04}>
 				ASVEL
 			</text>
 		</g>

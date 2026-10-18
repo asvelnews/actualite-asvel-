@@ -4,7 +4,7 @@ import {AIRPORTS, type LonLat} from '../data/tour';
 import {departementPaths, neighbourPaths, partial, project, pxPerKm, smoothAngle, along, type Pt} from '../lib/geo';
 import {BUSES, FLIGHTS, HEIGHT, WIDTH, busProgress, cameraAt, mapTransform, planeAt, toScreen, type Tone, type View} from '../lib/timeline';
 import {C, FONT_TITLE} from '../theme';
-import {Coach, Erj145} from './Vehicles';
+import {Atr42, Coach} from './Vehicles';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
@@ -103,14 +103,14 @@ const Plane: React.FC<{frame: number; view: View}> = ({frame, view}) => {
 	const st = planeAt(s, frame);
 	const p = toScreen(st.pos, view);
 	const fade = interpolate(frame, [s.start, s.start + 8, s.end - 6, s.end], [0, 1, 1, 0], clamp);
-	const len = 150 + st.alt * 46;
+	const len = 140 + st.alt * 40;
 	return (
 		<g opacity={fade}>
 			<g transform={`translate(${p.x + 3 + st.alt * 30} ${p.y + 4 + st.alt * 40}) rotate(${st.angle})`} opacity={0.38 - st.alt * 0.14}>
-				<Erj145 lengthPx={len * (1 - st.alt * 0.12)} gear={0} shadow />
+				<Atr42 lengthPx={len * (1 - st.alt * 0.12)} gear={0} shadow />
 			</g>
 			<g transform={`translate(${p.x} ${p.y}) rotate(${st.angle})`}>
-				<Erj145 lengthPx={len} gear={st.gear} />
+				<Atr42 lengthPx={len} gear={st.gear} propPhase={frame * 0.9} />
 			</g>
 		</g>
 	);
