@@ -2,14 +2,16 @@
   "name": "asvel-tour",
   "version": "1.0.0",
   "private": true,
-  "description": "ASVEL TOUR – vidéo Reel 1080x1920 (Remotion) affichant les victoires de l'ASVEL sur la carte de France",
+  "description": "ASVEL TOUR – Reel Instagram 1080x1920 60 i/s (Remotion) : tournée aller-retour depuis Lyon et victoires de l'ASVEL sur la carte de France",
   "type": "module",
   "scripts": {
     "build:map": "node scripts/build-france.mjs",
     "studio": "remotion studio",
-    "render": "remotion render AsvelTour out/asvel-tour.mp4 --codec=h264 --crf=16",
-    "still": "remotion still AsvelTour out/frame.png --frame=60",
-    "typecheck": "tsc --noEmit"
+    "render": "remotion render AsvelTour out/asvel-tour.mp4 --codec=h264 --crf=17 --x264-preset=slow",
+    "still": "remotion still AsvelTour out/frame.png --frame=600",
+    "fetch:routes": "node scripts/fetch-routes.mjs",
+    "typecheck": "tsc --noEmit",
+    "export": "remotion render AsvelTour out/asvel-tour.mp4 --codec=h264 --crf=17 --x264-preset=slow && ffmpeg -y -i out/asvel-tour.mp4 -vf scale=in_range=full:out_range=tv,format=yuv420p -c:v libx264 -profile:v high -level 4.2 -crf 17 -preset slow -r 60 -movflags +faststart -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 export/asvel-tour.mp4"
   },
   "dependencies": {
     "@fontsource/barlow": "^5.1.0",
@@ -25,6 +27,7 @@
     "@types/react": "^18.3.12",
     "topojson-client": "^3.1.0",
     "typescript": "^5.6.3",
-    "world-atlas": "^2.0.2"
+    "world-atlas": "^2.0.2",
+    "esbuild": "0.28.1"
   }
 }

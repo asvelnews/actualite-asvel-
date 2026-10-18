@@ -7,7 +7,7 @@ import '@fontsource/barlow/700.css';
 export const C = {
 	bg: '#070B10',
 	bg2: '#0D141C',
-	land: '#121B25',
+	land: '#17222E',
 	landEdge: '#3C5064',
 	neighbour: '#0C131A',
 	neighbourEdge: '#1A2530',
@@ -17,7 +17,6 @@ export const C = {
 	muted: '#8A99A8',
 	dim: '#3A4856',
 	win: '#1FD16B',
-	winDark: '#0C5A2E',
 	loss: '#F0475A',
 	upcoming: '#FFB800',
 	route: '#E8EEF4',

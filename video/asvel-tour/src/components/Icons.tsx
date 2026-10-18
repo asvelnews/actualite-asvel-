@@ -51,29 +51,3 @@ export const Stadium: React.FC<P> = ({size = 28, color = '#fff', style}) => (
 		<path d="M7 17.6v-4M12 18.8v-4.4M17 17.6v-4" stroke={color} strokeWidth="1.6" />
 	</svg>
 );
-
-/** Avion vu de dessus, nez orienté vers la droite (angle 0°). */
-export const PlaneTop: React.FC<{size: number; color: string}> = ({size, color}) => (
-	<g transform={`scale(${size / 48}) translate(-24 -24)`}>
-		<path
-			d="M46 24c0-1.5-1.3-2.6-2.9-2.6H31L20 5h-4.4l5.6 16.4H10.6L7 16.6H3.6L5.8 24l-2.2 7.4H7l3.6-4.8h10.6L15.6 43H20l11-16.4h12.1c1.6 0 2.9-1.1 2.9-2.6z"
-			fill={color}
-			stroke="#070B10"
-			strokeWidth="1.4"
-			strokeLinejoin="round"
-		/>
-	</g>
-);
-
-/** Bus vu de dessus, avant orienté vers la droite (angle 0°). */
-export const BusTop: React.FC<{size: number; color: string; accent: string}> = ({size, color, accent}) => (
-	<g transform={`scale(${size / 48}) translate(-24 -24)`}>
-		<rect x="4" y="15" width="40" height="18" rx="4" fill={color} stroke="#070B10" strokeWidth="1.4" />
-		<rect x="37" y="17" width="5" height="14" rx="1.5" fill="#070B10" />
-		<rect x="8" y="18" width="26" height="12" rx="2" fill={accent} />
-		<rect x="5.5" y="13.4" width="5" height="2" rx="1" fill="#070B10" />
-		<rect x="5.5" y="32.6" width="5" height="2" rx="1" fill="#070B10" />
-		<rect x="33" y="13.4" width="5" height="2" rx="1" fill="#070B10" />
-		<rect x="33" y="32.6" width="5" height="2" rx="1" fill="#070B10" />
-	</g>
-);

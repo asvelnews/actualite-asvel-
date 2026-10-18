@@ -1,13 +1,15 @@
 import {geoConicConformal, geoInterpolate, geoPath} from 'd3-geo';
-import type {Feature, MultiPolygon} from 'geojson';
+import type {Feature, FeatureCollection, MultiPolygon} from 'geojson';
 import mapData from '../data/france.json';
 import type {LonLat} from '../data/tour';
 
-export const france = mapData.france as unknown as Feature<MultiPolygon>;
+type Dep = Feature<MultiPolygon, {code: string; nom: string}>;
+export const departements = mapData.departements as unknown as Dep[];
 export const neighbours = mapData.neighbours as unknown as Feature<MultiPolygon>[];
+const franceFc: FeatureCollection = {type: 'FeatureCollection', features: departements};
 
 // Emprise de la carte en vue « France entière » (pixels de la vidéo 1080×1920).
-export const MAP_BOX = {x0: 80, y0: 430, x1: 1000, y1: 1350};
+export const MAP_BOX = {x0: 90, y0: 360, x1: 990, y1: 1260};
 export const MAP_CENTER = {x: (MAP_BOX.x0 + MAP_BOX.x1) / 2, y: (MAP_BOX.y0 + MAP_BOX.y1) / 2};
 
 // Projection conique conforme de Lambert, paramètres du Lambert-93 (RGF93),
@@ -21,11 +23,11 @@ export const projection = geoConicConformal()
 			[MAP_BOX.x0, MAP_BOX.y0],
 			[MAP_BOX.x1, MAP_BOX.y1],
 		],
-		france,
+		franceFc,
 	);
 
 const path = geoPath(projection);
-export const francePath = path(france) ?? '';
+export const departementPaths = departements.map((d) => path(d) ?? '');
 export const neighbourPaths = neighbours.map((n) => path(n) ?? '');
 
 export type Pt = {x: number; y: number};
@@ -36,96 +38,121 @@ export const project = (c: LonLat): Pt => {
 };
 
 const EARTH_RADIUS_KM = 6371.0088; // rayon moyen IUGG
+const RAD = Math.PI / 180;
 
 /** Distance orthodromique (formule de haversine), en km. */
 export const haversineKm = ([lon1, lat1]: LonLat, [lon2, lat2]: LonLat): number => {
-	const r = Math.PI / 180;
-	const dLat = (lat2 - lat1) * r;
-	const dLon = (lon2 - lon1) * r;
-	const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(dLon / 2) ** 2;
+	const dLat = (lat2 - lat1) * RAD;
+	const dLon = (lon2 - lon1) * RAD;
+	const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * RAD) * Math.cos(lat2 * RAD) * Math.sin(dLon / 2) ** 2;
 	return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(a));
 };
 
-/** Points (projetés) le long de l'orthodromie entre deux lieux. */
-export const greatCircle = (a: LonLat, b: LonLat, n = 160): Pt[] => {
-	const interp = geoInterpolate(a, b);
-	return Array.from({length: n + 1}, (_, i) => project(interp(i / n) as LonLat));
+/** Cap vrai initial de a vers b, en degrés [0, 360[. */
+export const bearing = ([lon1, lat1]: LonLat, [lon2, lat2]: LonLat): number => {
+	const y = Math.sin((lon2 - lon1) * RAD) * Math.cos(lat2 * RAD);
+	const x = Math.cos(lat1 * RAD) * Math.sin(lat2 * RAD) - Math.sin(lat1 * RAD) * Math.cos(lat2 * RAD) * Math.cos((lon2 - lon1) * RAD);
+	return ((Math.atan2(y, x) / RAD) + 360) % 360;
 };
 
-/** Points (projetés) d'un trajet routier stylisé : légère courbe entre deux lieux. */
-export const roadCurve = (a: LonLat, b: LonLat, n = 60): Pt[] => {
-	const p0 = project(a);
-	const p2 = project(b);
-	const dx = p2.x - p0.x;
-	const dy = p2.y - p0.y;
-	const ctrl = {x: (p0.x + p2.x) / 2 - dy * 0.18, y: (p0.y + p2.y) / 2 + dx * 0.18};
-	return Array.from({length: n + 1}, (_, i) => {
-		const t = i / n;
-		const u = 1 - t;
-		return {
-			x: u * u * p0.x + 2 * u * t * ctrl.x + t * t * p2.x,
-			y: u * u * p0.y + 2 * u * t * ctrl.y + t * t * p2.y,
-		};
-	});
+/** Point atteint depuis `a` en suivant le cap `deg` sur `km` kilomètres. */
+export const destination = ([lon, lat]: LonLat, deg: number, km: number): LonLat => {
+	const d = km / EARTH_RADIUS_KM;
+	const t = deg * RAD;
+	const lat2 = Math.asin(Math.sin(lat * RAD) * Math.cos(d) + Math.cos(lat * RAD) * Math.sin(d) * Math.cos(t));
+	const lon2 = lon * RAD + Math.atan2(Math.sin(t) * Math.sin(d) * Math.cos(lat * RAD), Math.cos(d) - Math.sin(lat * RAD) * Math.sin(lat2));
+	return [lon2 / RAD, lat2 / RAD];
 };
 
-/** Position et cap le long d'une polyligne, pour t ∈ [0, 1] (abscisse curviligne). */
-export const along = (pts: Pt[], t: number): Pt & {angle: number} => {
+export const lerpLonLat = (a: LonLat, b: LonLat, t: number): LonLat => geoInterpolate(a, b)(t) as LonLat;
+
+export const angleDiff = (a: number, b: number) => Math.abs(((a - b + 540) % 360) - 180);
+
+/** Polyligne avec abscisses curvilignes pré-calculées. */
+export type Line = {pts: Pt[]; lens: number[]; total: number};
+
+export const makeLine = (pts: Pt[]): Line => {
 	const lens = [0];
-	for (let i = 1; i < pts.length; i++) {
-		lens.push(lens[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+	for (let i = 1; i < pts.length; i++) lens.push(lens[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+	return {pts, lens, total: lens[lens.length - 1]};
+};
+
+const indexAt = (line: Line, target: number) => {
+	let lo = 1;
+	let hi = line.pts.length - 1;
+	while (lo < hi) {
+		const mid = (lo + hi) >> 1;
+		if (line.lens[mid] < target) lo = mid + 1;
+		else hi = mid;
 	}
-	const total = lens[lens.length - 1];
-	const target = Math.min(Math.max(t, 0), 1) * total;
-	let i = 1;
-	while (i < pts.length - 1 && lens[i] < target) i++;
-	const seg = lens[i] - lens[i - 1] || 1;
-	const k = (target - lens[i - 1]) / seg;
-	const a = pts[i - 1];
-	const b = pts[i];
+	return lo;
+};
+
+/** Position et orientation (degrés écran) pour t ∈ [0, 1]. */
+export const along = (line: Line, t: number): Pt & {angle: number} => {
+	const target = Math.min(Math.max(t, 0), 1) * line.total;
+	const i = Math.max(indexAt(line, target), 1);
+	const a = line.pts[i - 1];
+	const b = line.pts[i] ?? a;
+	const seg = line.lens[i] - line.lens[i - 1] || 1;
+	const k = (target - line.lens[i - 1]) / seg;
 	return {x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, angle: (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI};
 };
 
-/** Sous-polyligne de 0 à t, terminée par le point interpolé exact. */
-export const partial = (pts: Pt[], t: number): Pt[] => {
-	if (t <= 0) return [pts[0]];
-	if (t >= 1) return pts;
-	const end = along(pts, t);
-	const lens = [0];
-	for (let i = 1; i < pts.length; i++) {
-		lens.push(lens[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
-	}
-	const target = t * lens[lens.length - 1];
-	return [...pts.filter((_, i) => lens[i] < target), end];
+/** Orientation lissée : direction entre deux points encadrant t (fenêtre `w`). */
+export const smoothAngle = (line: Line, t: number, w: number) => {
+	const a = along(line, Math.max(t - w, 0));
+	const b = along(line, Math.min(t + w, 1));
+	if (Math.hypot(b.x - a.x, b.y - a.y) < 1e-9) return along(line, t).angle;
+	return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
 };
 
-// ── Estimations de temps de trajet ───────────────────────────────────────────
-// Vol : vitesse moyenne bloc d'un avion de ligne régional (≈ 750 km/h en
-// croisière) + 20 min de roulage, montée et approche.
-const FLIGHT_CRUISE_KMH = 750;
-const FLIGHT_OVERHEAD_MIN = 20;
-// Route : distance à vol d'oiseau × 1,3 (coefficient de détour routier moyen)
-// et 45 km/h de moyenne en zone périurbaine.
-const ROAD_DETOUR = 1.3;
-const ROAD_KMH = 45;
-
-const roundTo5 = (min: number) => Math.max(5, Math.round(min / 5) * 5);
-
-export const flightEstimate = (a: LonLat, b: LonLat) => {
-	const km = haversineKm(a, b);
-	return {km, minutes: roundTo5(FLIGHT_OVERHEAD_MIN + (km / FLIGHT_CRUISE_KMH) * 60)};
+/** Sous-polyligne de 0 à t. */
+export const partial = (line: Line, t: number): Pt[] => {
+	if (t <= 0) return [line.pts[0]];
+	if (t >= 1) return line.pts;
+	const target = t * line.total;
+	const i = indexAt(line, target);
+	return [...line.pts.slice(0, i), along(line, t)];
 };
 
-export const roadEstimate = (a: LonLat, b: LonLat) => {
-	const km = haversineKm(a, b) * ROAD_DETOUR;
-	return {km, minutes: roundTo5((km / ROAD_KMH) * 60)};
+export const cubic = (p0: Pt, p1: Pt, p2: Pt, p3: Pt, n: number): Pt[] =>
+	Array.from({length: n + 1}, (_, i) => {
+		const t = i / n;
+		const u = 1 - t;
+		return {
+			x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+			y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y,
+		};
+	});
+
+export const bbox = (pts: Pt[]) => {
+	const xs = pts.map((p) => p.x);
+	const ys = pts.map((p) => p.y);
+	return {x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys)};
+};
+
+/** Pixels de la carte de base par kilomètre, autour d'un point. */
+export const pxPerKm = (c: LonLat) => {
+	const a = project(c);
+	const b = project(destination(c, 90, 10));
+	return Math.hypot(b.x - a.x, b.y - a.y) / 10;
 };
 
 export const formatDuration = (min: number) => {
-	const h = Math.floor(min / 60);
-	const m = min % 60;
-	if (h === 0) return `${m} MIN`;
-	return `${h} H ${String(m).padStart(2, '0')}`;
+	const m = Math.round(min);
+	const h = Math.floor(m / 60);
+	const r = m % 60;
+	if (h === 0) return `${r} MIN`;
+	return `${h} H ${String(r).padStart(2, '0')}`;
 };
 
-export const formatKm = (km: number) => `${Math.round(km).toLocaleString('fr-FR')} KM`;
+export const formatClock = (min: number) => {
+	const s = Math.max(0, Math.round(min * 60));
+	return `${String(Math.floor(s / 3600)).padStart(1, '0')}:${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}`;
+};
+
+export const fmt = (n: number) => Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ');
+export const formatKm = (km: number, digits = 0) =>
+	`${digits ? km.toLocaleString('fr-FR', {minimumFractionDigits: digits, maximumFractionDigits: digits}).replace(/ | /g, ' ') : fmt(km)} KM`;
+export const formatEur = (r: [number, number]) => `${fmt(r[0])} – ${fmt(r[1])} €`;
