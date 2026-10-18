@@ -1,8 +1,8 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {ACCOUNT, AIRPORTS, DISCLAIMER, GAMES, PLACES, scoreLine, TEAM, type Game} from '../data/tour';
-import {AIRCRAFT, FUEL_PRICE, sumRanges, type Range} from '../lib/aviation';
-import {fmt, formatClock, formatDuration, formatEur, formatKm} from '../lib/geo';
+import {AIRCRAFT} from '../lib/aviation';
+import {fmt, formatClock, formatDuration, formatKm, trueHeading} from '../lib/geo';
 import {
 	BUSES,
 	FINAL_T,
@@ -137,7 +137,11 @@ export const Strip: React.FC = () => {
 
 // ── Bannière d'état (départ, retour, arrivée à la base) ─────────────────────
 const bannerFor = (s: Seg | undefined, frame: number): {text: string; icon: 'plane' | 'bus' | 'house'; color: string; since: number} | null => {
-	if (!s || s.kind === 'stage' || s.kind === 'result' || s.kind === 'upcoming') return null;
+	if (s?.kind === 'stage') {
+		const city = PLACES[s.game.arena].city.toUpperCase();
+		return {text: `ÉTAPE ${s.stage} · ${s.game.home ? `${city} · DOMICILE` : city}`, icon: s.game.airport ? 'plane' : 'bus', color: C.win, since: s.start};
+	}
+	if (!s || s.kind === 'result' || s.kind === 'upcoming') return null;
 	if (s.kind === 'bus' && s.arrivesAtBase && frame >= s.moveEnd) return {text: 'DE RETOUR À LA BASE', icon: 'house', color: C.win, since: s.moveEnd};
 	if (s.tone === 'retour') {
 		const first = [...BUSES, ...FLIGHTS].filter((x) => x.game === s.game && x.tone === 'retour').sort((a, b) => a.start - b.start)[0];
@@ -243,10 +247,6 @@ const Progress: React.FC<{p: number; color: string; icon: React.ReactNode}> = ({
 	</div>
 );
 
-const rangeAt = (r: Range, k: number): Range => [r[0] * k, r[1] * k];
-const fmtRange = (r: Range) => formatEur([Math.round(r[0] / 10) * 10, Math.round(r[1] / 10) * 10]);
-/** Fourchette en milliers d'euros : « 11,2 – 17,3 k€ » */
-const fmtK = (r: Range) => `${(r[0] / 1000).toFixed(1).replace('.', ',')} – ${(r[1] / 1000).toFixed(1).replace('.', ',')} k€`;
 
 const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 	const frame = useCurrentFrame();
@@ -256,11 +256,9 @@ const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 	const to = AIRPORTS[p.to];
 	const dir = p.direction;
 	const color = dir === 'ALLER' ? C.win : C.white;
-	const count = interpolate(frame, [s.start + 4, s.start + 50], [0, 1], clamp);
-	const fuelNow = rangeAt(FUEL_PRICE, st.fuelL);
-	const pair = FLIGHTS.filter((f) => f.game === s.game);
-	const aller = pair.find((f) => f.plan.direction === 'ALLER')!.plan;
-	const retour = pair.find((f) => f.plan.direction === 'RETOUR')?.plan;
+	const altM = st.alt * AIRCRAFT.cruiseAltM;
+	const heading = Math.round(trueHeading(st.pos, st.angle)) % 360;
+	const wind = Math.round(p.windKmh);
 	return (
 		<Panel s={s} border={color}>
 			<div style={{display: 'flex', alignItems: 'center', gap: 14}}>
@@ -295,19 +293,10 @@ const FlightPanel: React.FC<{s: FlightSeg}> = ({s}) => {
 				<Cell label="KÉROSÈNE" value={`${fmt(st.fuelL)} L`} />
 			</div>
 			<div style={{display: 'flex', gap: 10, marginTop: 10}}>
-				<Cell label="CARBURANT (INCLUS)" value={fmtRange(fuelNow)} size={30} sub={`Jet A-1 ${FUEL_PRICE[0].toFixed(2).replace('.', ',')}–${FUEL_PRICE[1].toFixed(2).replace('.', ',')} €/L`} flex={1.25} />
-				{dir === 'ALLER' ? (
-					<>
-						<Cell label="AFFRÈTEMENT VOL ALLER" value={fmtK(rangeAt(p.charter, count))} size={30} sub="carburant inclus" color={C.win} flex={1.25} />
-						<Cell label="PRIX MOYEN ESTIMÉ" value={`≈ ${fmt(p.charterMean * count)} €`} size={30} sub="vol comparable" color={C.win} flex={0.95} />
-					</>
-				) : (
-					<>
-						<Cell label="VOL ALLER" value={fmtK(aller.charter)} size={27} sub={`moyenne ≈ ${fmt(aller.charterMean)} €`} flex={1} />
-						<Cell label="VOL RETOUR" value={fmtK(rangeAt(p.charter, count))} size={27} sub={`moyenne ≈ ${fmt(p.charterMean)} €`} flex={1} />
-						<Cell label="TOTAL A/R" value={fmtK(rangeAt(sumRanges([aller.charter, retour!.charter]), count))} size={27} sub={`moyenne ≈ ${fmt(aller.charterMean + retour!.charterMean)} €`} color={C.win} flex={1.05} />
-					</>
-				)}
+				<Cell label="ALTITUDE" value={`${fmt(Math.round(altM / 50) * 50)} M`} sub={`profil simulé · FL${String(Math.round((altM / 0.3048 / 100) / 5) * 5).padStart(3, '0')}`} />
+				<Cell label="CAP" value={`${String(heading).padStart(3, '0')}°`} sub={st.alt > 0.05 ? 'cap vrai' : `piste ${st.f < 0.5 ? s.depRunway : s.arrRunway}`} />
+				<Cell label="VENT MOYEN" value={`${wind >= 0 ? '+' : '−'}${Math.abs(wind)} KM/H`} sub={wind >= 0 ? 'vent arrière' : 'vent de face'} color={wind >= 0 ? C.win : C.white} />
+				<Cell label="VITESSE SOL CROISIÈRE" value={`${fmt(p.groundSpeedKmh)} KM/H`} sub={`${AIRCRAFT.model} · ${AIRCRAFT.seats} places`} flex={1.2} />
 			</div>
 		</Panel>
 	);
@@ -386,7 +375,8 @@ const ResultPanel: React.FC<{s: ResultSeg}> = ({s}) => {
 	return (
 		<Panel s={s} border={C.win}>
 			<div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-				<div style={{fontSize: 34, fontWeight: 800, letterSpacing: 4, color: C.win}}>VICTOIRE {s.winNumber}</div>
+				<div style={{fontSize: 40, fontWeight: 800, letterSpacing: 4, color: C.win, transform: `scale(${0.6 + 0.4 * p})`, transformOrigin: 'left center'}}>VICTOIRE !</div>
+				<div style={{background: C.win, color: '#04140A', borderRadius: 8, padding: '2px 12px', fontSize: 26, fontWeight: 800, letterSpacing: 1}}>N°{s.winNumber}</div>
 				<Label>{s.game.home ? 'À DOMICILE' : 'À L’EXTÉRIEUR'} · {PLACES[s.game.arena].name.toUpperCase()}</Label>
 			</div>
 			<div style={{display: 'flex', alignItems: 'center', marginTop: 10}}>
@@ -451,7 +441,6 @@ const totals = (() => {
 		km: plans.reduce((a, p) => a + p.gcKm, 0),
 		minutes: plans.reduce((a, p) => a + p.airborneMin, 0),
 		fuelL: plans.reduce((a, p) => a + p.fuelL, 0),
-		charter: sumRanges(plans.map((p) => p.charter)),
 		busKm: BUSES.reduce((a, b) => a + b.km, 0),
 	};
 })();
@@ -469,6 +458,7 @@ export const Final: React.FC = () => {
 	const titleO = interpolate(frame, [FINAL_T.zoom, FINAL_T.zoom + 20], [0, 1], clamp);
 	const titleOut = interpolate(frame, [t0 - 20, t0], [1, 0], clamp);
 	const statsOut = interpolate(frame, [FINAL_T.table - 20, FINAL_T.table], [1, 0], clamp);
+	if (frame >= FINAL_T.outro) return <Outro />;
 	if (frame >= FINAL_T.table) return <FlightsTable />;
 	const tile = (i: number, children: React.ReactNode, style: React.CSSProperties = {}) => (
 		<div style={{opacity: ap(i), transform: `translateY(${(1 - ap(i)) * 40}px)`, background: C.panel, border: `2px solid ${C.panelEdge}`, borderRadius: 16, padding: '10px 16px', boxSizing: 'border-box', ...style}}>{children}</div>
@@ -530,7 +520,7 @@ export const Final: React.FC = () => {
 					{tile(4, <><Label>DISTANCE AÉRIENNE TOTALE</Label>{big(formatKm(totals.km * cnt(4)))}</>, {width: (INNER - 12) / 2})}
 					{tile(5, <><Label>DURÉE TOTALE DES VOLS</Label>{big(formatDuration(totals.minutes * cnt(5)))}</>, {width: (INNER - 12) / 2})}
 					{tile(6, <><Label>KÉROSÈNE TOTAL ESTIMÉ</Label>{big(`${fmt(totals.fuelL * cnt(6))} L`)}</>, {width: (INNER - 12) / 2})}
-					{tile(7, <><Label>COÛT TOTAL ESTIMÉ DES AFFRÈTEMENTS</Label>{big(formatEur([Math.round((totals.charter[0] * cnt(7)) / 100) * 100, Math.round((totals.charter[1] * cnt(7)) / 100) * 100]), C.win)}</>, {width: (INNER - 12) / 2})}
+					{tile(7, <><Label>{Object.keys(AIRPORTS).length} AÉRODROMES DESSERVIS</Label>{big(Object.values(AIRPORTS).map((a) => a.iata).join(' · '), C.win)}</>, {width: (INNER - 12) / 2})}
 				</div>
 				{tile(
 					8,
@@ -561,7 +551,7 @@ export const Final: React.FC = () => {
 	);
 };
 
-/** Tableau des 6 vols : distance, durée, kérosène, prix moyen estimé. */
+/** Tableau des 6 vols : distance, durée, kérosène, vent. */
 const FlightsTable: React.FC = () => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
@@ -576,9 +566,9 @@ const FlightsTable: React.FC = () => {
 					<div style={{fontSize: 44, fontWeight: 800, letterSpacing: 1}}>LES {FLIGHTS.length} VOLS SIMULÉS</div>
 					<div style={{fontSize: 28, fontWeight: 700, color: C.muted}}>{AIRCRAFT.model}</div>
 				</div>
-				<Label color={C.upcoming}>VALEURS D'UN VOL COMPARABLE · ESTIMATIONS, PAS LES DÉPENSES RÉELLES DE L'ASVEL</Label>
+				<Label color={C.upcoming}>VOLS SIMULÉS À TITRE ILLUSTRATIF · VALEURS ESTIMÉES</Label>
 				<div style={{display: 'grid', gridTemplateColumns: cols, marginTop: 12, padding: '0 16px'}}>
-					{['TRAJET', 'DISTANCE', 'DURÉE', 'KÉROSÈNE', 'PRIX MOYEN'].map((h) => (
+					{['TRAJET', 'DISTANCE', 'DURÉE', 'KÉROSÈNE', 'VENT MOYEN'].map((h) => (
 						<Label key={h}>{h}</Label>
 					))}
 				</div>
@@ -612,15 +602,67 @@ const FlightsTable: React.FC = () => {
 							<div style={cell}>{formatKm(f.plan.gcKm)}</div>
 							<div style={cell}>{formatDuration(f.plan.airborneMin)}</div>
 							<div style={cell}>{fmt(f.plan.fuelL)} L</div>
-							<div style={{...cell, color: C.win}}>≈ {fmt(f.plan.charterMean)} €</div>
+							<div style={{...cell, color: f.plan.windKmh >= 0 ? C.win : C.muted}}>
+								{f.plan.windKmh >= 0 ? '+' : '−'}
+								{Math.abs(Math.round(f.plan.windKmh))} KM/H
+							</div>
 						</div>
 					);
 				})}
 			</div>
 			<div style={{marginTop: 10, opacity: spring({frame: frame - t - 80, fps, config: {damping: 15}})}}>
 				<Label>
-					CET = CHOLET-LE PONTREAU · CQF = CALAIS-DUNKERQUE · LIG = LIMOGES-BELLEGARDE · LYS = LYON-SAINT-EXUPÉRY
+					CET CHOLET-LE PONTREAU · CQF CALAIS-DUNKERQUE · LIG LIMOGES · LYS LYON
 				</Label>
+			</div>
+		</div>
+	);
+};
+
+/** Carte de fin : rappel de la série, prochain match et appel à suivre le compte. */
+const Outro: React.FC = () => {
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
+	const t = FINAL_T.outro;
+	const a = spring({frame: frame - t, fps, config: {damping: 14}});
+	const b = spring({frame: frame - t - 18, fps, config: {damping: 14}});
+	const c = spring({frame: frame - t - 36, fps, config: {damping: 12}});
+	const pulse = 1 + 0.04 * Math.sin((frame - t) / 6);
+	return (
+		<div style={{position: 'absolute', left: SIDE, width: INNER, top: 990, fontFamily: FONT_TITLE, color: C.white, textAlign: 'center'}}>
+			<div style={{opacity: a, transform: `translateY(${(1 - a) * 40}px)`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20}}>
+				<div style={{fontSize: 120, fontWeight: 800, lineHeight: 0.95}}>
+					{streak} <span style={{color: C.win}}>{plural(streak, 'VICTOIRE', 'VICTOIRES')}</span>
+				</div>
+				<Flame size={100} />
+			</div>
+			<div style={{opacity: b, transform: `translateY(${(1 - b) * 40}px)`, fontSize: 54, fontWeight: 800, letterSpacing: 3, marginTop: 8, lineHeight: 1.15}}>
+				{NEXT ? (
+					<>
+						PROCHAIN MATCH : {TEAM} vs {NEXT.opponent.toUpperCase()}
+						<div style={{color: C.upcoming, fontSize: 72}}>OBJECTIF 5/5</div>
+					</>
+				) : (
+					'LA SÉRIE CONTINUE'
+				)}
+			</div>
+			<div
+				style={{
+					display: 'inline-block',
+					marginTop: 34,
+					opacity: c,
+					transform: `scale(${(0.7 + 0.3 * c) * pulse})`,
+					background: C.win,
+					color: '#04140A',
+					borderRadius: 60,
+					padding: '18px 48px',
+					fontSize: 60,
+					fontWeight: 800,
+					letterSpacing: 3,
+					boxShadow: '0 0 60px rgba(31, 209, 107, 0.45)',
+				}}
+			>
+				SUIS {ACCOUNT}
 			</div>
 		</div>
 	);
@@ -632,7 +674,7 @@ export const Disclaimer: React.FC = () => {
 	const inFlight = segAt(frame)?.kind === 'flight';
 	return (
 		<div style={{position: 'absolute', left: 0, right: 0, top: 1656, textAlign: 'center', fontFamily: FONT_TEXT, fontSize: 18, fontWeight: 500, color: C.muted, opacity: 0.85 * o, letterSpacing: 0.5}}>
-			{inFlight ? 'Vol simulé à titre illustratif – valeurs d\'un vol comparable, pas les dépenses réelles de l\'ASVEL' : `${DISCLAIMER} · ${ACCOUNT}`}
+			{inFlight ? 'Vol simulé à titre illustratif – valeurs estimées, non officielles' : `${DISCLAIMER} · ${ACCOUNT}`}
 		</div>
 	);
 };

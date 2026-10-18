@@ -155,4 +155,12 @@ export const formatClock = (min: number) => {
 export const fmt = (n: number) => Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ');
 export const formatKm = (km: number, digits = 0) =>
 	`${digits ? km.toLocaleString('fr-FR', {minimumFractionDigits: digits, maximumFractionDigits: digits}).replace(/ | /g, ' ') : fmt(km)} KM`;
-export const formatEur = (r: [number, number]) => `${fmt(r[0])} – ${fmt(r[1])} €`;
+
+/** Cap vrai (degrés) d'un mobile situé en `p` (carte de base) et orienté selon `angleDeg` à l'écran. */
+export const trueHeading = (p: Pt, angleDeg: number): number => {
+	const a = projection.invert?.([p.x, p.y]);
+	const r = (angleDeg * Math.PI) / 180;
+	const b = projection.invert?.([p.x + Math.cos(r) * 0.5, p.y + Math.sin(r) * 0.5]);
+	if (!a || !b) return 0;
+	return bearing(a as LonLat, b as LonLat);
+};

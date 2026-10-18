@@ -13,19 +13,28 @@ export const TONE: Record<Tone, string> = {aller: C.win, retour: C.white, upcomi
 const polyline = (pts: Pt[]) => pts.map((p) => `${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(' ');
 
 /** Trajet : tracé vif pendant le déplacement, puis ligne discrète permanente. */
-const RouteLine: React.FC<{pts: Pt[]; tone: Tone; live: number; dash?: string}> = ({pts, tone, live, dash}) => (
-	<polyline
-		points={polyline(pts)}
-		fill="none"
-		stroke={TONE[tone]}
-		strokeOpacity={0.42 + 0.53 * live}
-		strokeWidth={2 + 2 * live}
-		strokeDasharray={dash}
-		strokeLinecap="round"
-		strokeLinejoin="round"
-		vectorEffect="non-scaling-stroke"
-	/>
-);
+const RouteLine: React.FC<{pts: Pt[]; tone: Tone; live: number; dash?: string}> = ({pts, tone, live, dash}) => {
+	const points = polyline(pts);
+	return (
+		<>
+			{/* Halo lumineux sous le trajet en cours */}
+			{live > 0.02 ? (
+				<polyline points={points} fill="none" stroke={TONE[tone]} strokeOpacity={0.18 * live} strokeWidth={14 * live} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+			) : null}
+			<polyline
+				points={points}
+				fill="none"
+				stroke={TONE[tone]}
+				strokeOpacity={0.42 + 0.53 * live}
+				strokeWidth={2 + 2 * live}
+				strokeDasharray={dash}
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				vectorEffect="non-scaling-stroke"
+			/>
+		</>
+	);
+};
 
 const Routes: React.FC<{frame: number}> = ({frame}) => (
 	<>

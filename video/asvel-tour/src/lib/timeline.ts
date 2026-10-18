@@ -29,7 +29,7 @@ const RESULT = 110;
 const UPCOMING = 210;
 const BASE_HOLD = 50;
 const CAM = 24; // transition caméra au début de chaque segment
-const FINAL = {zoom: 60, stats: 400, table: 380};
+const FINAL = {zoom: 60, stats: 360, table: 320, outro: 160};
 
 const busFrames = (km: number) => Math.round(Math.min(Math.max(70 + km * 0.7, 80), 150));
 const airFrames = (km: number) => Math.round(105 + km * 0.12);
@@ -264,7 +264,8 @@ export const FINAL_T = {
 	zoom: built.tourEnd,
 	stats: built.tourEnd + FINAL.zoom,
 	table: built.tourEnd + FINAL.zoom + FINAL.stats,
-	end: built.tourEnd + FINAL.zoom + FINAL.stats + FINAL.table,
+	outro: built.tourEnd + FINAL.zoom + FINAL.stats + FINAL.table,
+	end: built.tourEnd + FINAL.zoom + FINAL.stats + FINAL.table + FINAL.outro,
 };
 export const DURATION = FINAL_T.end;
 

@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Modèle de vol simplifié – ATR 42-600 (turbopropulseur régional, 48 sièges).
-// Simulation illustrative : valeurs d'un vol COMPARABLE, pas des trajets
-// réellement effectués ni des dépenses réelles de l'ASVEL.
+// Simulation illustrative : valeurs estimées d'un vol comparable, pas des
+// trajets réellement effectués par l'équipe.
 // Choix de l'appareil : compatible avec les quatre pistes retenues
 // (la plus courte : Cholet-Le Pontreau, 1 380 m × 30 m, LDA 03 ≈ 1 200 m).
 // Fiche ATR 42-600 (2022) : décollage 1 107 m (MTOW), atterrissage 966 m (MLW),
@@ -15,13 +15,7 @@
 //   terrains ; 6 / 4 / 3 min à l'arrivée.
 // - Consommation : 650 kg/h en vol (croisière ATR 620 kg/h + montée),
 //   2 kg/min au roulage ; densité Jet A-1 0,80 kg/L.
-// - Prix Jet A-1 : 1,20 à 1,80 €/L HT (tarifs publics Air BP 2026 relevés
-//   entre 1,60 et 1,92 €/L HT ; les opérateurs sous contrat paient moins).
-// - Affrètement (carburant INCLUS, jamais ajouté une seconde fois) :
-//   4 800 à 7 000 € par heure bloc (coût d'exploitation calculé ≈ 4 400 –
-//   5 200 €/h + marge opérateur), minimum 1 h facturée par vol,
-//   + 0,75 h de repositionnement par vol, + 800 à 1 600 € de redevances et
-//   d'assistance par vol, + 900 à 1 500 € d'immobilisation au retour.
+// - Altitude de croisière affichée : FL200 (≈ 6 100 m), profil simulé.
 // ─────────────────────────────────────────────────────────────────────────────
 import {AIRPORTS, type AirportId, type LonLat} from '../data/tour';
 import {bearing, haversineKm} from './geo';
@@ -41,24 +35,14 @@ export const AIRCRAFT = {
 	/** Roulage au décollage et distance d'arrêt après le toucher (km) */
 	takeoffRollKm: 0.9,
 	landingRollKm: 0.7,
+	/** Altitude de croisière du profil simulé (m) */
+	cruiseAltM: 6100,
 };
 
 const WIND = {fromDeg: 270, kmh: 40};
-const FUEL_EUR_L: [number, number] = [1.2, 1.8];
-const RATE_EUR_H: [number, number] = [4800, 7000];
-const MIN_BILLED_H = 1;
-const REPOSITION_H = 0.75;
-const FEES_EUR: [number, number] = [800, 1600];
-const NIGHT_STOP_EUR: [number, number] = [900, 1500];
 
 const taxiOut = (a: AirportId) => (a === 'LYS' ? 12 : a === 'LIG' ? 6 : 4);
 const taxiIn = (a: AirportId) => (a === 'LYS' ? 6 : a === 'LIG' ? 4 : 3);
-
-export type Range = [number, number];
-const round100 = (x: number) => Math.round(x / 100) * 100;
-const mul = (r: Range, k: number): Range => [r[0] * k, r[1] * k];
-const add = (...rs: Range[]): Range => rs.reduce<Range>((s, r) => [s[0] + r[0], s[1] + r[1]], [0, 0]);
-const r100 = (r: Range): Range => [round100(r[0]), round100(r[1])];
 
 export type FlightPlan = {
 	number: string;
@@ -77,10 +61,6 @@ export type FlightPlan = {
 	fuelL: number;
 	taxiOutFuelL: number;
 	taxiInFuelL: number;
-	fuelCost: Range;
-	charter: Range;
-	/** Prix moyen estimé du trajet (milieu de la fourchette d'affrètement) */
-	charterMean: number;
 };
 
 export const planFlight = (from: AirportId, to: AirportId, direction: FlightPlan['direction'], number: string): FlightPlan => {
@@ -97,8 +77,6 @@ export const planFlight = (from: AirportId, to: AirportId, direction: FlightPlan
 	const blockMin = airborneMin + tOut + tIn;
 	const fuelKg = (airborneMin / 60) * AIRCRAFT.burnKgH + (tOut + tIn) * AIRCRAFT.taxiBurnKgMin;
 	const fuelL = fuelKg / AIRCRAFT.densityKgL;
-	const billedH = Math.max(MIN_BILLED_H, blockMin / 60) + REPOSITION_H;
-	const charter = r100(add(mul(RATE_EUR_H, billedH), FEES_EUR, direction === 'RETOUR' ? NIGHT_STOP_EUR : [0, 0]));
 	return {
 		number,
 		direction,
@@ -114,14 +92,8 @@ export const planFlight = (from: AirportId, to: AirportId, direction: FlightPlan
 		fuelL,
 		taxiOutFuelL: (tOut * AIRCRAFT.taxiBurnKgMin) / AIRCRAFT.densityKgL,
 		taxiInFuelL: (tIn * AIRCRAFT.taxiBurnKgMin) / AIRCRAFT.densityKgL,
-		fuelCost: r100(mul(FUEL_EUR_L, fuelL)),
-		charter,
-		charterMean: round100((charter[0] + charter[1]) / 2),
 	};
 };
-
-export const FUEL_PRICE = FUEL_EUR_L;
-export const sumRanges = (rs: Range[]) => add(...rs);
 
 /**
  * Profil de vitesse en vol en fonction de la fraction de distance f ∈ [0, 1] :

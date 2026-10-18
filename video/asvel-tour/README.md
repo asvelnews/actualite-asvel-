@@ -3,9 +3,9 @@
 Vidéo verticale 1080 × 1920, **60 i/s**, **≈ 99 s**, MP4 H.264 (yuv420p, BT.709,
 faststart), directement publiable sur Instagram : `export/asvel-tour.mp4`.
 
-> **Simulation illustrative.** Les vols, trajets, consommations et coûts sont
-> des estimations correspondant à un vol comparable. Ce ne sont ni des trajets
-> réellement effectués par l'équipe, ni des dépenses réelles de l'ASVEL.
+> **Simulation illustrative.** Les vols, trajets et consommations sont des
+> estimations correspondant à un vol comparable : ce ne sont pas des trajets
+> réellement effectués par l'équipe. Aucune estimation de prix n'est affichée.
 > Mention permanente à l'écran : « Simulation de déplacements – données estimatives – non officielle ».
 
 ## Déroulé
@@ -17,7 +17,7 @@ faststart), directement publiable sur Instagram : `export/asvel-tour.mp4`.
 4. **Roanne** : car base → Astroballe (sans avion) · **ASVEL 96-77 Roanne** · retour à la base
 5. **Limoges** : via **Limoges-Bellegarde** et Beaublanc · **Limoges 94-97 ASVEL**
 6. **Nancy** : car base → Astroballe · PROCHAIN MATCH ASVEL vs NANCY · OBJECTIF 5/5
-7. **Bilan** – France entière, statistiques, puis tableau des 6 vols
+7. **Bilan** – France entière, statistiques, tableau des 6 vols, puis carte de fin « SUIS @ASVEL_NEWS »
 
 CHOLET, GRAVELINES et LIMOGES apparaissent en grandes lettres sur la carte ;
 les aérodromes en plus petit (code + nom). Vert = aller, blanc = retour,
@@ -81,17 +81,19 @@ masse maximale : incompatible avec Cholet-Le Pontreau. Il est remplacé par un
 
 ## Les 6 vols (estimations, vol comparable)
 
-| Vol | Distance | Vent | Durée en vol | Kérosène | Carburant (inclus) | Affrètement | Prix moyen |
-|---|---|---|---|---|---|---|---|
-| ASVEL 101 LYS → CET | 482 km | −37 km/h | 1 h 15 | 1 052 L | 1 300 – 1 900 € | 11 600 – 17 300 € | ≈ 14 500 € |
-| ASVEL 102 CET → LYS | 482 km | +38 km/h | 1 h 06 | 923 L | 1 100 – 1 700 € | 11 400 – 17 300 € | ≈ 14 400 € |
-| ASVEL 103 LYS → CQF | 627 km | −14 km/h | 1 h 30 | 1 256 L | 1 500 – 2 300 € | 12 800 – 19 100 € | ≈ 16 000 € |
-| ASVEL 104 CQF → LYS | 627 km | +16 km/h | 1 h 26 | 1 185 L | 1 400 – 2 100 € | 13 000 – 19 500 € | ≈ 16 300 € |
-| ASVEL 105 LYS → LIG | 304 km | −40 km/h | 0 h 52 | 742 L | 900 – 1 300 € | 9 800 – 14 800 € | ≈ 12 300 € |
-| ASVEL 106 LIG → LYS | 304 km | +40 km/h | 0 h 46 | 655 L | 800 – 1 200 € | 10 100 – 15 400 € | ≈ 12 800 € |
+Pendant chaque vol, le tableau de bord affiche : distance, temps de vol, vitesse,
+kérosène, altitude, cap, vent moyen et vitesse sol de croisière.
 
-**Totaux (3 allers + 3 retours)** : 2 823 km · 6 h 55 de vol · 5 813 L ·
-affrètements 68 700 – 103 400 € (prix moyen cumulé ≈ 86 300 €).
+| Vol | Distance | Vent moyen | Durée en vol | Kérosène |
+|---|---|---|---|---|
+| ASVEL 101 LYS → CET | 482 km | −37 km/h | 1 h 15 | 1 052 L |
+| ASVEL 102 CET → LYS | 482 km | +38 km/h | 1 h 06 | 923 L |
+| ASVEL 103 LYS → CQF | 627 km | −14 km/h | 1 h 30 | 1 256 L |
+| ASVEL 104 CQF → LYS | 627 km | +16 km/h | 1 h 26 | 1 185 L |
+| ASVEL 105 LYS → LIG | 304 km | −40 km/h | 0 h 52 | 742 L |
+| ASVEL 106 LIG → LYS | 304 km | +40 km/h | 0 h 46 | 655 L |
+
+**Totaux (3 allers + 3 retours)** : 2 823 km · 6 h 55 de vol · 5 813 L.
 **Autocar** : 278,7 km au total (15 transferts).
 
 Hypothèses (`src/lib/aviation.ts`) :
@@ -102,14 +104,7 @@ Hypothèses (`src/lib/aviation.ts`) :
   40 km/h d'ouest : les retours vers Lyon sont plus courts.
 - Roulage : 12 min au départ de LYS, 6 min à LIG, 4 min sur les petits terrains.
 - Consommation : 650 kg/h en vol, 2 kg/min au roulage, densité 0,80 kg/L.
-- Jet A-1 : 1,20 – 1,80 €/L HT (tarifs publics Air BP 2026 entre 1,60 et 1,92 €/L HT).
-- Affrètement, **carburant inclus (jamais ajouté une seconde fois)** :
-  4 800 – 7 000 € par heure bloc (coût d'exploitation calculé ≈ 4 400 – 5 200 €/h
-  + marge opérateur ; les tarifs courtiers grand public, 17 000 – 20 000 $/h, ne
-  sont pas retenus), minimum 1 h facturée par vol, + 0,75 h de repositionnement
-  par vol, + 800 – 1 600 € de redevances et d'assistance par vol, + 900 – 1 500 €
-  d'immobilisation (attente du match, équipage) sur le retour.
-- Prix moyen = milieu de la fourchette d'affrètement.
+- Altitude affichée : profil simulé jusqu'au FL200 (≈ 6 100 m) ; cap vrai calculé sur la trajectoire.
 
 ## Lieux (OpenStreetMap, octobre 2026)
 

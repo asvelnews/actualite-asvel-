@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {AIRPORT_LABEL_SIDE, AIRPORTS, GAMES, PLACES, scoreLine, TEAM, type AirportId, type Game, type LonLat} from '../data/tour';
 import {project} from '../lib/geo';
-import {FINAL_T, HEIGHT, RESULTS, UPCOMINGS, WIDTH, cameraAt, toScreen, type ResultSeg, type UpcomingSeg, type View} from '../lib/timeline';
+import {FINAL_T, HEIGHT, RESULTS, SEGS, UPCOMINGS, WIDTH, cameraAt, toScreen, type ResultSeg, type UpcomingSeg, type View} from '../lib/timeline';
 import {C, FONT_TEXT, FONT_TITLE} from '../theme';
 import {Check, House, Plane} from './Icons';
 
@@ -213,6 +213,57 @@ const Places: React.FC<{view: View; frame: number}> = ({view, frame}) => {
 	);
 };
 
+/** Explosion de particules à l'apparition d'une victoire. */
+const Burst: React.FC<{s: ResultSeg}> = ({s}) => {
+	const frame = useCurrentFrame();
+	const t = frame - s.start;
+	if (t < 0 || t > 75 || s.winNumber === null) return null;
+	const {anchor} = geometry(s, frame);
+	const u = t / 75;
+	const ease = 1 - (1 - u) ** 3;
+	return (
+		<g>
+			<circle cx={anchor.x} cy={anchor.y} r={20 + ease * 150} fill="none" stroke={C.win} strokeWidth={6 * (1 - u)} opacity={1 - u} />
+			<circle cx={anchor.x} cy={anchor.y} r={10 + ease * 90} fill="none" stroke="#fff" strokeWidth={3 * (1 - u)} opacity={(1 - u) * 0.8} />
+			{Array.from({length: 22}, (_, i) => {
+				// Répartition déterministe (pas d'aléatoire entre deux rendus)
+				const ang = (i / 22) * Math.PI * 2 + (i % 3) * 0.21;
+				const dist = (70 + ((i * 37) % 60)) * ease + 20;
+				const size = 4 + (i % 4) * 1.6;
+				return (
+					<rect
+						key={i}
+						x={anchor.x + Math.cos(ang) * dist - size / 2}
+						y={anchor.y + Math.sin(ang) * dist - size / 2 + u * u * 30}
+						width={size}
+						height={size * 2.2}
+						rx={1.5}
+						transform={`rotate(${(ang * 180) / Math.PI + t * 6} ${anchor.x + Math.cos(ang) * dist} ${anchor.y + Math.sin(ang) * dist})`}
+						fill={i % 3 === 0 ? '#fff' : C.win}
+						opacity={1 - u}
+					/>
+				);
+			})}
+		</g>
+	);
+};
+
+/** Pulsation de la destination pendant l'annonce d'une étape. */
+const StagePulse: React.FC<{frame: number; view: View}> = ({frame, view}) => {
+	const s = SEGS.find((x) => x.kind === 'stage' && frame >= x.start && frame < x.end);
+	if (!s) return null;
+	const p = toScreen(project(PLACES[s.game.arena].coords as LonLat), view);
+	const color = s.game.score ? C.win : C.upcoming;
+	return (
+		<g>
+			{[0, 1].map((i) => {
+				const ph = ((frame - s.start) / 30 + i / 2) % 1;
+				return <circle key={i} cx={p.x} cy={p.y} r={14 + ph * 60} fill="none" stroke={color} strokeWidth={3} opacity={1 - ph} />;
+			})}
+		</g>
+	);
+};
+
 export const Markers: React.FC = () => {
 	const frame = useCurrentFrame();
 	const view = cameraAt(frame);
@@ -220,12 +271,16 @@ export const Markers: React.FC = () => {
 		<>
 			<svg width={WIDTH} height={HEIGHT} style={{position: 'absolute', inset: 0}}>
 				<Places view={view} frame={frame} />
+				<StagePulse frame={frame} view={view} />
 				{CARDS.map((s, i) => (
 					<Leader key={i} s={s} />
 				))}
 				{/* Annonce à venir sous les pastilles de victoire */}
 				{[...UPCOMINGS, ...RESULTS].map((s, i) => (
 					<Dot key={i} s={s} />
+				))}
+				{RESULTS.map((s, i) => (
+					<Burst key={`b${i}`} s={s} />
 				))}
 			</svg>
 			{CARDS.map((s, i) => (
