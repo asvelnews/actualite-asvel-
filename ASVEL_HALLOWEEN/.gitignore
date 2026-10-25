@@ -5,3 +5,4 @@ renders/*.mov
 previews/*.mp4
 previews/*.log
 previews/*.time
+renders/_chunks*/
