@@ -3,6 +3,7 @@ import {Composition} from 'remotion';
 import './components/Fonts';
 import {Trailer} from './compositions/Trailer';
 import {VfxTest} from './compositions/VfxTest';
+import {WalkTest} from './compositions/WalkTest';
 import {S1Arena} from './scenes/S1Arena';
 import {S2Horror} from './scenes/S2Horror';
 import {S3Patty} from './scenes/S3Patty';
@@ -26,5 +27,6 @@ export const Root: React.FC = () => (
     <Composition id="S5FaceOff" component={S5FaceOff} durationInFrames={len('faceoff')} {...V} />
     <Composition id="S6GameDay" component={S6GameDay} durationInFrames={len('gameday')} {...V} />
     <Composition id="VfxTest" component={VfxTest} durationInFrames={300} {...V} />
+    <Composition id="WalkTest" component={WalkTest} durationInFrames={240} {...V} />
   </>
 );
