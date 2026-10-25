@@ -2,7 +2,7 @@ import React, {useLayoutEffect, useRef} from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {hash} from './random';
 
-type Kind = 'embers' | 'ash' | 'sparks' | 'rain' | 'dust';
+type Kind = 'embers' | 'ash' | 'sparks' | 'rain' | 'dust' | 'leaves';
 
 /**
  * Particules sans état : la position de chaque particule est une fonction pure du temps,
@@ -62,6 +62,24 @@ export const Particles: React.FC<{
         ctx.rotate(t * (1 + h2 * 2) + i);
         ctx.fillStyle = `rgba(190,180,175,${opacity * 0.5 * Math.sin(Math.PI * ph) * depth})`;
         ctx.fillRect(-s, -s * 0.4, s * 2, s * 0.8);
+        ctx.restore();
+      } else if (kind === 'leaves') {
+        // feuilles mortes qui tombent en tourbillonnant, poussées par le vent
+        const life = 4 + 4 * h2;
+        const ph = ((t * speed) / life + h1) % 1;
+        const x = (h4 * 1.4 - 0.2) * W + wind * ph * 600 + Math.sin(t * (1.5 + h2) + i) * 70 * depth;
+        const y = -60 + ph * (H + 120);
+        const s = 7 + 13 * depth;
+        const flip = Math.cos(t * (3 + 4 * h3) + i);
+        const col = h2 > 0.66 ? '140,60,20' : h2 > 0.33 ? '110,40,18' : '80,30,14';
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(t * (1.2 + 2 * h3) + i);
+        ctx.scale(1, Math.max(0.15, Math.abs(flip)));
+        ctx.fillStyle = `rgba(${col},${opacity * (0.55 + 0.45 * depth)})`;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, s, s * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
       } else if (kind === 'rain') {
         const ph = ((t * speed * (1.4 + depth)) + h1) % 1;

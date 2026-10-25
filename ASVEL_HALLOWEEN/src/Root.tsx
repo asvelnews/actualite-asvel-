@@ -5,6 +5,7 @@ import {Trailer} from './compositions/Trailer';
 import {VfxTest} from './compositions/VfxTest';
 import {WalkTest} from './compositions/WalkTest';
 import {RoadPlate} from './compositions/RoadPlate';
+import {S0Intro} from './scenes/S0Intro';
 import {S1Arena} from './scenes/S1Arena';
 import {S2Horror} from './scenes/S2Horror';
 import {S3Patty} from './scenes/S3Patty';
@@ -21,6 +22,7 @@ export const Root: React.FC = () => (
     {/* Trailer complet : 60 s, 1080x1920, 60 FPS natifs */}
     <Composition id="Trailer" component={Trailer} durationInFrames={tl.duration} {...V} defaultProps={{music: true}} />
     {/* Scènes isolées pour le travail et les vérifications */}
+    <Composition id="S0Intro" component={S0Intro} durationInFrames={1320} {...V} />
     <Composition id="S1Arena" component={S1Arena} durationInFrames={len('arena')} {...V} />
     <Composition id="S2Horror" component={S2Horror} durationInFrames={len('horror')} {...V} />
     <Composition id="S3Patty" component={S3Patty} durationInFrames={len('patty')} {...V} />

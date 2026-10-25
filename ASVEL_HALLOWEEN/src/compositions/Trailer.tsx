@@ -1,7 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame, Easing} from 'remotion';
-import {S1Arena} from '../scenes/S1Arena';
-import {S2Horror} from '../scenes/S2Horror';
+import {S0Intro} from '../scenes/S0Intro';
 import {S3Patty} from '../scenes/S3Patty';
 import {S4Tadas} from '../scenes/S4Tadas';
 import {S5FaceOff} from '../scenes/S5FaceOff';
@@ -45,11 +44,9 @@ const Transitions: React.FC = () => {
 
 export const Trailer: React.FC<{music?: boolean}> = ({music = true}) => (
   <AbsoluteFill style={{background: '#080608'}}>
-    <Sequence {...seq('arena')}>
-      <S1Arena />
-    </Sequence>
-    <Sequence {...seq('horror')}>
-      <S2Horror />
+    {/* Nouvelle intro (cimetière -> marche -> arrivée), remplace l'ancienne arène + apparitions */}
+    <Sequence {...seq('intro')}>
+      <S0Intro />
     </Sequence>
     <Sequence {...seq('patty')}>
       <S3Patty />

@@ -209,45 +209,43 @@ def stereo(x, w=0.003):
 # ================================================================= PLACEMENT
 cue = TL['cues']; S = TL['scenes']
 
-# --- S1 (0-10 s) : battements, vent, grondements, pas, tonnerre
-hb_times = [0.5, 1.7, 2.85, 3.95, 5.0, 5.95, 6.85, 7.7, 8.5, 9.2]
-for t in hb_times: add(sfx, t, heartbeat(), 0.95)
-add(sfx, 0.0, wind(10.5), 0.22)
-add(sfx, 0.0, rumble(10.0), 0.35)
-for i, t in enumerate(np.arange(4.2, 9.3, 0.62)): add(sfx, t, step(), 0.22, pan=-0.4 + 0.08 * i)
-add(sfx, 3.0, creak(1.6), 0.18, pan=0.5)
-for fr in cue['lightning'][:4]: add(sfx, sec(fr) - 0.02, thunder(dist=0.2 if fr < 590 else 0.0), 0.55)
-add(sfx, sec(cue['arenaText1']) - 0.3, whoosh(0.9, 200, 2500), 0.35)
-add(sfx, sec(cue['arenaText2']) - 0.2, whoosh(0.8, 300, 3000), 0.35)
-add(sfx, sec(cue['arenaText2']), impact(braam=False), 0.35)
-# musique S1 : drone de ré grave + cluster de cordes qui grossit
-add(music, 0.0, stereo(note(D['D2'], 10.2, 'str') * 0.5 + note(D['A1'], 10.2, 'str') * 0.4), 0.16)
-add(music, 3.0, stereo(note(D['D3'], 7.2, 'trem') + note(D['Eb3'], 7.2, 'trem') * 0.7), 0.07)
-add(music, 6.0, riser(4.0), 0.10)
-
-# --- S2 (10-22 s) : apparitions
-H = cue['horror']
-add(sfx, sec(cue['bigImpact'][0]), impact(), 0.8)
-add(sfx, sec(H['myers']) + 0.3, breath(2.4), 0.35)
-add(sfx, sec(H['myers']) + 0.2, whoosh(1.6, 150, 900), 0.3)
-add(sfx, sec(H['myers']) + 2.1, breath(2.2), 0.3)
-add(sfx, sec(H['freddy']), metal_screech(1.8), 0.32, pan=-0.3)
-add(sfx, sec(H['freddy']) + 0.5, slash(), 0.5)
-add(sfx, sec(H['freddy']) + 0.55, impact(braam=False), 0.4)
-for k, fr in enumerate([H['ghost'] + 20, H['ghost'] + 60, H['ghost'] + 120]): add(sfx, sec(fr), thunder(dist=0.1 * k), 0.5)
-add(sfx, sec(H['ghost'] - 10), slash(), 0.45)
-add(sfx, sec(H['art']) - 0.1, impact(braam=False), 0.45)
-add(sfx, sec(H['art']) + 0.6, distant_cry(f0=480), 0.12, pan=0.6)
-add(sfx, sec(H['ghost']) + 0.8, distant_cry(f0=610), 0.08, pan=-0.7)
-add(sfx, 10.0, wind(12), 0.12)
-for t in [sec(H['black']) + 0.15, sec(H['black']) + 0.6]: add(sfx, t, heartbeat(), 0.9)
-# musique S2 : boîte à musique désaccordée (motif original) + cordes graves
+# --- INTRO (0-22 s) : cimetière, sortie, marche, arrivée devant l'arène
+IN = cue['intro']
+def caw(g=1.0):
+    """Croassement de corbeau : bruit rauque filtré en formants, deux appels."""
+    out = np.zeros(int(1.0 * SR))
+    for k, o in enumerate([0.0, 0.42]):
+        d = 0.28; t = t_(d)
+        src = signal.sawtooth(2 * np.pi * np.cumsum(520 + 160 * np.sin(np.pi * t / d)) / SR) * (1 + 0.6 * noise(d))
+        x = (bp(src, 900, 1500) + bp(src, 2200, 3000) * 0.6) * np.sin(np.pi * t / d) ** 0.7
+        i = int(o * SR); out[i:i + len(x)] += x * (1 - 0.25 * k)
+    return reverb(out / (np.abs(out).max() + 1e-9) * g, 0.5, 2.5, 4000)
+add(sfx, 0.0, wind(22.5), 0.2)
+add(sfx, 0.0, rumble(22.0), 0.3)
+add(sfx, sec(IN['gateCreak']), creak(2.6), 0.5, pan=-0.2)
+add(sfx, sec(IN['gateCreak']) + 0.6, creak(2.0), 0.35, pan=0.3)
+for t, p_ in [(1.6, 0.6), (3.2, -0.5), (6.0, 0.4), (12.5, -0.6)]: add(sfx, t, caw(), 0.22, pan=p_)
+add(sfx, sec(IN['clipB'][0]) - 0.05, thunder(dist=0.1), 0.5)
+for i, t in enumerate(np.arange(5.4, 16.2, 0.56)):
+    add(sfx, t, step(), 0.2, pan=-0.3 + 0.2 * (i % 4))
+    add(sfx, t + 0.05, lp(noise(0.12), 2500) * np.exp(-t_(0.12) * 30) * 0.15, 0.3)   # feuilles écrasées
+add(sfx, sec(IN['clipB'][1]) - 0.3, whoosh(1.4, 150, 1200), 0.4)
+for fr in IN['redLightning']: add(sfx, sec(fr), thunder(dist=0.2), 0.45)
+add(sfx, sec(IN['arrival']) - 0.2, whoosh(0.9, 2500, 300), 0.3)
+add(sfx, sec(IN['bigLightning']), thunder(), 0.85)
+add(sfx, sec(IN['bigLightning']), impact(), 0.7)
+add(sfx, sec(IN['title']), impact(braam=False), 0.5)
+add(sfx, sec(IN['title']) + 0.45, impact(braam=False), 0.45)
+for i, fr in enumerate([IN['out'], IN['out'] + 3, IN['out'] + 6]): add(sfx, sec(fr), slash(), 0.5, pan=-0.3 + 0.3 * i)
+add(sfx, sec(IN['out']) + 0.2, whoosh(1.2, 120, 1000), 0.45)
+# musique synthétisée (version libre) : drone + cordes qui montent
+add(music, 0.0, stereo(note(D['D2'], 22.0, 'str') * 0.5 + note(D['A1'], 22.0, 'str') * 0.4), 0.14)
+add(music, 5.0, stereo(note(D['D3'], 11, 'trem') + note(D['Eb3'], 11, 'trem') * 0.7), 0.06)
 box_mel = ['D5', 'A4', 'F4', 'E4', 'F4', 'D4', 'C#4', 'D4']
 for i, n_ in enumerate(box_mel * 2):
-    add(music, sec(H['art']) - 1.2 + i * 0.32, stereo(note(D[n_] * (1 + 0.006 * rng.standard_normal()), 1.2, 'box')), 0.09)
-for k, (n_, t) in enumerate([('D2', 10.0), ('Bb2', 13.0), ('A1', 16.0), ('D2', 18.6)]):
-    add(music, t, stereo(note(D[n_], 3.4, 'str') + note(D[n_] * 2, 3.4, 'trem') * 0.5), 0.13)
-for fr in [H['freddy'], H['ghost'], H['art']]: add(music, sec(fr), stereo(note(D['D1'], 2.5, 'brass')), 0.18)
+    add(music, 0.8 + i * 0.32, stereo(note(D[n_] * (1 + 0.006 * rng.standard_normal()), 1.2, 'box')), 0.08)
+for t in [sec(IN['clipB'][0]), sec(IN['clipC'][0]), sec(IN['arrival'])]: add(music, t, stereo(note(D['D1'], 2.5, 'brass')), 0.16)
+add(music, sec(IN['bigLightning']) - 4.0, riser(4.0), 0.12)
 
 # --- S3 (22-32 s) : montée orchestrale sombre pour Patty Mills
 p0 = sec(S['patty'][0])
@@ -332,7 +330,7 @@ L_ = int(DUR * SR)
 music_r = reverb(music, 0.25, 2.8, 4000)
 # automation : montée en tension acte par acte (dB), appliquée avant le master
 pts_t = [0, 9.9, 10.0, 21.9, 22.0, 31.9, 32.0, 41.9, 42.0, 51.7, 52.0, 60.0, 62.0]
-pts_db = [-7, -6, -6, -5, -4.5, -3, -2.5, -1.5, -2, 0, 0, 0, 0]
+pts_db = [-5, -4.5, -4.5, -3, -3, -3, -2.5, -1.5, -2, 0, 0, 0, 0]
 auto = 10 ** (np.interp(np.arange(N) / SR, pts_t, pts_db) / 20)[:, None]
 music_r = music_r * auto; sfx = sfx * auto
 mix = master(music_r * 0.95 + sfx)[:L_]
@@ -353,18 +351,18 @@ if os.path.exists(THEME):
     import subprocess
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', THEME, '-ac', '2', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True, check=True).stdout
     th = np.frombuffer(raw, np.float32).reshape(-1, 2).astype(float)
-    OFFSET = 4.7          # t_trailer = t_theme + OFFSET : l'entrée complète (17,3 s) tombe à 22,0 s (Patty Mills)
-    bed = np.zeros((N, 2)); i0 = int(OFFSET * SR)
-    n = min(N - i0, len(th)); bed[i0:i0 + n] = th[:n]
+    OFFSET = -1.6         # t_trailer = t_theme + OFFSET : le piano démarre à 0,4 s, l'orchestre entre à 15,7 s (la marche)
+    bed = np.zeros((N, 2)); skip = int(max(0, -OFFSET) * SR); i0 = int(max(0, OFFSET) * SR)
+    n = min(N - i0, len(th) - skip); bed[i0:i0 + n] = th[skip:skip + n]
     tt = np.arange(N) / SR
     # automation : piano discret sous le vent, plein à partir de Patty, coupure sèche au GAME DAY, fondu final
     g0 = sec(cue['gameDay'])
-    pts_t = [0, 9.8, 10.0, 21.8, 22.0, 51.85, g0 - 0.02, g0 + 0.35, g0 + 0.9, 57.3, 59.3, 62]
-    pts_db = [-5, -5, -3, -3, 0, 0, -60, -60, -1, -1, -60, -60]
+    pts_t = [0, 15.5, 16.0, 19.1, 19.25, 19.6, 51.85, g0 - 0.02, g0 + 0.35, g0 + 0.9, 57.3, 59.3, 62]
+    pts_db = [-3, -3, 0, 0, -8, 0, 0, -60, -60, -1, -1, -60, -60]
     bed *= 10 ** (np.interp(tt, pts_t, pts_db) / 20)[:, None]
     # ducking sous les impacts (-6 dB, retour en 0,6 s)
     duck = np.zeros(N)
-    for fr in cue['bigImpact'] + [cue['tadasRedBlast'], cue['faceoffText1'], cue['faceoffText2'], cue['brand']]:
+    for fr in cue['bigImpact'][1:] + [IN['bigLightning'], IN['title'], cue['tadasRedBlast'], cue['faceoffText1'], cue['faceoffText2'], cue['brand']]:
         j = int(sec(fr) * SR); L = int(0.8 * SR)
         duck[j:j + L] = np.maximum(duck[j:j + L], np.linspace(1, 0, L)[: max(0, min(L, N - j))])
     bed *= (10 ** (-6 * duck / 20))[:, None]
