@@ -1,0 +1,24 @@
+{
+  "name": "asvel-halloween-trailer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Trailer Halloween ASVEL_NEWS — LDLC ASVEL vs Baskonia (Remotion, 60 FPS)",
+  "scripts": {
+    "prepare-assets": "python tools_prepare_arena.py && python tools_prepare_players.py && python tools_embed_fonts.py",
+    "audio": "python tools_audio.py",
+    "studio": "remotion studio src/index.ts",
+    "test-vfx": "remotion render src/index.ts VfxTest renders/TEST_VFX_ARENA_5s_60FPS.mp4 --codec=h264 --crf=16",
+    "render:video": "remotion render src/index.ts Trailer renders/_video.mp4 --codec=h264 --video-bitrate=20M --muted",
+    "render:4k": "remotion render src/index.ts Trailer renders/_video_4k.mp4 --codec=h264 --video-bitrate=60M --muted --scale=2",
+    "thumbnail": "remotion still src/index.ts Trailer renders/ASVEL_HALLOWEEN_THUMBNAIL.png --frame=3330",
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.300",
+    "@types/react": "18.3.12",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.300",
+    "typescript": "5.6.3"
+  }
+}

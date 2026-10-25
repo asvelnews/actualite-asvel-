@@ -1,0 +1,67 @@
+Detected differing memory amounts:
+Memory reported by CGroup: 8796093020946.37 MB
+Memory reported by /proc/meminfo: 15398.03 MB
+Memory reported by Node: 15398.03 MB
+You might have inadvertenly set the --memory flag of `docker run` to a value that is higher than the global Docker memory limit.
+Using the lower amount of memory for calculation.
+Bundling 6%
+Bundling 24%
+Bundling 38%
+Bundling 57%
+Bundling 65%
+Bundling 71%
+Bundling 76%
+Bundling 81%
+Bundling 87%
+Bundling 92%
+Bundling 98%
+Bundling 100%
+Copying public dir 14.6 MB
+Copying public dir 26.1 MB
+Copying public dir 37.7 MB
+Copying public dir 37.7 MB
+Copying public dir 37.9 MB
+Getting compositions
+Getting compositions
+Composition          Trailer
+Codec                h264
+Output               renders/_chunks__video_v1/part_00.mp4
+Concurrency          1x
+Detected differing memory amounts:
+Memory reported by CGroup: 8796093020691.14 MB
+Memory reported by /proc/meminfo: 15176.22 MB
+Memory reported by Node: 15176.22 MB
+You might have inadvertenly set the --memory flag of `docker run` to a value that is higher than the global Docker memory limit.
+Using the lower amount of memory for calculation.
+Rendered 0/900
+Rendered 1/900, time remaining: 16m 23s
+Rendered 2/900, time remaining: 15m 16s
+Rendered 3/900, time remaining: 13m 46s
+Rendered 4/900, time remaining: 13m 24s
+Rendered 5/900, time remaining: 12m 48s
+Rendered 6/900, time remaining: 12m 34s
+Rendered 7/900, time remaining: 12m 43s
+Rendered 8/900, time remaining: 12m 49s
+Rendered 9/900, time remaining: 12m 49s
+Rendered 10/900, time remaining: 12m 40s
+Rendered 11/900, time remaining: 12m 32s
+Rendered 12/900, time remaining: 12m 41s
+Rendered 13/900, time remaining: 12m 51s
+Rendered 14/900, time remaining: 13m 8s
+Rendered 15/900, time remaining: 13m 10s
+Rendered 16/900, time remaining: 13m 17s
+Rendered 17/900, time remaining: 13m 18s
+Rendered 18/900, time remaining: 13m 40s
+Rendered 19/900, time remaining: 13m 50s
+Rendered 20/900, time remaining: 13m 44s
+Rendered 21/900, time remaining: 13m 46s
+Rendered 22/900, time remaining: 13m 45s
+Rendered 23/900, time remaining: 13m 40s
+Rendered 24/900, time remaining: 13m 43s
+Rendered 25/900, time remaining: 13m 47s
+Rendered 26/900, time remaining: 13m 55s
+Rendered 27/900, time remaining: 13m 58s
+Rendered 28/900, time remaining: 13m 52s
+Rendered 29/900, time remaining: 13m 58s
+Rendered 30/900, time remaining: 14m 19s
+Rendered 31/900, time remaining: 14m 33s

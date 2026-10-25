@@ -1,0 +1,32 @@
+{
+  "fps": 60,
+  "duration": 3600,
+  "scenes": {
+    "arena":   [0, 600],
+    "horror":  [600, 1320],
+    "patty":   [1320, 1920],
+    "tadas":   [1920, 2520],
+    "faceoff": [2520, 3120],
+    "gameday": [3120, 3600]
+  },
+  "cues": {
+    "heartbeats": [30, 95, 300, 360, 3480, 3530],
+    "arenaText1": 180,
+    "arenaText2": 330,
+    "lightning": [250, 430, 520, 598, 1010, 1610, 2050, 2260, 2700, 2930],
+    "bigImpact": [598, 1320, 1500, 2160, 3120, 3180],
+    "horror": {"myers": 610, "freddy": 770, "ghost": 950, "art": 1110, "black": 1270},
+    "pattyName": 1500,
+    "tadasClaws": 1920,
+    "tadasRedBlast": 1950,
+    "tadasName": 2160,
+    "fireSweep": 2490,
+    "faceoffText1": 2640,
+    "faceoffText2": 2880,
+    "explosion": 3105,
+    "gameDay": 3120,
+    "infoReveal": 3240,
+    "brand": 3360,
+    "fadeOut": 3480
+  }
+}

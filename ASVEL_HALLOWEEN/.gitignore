@@ -1,0 +1,7 @@
+node_modules/
+# vidéos de rendu : trop lourdes pour Git (> 100 Mo), livrées à part
+renders/*.mp4
+renders/*.mov
+previews/*.mp4
+previews/*.log
+previews/*.time

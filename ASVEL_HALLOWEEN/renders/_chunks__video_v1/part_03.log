@@ -1,0 +1,42 @@
+Detected differing memory amounts:
+Memory reported by CGroup: 8796093019057.88 MB
+Memory reported by /proc/meminfo: 13958.09 MB
+Memory reported by Node: 13958.09 MB
+You might have inadvertenly set the --memory flag of `docker run` to a value that is higher than the global Docker memory limit.
+Using the lower amount of memory for calculation.
+Bundling 6%
+Bundling 12%
+Bundling 24%
+Bundling 37%
+Bundling 51%
+Bundling 65%
+Bundling 71%
+Bundling 76%
+Bundling 81%
+Bundling 87%
+Bundling 92%
+Bundling 98%
+Bundling 100%
+Copying public dir 14.6 MB
+Copying public dir 26.1 MB
+Copying public dir 37.7 MB
+Copying public dir 37.7 MB
+Copying public dir 37.9 MB
+Getting compositions
+Getting compositions
+Composition          Trailer
+Codec                h264
+Output               renders/_chunks__video_v1/part_03.mp4
+Concurrency          1x
+Detected differing memory amounts:
+Memory reported by CGroup: 8796093018441.92 MB
+Memory reported by /proc/meminfo: 13596.30 MB
+Memory reported by Node: 13596.30 MB
+You might have inadvertenly set the --memory flag of `docker run` to a value that is higher than the global Docker memory limit.
+Using the lower amount of memory for calculation.
+Rendered 0/900
+Rendered 1/900, time remaining: 1h 28m 19s
+Rendered 2/900, time remaining: 1h 11m 52s
+Rendered 3/900, time remaining: 1h 2m 37s
+Rendered 4/900, time remaining: 1h 48s
+Rendered 5/900, time remaining: 1h 1m 19s
