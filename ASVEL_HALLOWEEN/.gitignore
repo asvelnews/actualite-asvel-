@@ -8,3 +8,4 @@ previews/*.time
 renders/_chunks*/
 assets/audio/halloween_theme_user.mp3
 public/audio/*THEME*
+assets/intro/
