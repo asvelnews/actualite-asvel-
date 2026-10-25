@@ -1,0 +1,152 @@
+{
+  "final": {
+    "fichier": "renders/ASVEL_HALLOWEEN_60FPS.mp4",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "60/1",
+          "avg_frame_rate": "60/1",
+          "bit_rate": "19671700",
+          "nb_frames": "3600",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "aac",
+          "profile": "LC",
+          "sample_rate": "48000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "bit_rate": "327190",
+          "nb_frames": "2814"
+        }
+      ],
+      "format": {
+        "duration": "60.000000",
+        "size": "150087653",
+        "bit_rate": "20011687"
+      }
+    },
+    "loudness": {
+      "integrated": "-17.5 LUFS",
+      "range": "10.2 LU",
+      "true_peak": "-1.0 dBFS"
+    }
+  },
+  "musique_libre": {
+    "fichier": "renders/ASVEL_HALLOWEEN_60FPS_MUSIQUE_LIBRE.mp4",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "60/1",
+          "avg_frame_rate": "60/1",
+          "bit_rate": "19671700",
+          "nb_frames": "3600",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "aac",
+          "profile": "LC",
+          "sample_rate": "48000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "bit_rate": "322287",
+          "nb_frames": "2814"
+        }
+      ],
+      "format": {
+        "duration": "60.000000",
+        "size": "150050871",
+        "bit_rate": "20006782"
+      }
+    }
+  },
+  "sans_musique": {
+    "fichier": "renders/ASVEL_HALLOWEEN_60FPS_SANS_MUSIQUE.mp4",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "60/1",
+          "avg_frame_rate": "60/1",
+          "bit_rate": "19671700",
+          "nb_frames": "3600",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "aac",
+          "profile": "LC",
+          "sample_rate": "48000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "bit_rate": "326849",
+          "nb_frames": "2814"
+        }
+      ],
+      "format": {
+        "duration": "60.000000",
+        "size": "150085096",
+        "bit_rate": "20011346"
+      }
+    }
+  },
+  "carre": {
+    "fichier": "renders/ASVEL_HALLOWEEN_CARRE_1080.mp4",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1080,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "60/1",
+          "avg_frame_rate": "60/1",
+          "bit_rate": "15856260",
+          "nb_frames": "3600"
+        },
+        {
+          "codec_name": "aac",
+          "profile": "LC",
+          "sample_rate": "48000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "bit_rate": "327190",
+          "nb_frames": "2814"
+        }
+      ],
+      "format": {
+        "duration": "60.000000",
+        "size": "121472659",
+        "bit_rate": "16196354"
+      }
+    }
+  }
+}
