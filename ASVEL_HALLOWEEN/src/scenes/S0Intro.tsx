@@ -112,7 +112,7 @@ export const S0Intro: React.FC = () => {
       <Flash strikes={[b0 - 2]} max={0.9} />
       <Smoke seed={117} color={[0.01, 0.006, 0.008]} light={[0.3, 0.05, 0.04]} density={1.5} scale={1.1} flow={[0.3, 0.06]} turb={1.3} opacity={interpolate(f, [b1 - 24, b1, b1 + 6, b1 + 30], [0, 1, 1, 0], clamp)} />
       <Black v={interpolate(f, [0, 40], [1, 0], clamp) + interpolate(f, [c1 - 18, c1, c1 + 2, c1 + 26], [0, 1, 1, 0], clamp)} />
-      <div style={{position: 'absolute', right: 40, top: 60, fontFamily: FONT.horror, fontSize: 44, color: C.blood, opacity: interpolate(f, [60, 90, 560, 600], [0, 0.85, 0.85, 0], clamp), textShadow: '0 0 12px #d71920'}}>ASVEL_NEWS</div>
+      <div style={{position: 'absolute', right: 40, top: 60, fontFamily: FONT.horror, fontSize: 58, color: C.blood, opacity: interpolate(f, [60, 90, 560, 600], [0, 0.85, 0.85, 0], clamp), textShadow: '0 0 12px #d71920'}}>ASVEL_NEWS</div>
     </AbsoluteFill>
   );
 };
