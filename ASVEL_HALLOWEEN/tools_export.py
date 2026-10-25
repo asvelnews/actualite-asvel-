@@ -2,7 +2,8 @@
 
 Usage : python tools_export.py [video_1080x1920.mp4] [video_4k.mp4 (optionnel)]
 Produit dans renders/ :
-  ASVEL_HALLOWEEN_60FPS.mp4             vertical 1080x1920, H.264 ~20 Mb/s, AAC 48 kHz stéréo
+  ASVEL_HALLOWEEN_60FPS.mp4             vertical 1080x1920, H.264 ~20 Mb/s, AAC 48 kHz stéréo (thème fourni si présent)
+  ASVEL_HALLOWEEN_60FPS_MUSIQUE_LIBRE.mp4 même vidéo, musique synthétisée libre de droits
   ASVEL_HALLOWEEN_60FPS_SANS_MUSIQUE.mp4 effets sonores seuls
   ASVEL_HALLOWEEN_CARRE_1080.mp4         1080x1080 (vertical centré sur fond flouté)
   ASVEL_HALLOWEEN_4K_60FPS.mp4           2160x3840 si le rendu 4K est fourni
@@ -42,7 +43,11 @@ def loudness(path):
 
 outs = {}
 final = R / 'ASVEL_HALLOWEEN_60FPS.mp4'
-mux(src, A / 'ASVEL_HALLOWEEN_MIX.wav', final); outs['final'] = final
+theme = A / 'ASVEL_HALLOWEEN_MIX_THEME.wav'   # thème fourni par l'utilisateur (droits non libres)
+mux(src, theme if theme.exists() else A / 'ASVEL_HALLOWEEN_MIX.wav', final); outs['final'] = final
+if theme.exists():
+    libre = R / 'ASVEL_HALLOWEEN_60FPS_MUSIQUE_LIBRE.mp4'
+    mux(src, A / 'ASVEL_HALLOWEEN_MIX.wav', libre); outs['musique_libre'] = libre
 nomus = R / 'ASVEL_HALLOWEEN_60FPS_SANS_MUSIQUE.mp4'
 mux(src, A / 'ASVEL_HALLOWEEN_SFX_ONLY.wav', nomus); outs['sans_musique'] = nomus
 # Carré : la vidéo verticale entière (aucun texte coupé) sur un fond flouté de la même image
@@ -55,7 +60,7 @@ run(['ffmpeg', '-v', 'error', '-y', '-i', final, '-filter_complex',
 outs['carre'] = sq
 if src4k and src4k.exists():
     k4 = R / 'ASVEL_HALLOWEEN_4K_60FPS.mp4'
-    mux(src4k, A / 'ASVEL_HALLOWEEN_MIX.wav', k4); outs['4k'] = k4
+    mux(src4k, theme if theme.exists() else A / 'ASVEL_HALLOWEEN_MIX.wav', k4); outs['4k'] = k4
 
 report = {k: {'fichier': str(v), 'ffprobe': probe(v)} for k, v in outs.items()}
 report['final']['loudness'] = loudness(final)

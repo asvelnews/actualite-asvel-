@@ -343,3 +343,32 @@ music_only = master(music_r)[:L_] * fade[:, None]
 for name, x in [('ASVEL_HALLOWEEN_MIX', mix), ('ASVEL_HALLOWEEN_SFX_ONLY', sfx_only), ('ASVEL_HALLOWEEN_MUSIC', music_only)]:
     wavfile.write(f'public/audio/{name}.wav', SR, (x * 32767).astype(np.int16))
     print(name, 'peak dBFS %.2f' % (20 * np.log10(np.abs(x).max())), 'durée %.2f s' % (len(x) / SR))
+
+# ---------------------------------------------------------------- version avec le thème fourni
+# Si assets/audio/halloween_theme_user.mp3 existe (fourni par l'utilisateur, NON libre de droits),
+# on produit un mix où il remplace la musique synthétisée. Les effets sonores restent identiques.
+import os
+THEME = 'assets/audio/halloween_theme_user.mp3'
+if os.path.exists(THEME):
+    import subprocess
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', THEME, '-ac', '2', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True, check=True).stdout
+    th = np.frombuffer(raw, np.float32).reshape(-1, 2).astype(float)
+    OFFSET = 4.7          # t_trailer = t_theme + OFFSET : l'entrée complète (17,3 s) tombe à 22,0 s (Patty Mills)
+    bed = np.zeros((N, 2)); i0 = int(OFFSET * SR)
+    n = min(N - i0, len(th)); bed[i0:i0 + n] = th[:n]
+    tt = np.arange(N) / SR
+    # automation : piano discret sous le vent, plein à partir de Patty, coupure sèche au GAME DAY, fondu final
+    g0 = sec(cue['gameDay'])
+    pts_t = [0, 9.8, 10.0, 21.8, 22.0, 51.85, g0 - 0.02, g0 + 0.35, g0 + 0.9, 57.3, 59.3, 62]
+    pts_db = [-5, -5, -3, -3, 0, 0, -60, -60, -1, -1, -60, -60]
+    bed *= 10 ** (np.interp(tt, pts_t, pts_db) / 20)[:, None]
+    # ducking sous les impacts (-6 dB, retour en 0,6 s)
+    duck = np.zeros(N)
+    for fr in cue['bigImpact'] + [cue['tadasRedBlast'], cue['faceoffText1'], cue['faceoffText2'], cue['brand']]:
+        j = int(sec(fr) * SR); L = int(0.8 * SR)
+        duck[j:j + L] = np.maximum(duck[j:j + L], np.linspace(1, 0, L)[: max(0, min(L, N - j))])
+    bed *= (10 ** (-6 * duck / 20))[:, None]
+    bed *= 10 ** (11 / 20)  # le thème (-21,6 LUFS) remonté pour porter le trailer
+    theme_mix = master(bed + sfx)[:L_] * fade[:, None]
+    wavfile.write('public/audio/ASVEL_HALLOWEEN_MIX_THEME.wav', SR, (theme_mix * 32767).astype(np.int16))
+    print('ASVEL_HALLOWEEN_MIX_THEME peak dBFS %.2f' % (20 * np.log10(np.abs(theme_mix).max())))
