@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Statistiques ASVEL 2026-2027 — Actu ASVEL</title>
-  <meta name="description" content="Statistiques des joueurs de LDLC ASVEL en EuroLeague et Betclic ÉLITE pour la saison 2026-2027.">
-  <meta name="theme-color" content="#050505"><link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="alternate" type="application/rss+xml" title="Actu ASVEL — Flux RSS" href="rss.xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="theme.css?v=20261002-theme-rouge">
-  <style>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Statistiques ASVEL 2026-2027 — Actu ASVEL</title>
+<meta content="Statistiques des joueurs de LDLC ASVEL en EuroLeague et Betclic ÉLITE pour la saison 2026-2027." name="description"/>
+<meta content="#050505" name="theme-color"/><link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="rss.xml" rel="alternate" title="Actu ASVEL — Flux RSS" type="application/rss+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Oswald:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="theme.css?v=20261002-theme-rouge" rel="stylesheet"/>
+<style>
         *{box-sizing:border-box}body{margin:0;background:var(--off);color:var(--text);font-family:'Source Sans 3',Arial,sans-serif}a{color:inherit;text-decoration:none}
     @media(min-width:981px){nav{display:flex;gap:1rem;flex-wrap:wrap;font-family:'Oswald',sans-serif;font-size:.74rem;text-transform:uppercase}}
     .hero{padding:5rem 5vw 4rem;background:#050505;color:#fff;border-bottom:4px solid var(--gold)}.hero>div,.page,footer>div{width:min(1180px,100%);margin:auto}.eyebrow{color:#ff6a5f;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.13em;font-size:.7rem}h1{margin:.8rem 0 0;font-family:'Archivo Black',sans-serif;font-size:clamp(2.6rem,7vw,6rem);line-height:.92;text-transform:uppercase;letter-spacing:-.05em}.hero p{max-width:680px;color:#c9c6bd;line-height:1.6}
@@ -40,25 +41,25 @@
 </style>
 </head>
 <body>
-<header><a class="logo" href="index.html">ACTU ASVEL</a><nav id="nav"><a href="index.html">Accueil</a><a href="actualites.html">Actualités</a><a href="mercato.html">Mercato</a><a href="matchs.html#calendrier">Matchs</a><a href="matchs.html#classement">Classements</a><a href="effectif.html">Effectif</a><a class="active" href="statistiques.html">Stats</a><a href="palmares.html">Palmarès</a><a href="acces.html">Accès</a><a href="a-propos.html">À propos</a></nav><button class="menu-toggle" id="menuToggle" type="button" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button></header>
+<header><a class="logo" href="index.html">ACTU ASVEL</a><nav id="nav"><a href="index.html">Accueil</a><a href="actualites.html">Actualités</a><a href="mercato.html">Mercato</a><a href="matchs.html#calendrier">Matchs</a><a href="matchs.html#classement">Classements</a><a href="effectif.html">Effectif</a><a class="active" href="statistiques.html">Stats</a><a href="palmares.html">Palmarès</a><a href="acces.html">Accès</a><a href="a-propos.html">À propos</a></nav><button aria-label="Ouvrir le menu" class="menu-toggle" id="menuToggle" type="button"><span></span><span></span><span></span></button></header>
 <section class="hero"><div><span class="eyebrow">Saison 2026-2027</span><h1>Statistiques ASVEL</h1><p>EuroLeague et Betclic ÉLITE. Statistiques de la saison 2026-2027.</p></div></section>
 <main class="page">
-<section class="stats-app" id="statsApp" aria-labelledby="stats-title">
-  <div class="stats-shell">
-    <div class="stats-head"><h2 id="stats-title">Statistiques de la saison</h2><p>Statistiques par compétition. Mise à jour manuelle au fil des journées officielles — aucune donnée n’est inventée.</p></div>
-    <div class="stats-toggle" role="tablist" aria-label="Choisir une compétition">
-      <button class="stats-tab active" type="button" role="tab" aria-selected="true" data-stats-group="euroleague">EuroLeague</button>
-      <button class="stats-tab" type="button" role="tab" aria-selected="false" data-stats-group="france">Compétitions françaises</button>
-    </div>
-    <div class="stats-sub" id="stats-subfrance" role="tablist" aria-label="Compétition française" hidden>
-      <button class="stats-tab active" type="button" role="tab" aria-selected="true" data-stats-comp="belite">Betclic ÉLITE</button>
-      <button class="stats-tab" type="button" role="tab" aria-selected="false" data-stats-comp="coupe">Coupe de France</button>
-      <button class="stats-tab" type="button" role="tab" aria-selected="false" data-stats-comp="leaderscup">Leaders Cup</button>
-      <button class="stats-tab" type="button" role="tab" aria-selected="false" data-stats-comp="supercoupe">Supercoupe LNB</button>
-    </div>
-    <div class="stats-comp active" id="stats-euroleague">
-      <h3 class="comp-title">EuroLeague</h3>
-      <div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th><th data-sort="eval">Éval</th></tr></thead><tbody>
+<section aria-labelledby="stats-title" class="stats-app" id="statsApp">
+<div class="stats-shell">
+<div class="stats-head"><h2 id="stats-title">Statistiques de la saison</h2><p>Statistiques par compétition. Mise à jour manuelle au fil des journées officielles — aucune donnée n’est inventée.</p></div>
+<div aria-label="Choisir une compétition" class="stats-toggle" role="tablist">
+<button aria-selected="true" class="stats-tab active" data-stats-group="euroleague" role="tab" type="button">EuroLeague</button>
+<button aria-selected="false" class="stats-tab" data-stats-group="france" role="tab" type="button">Compétitions françaises</button>
+</div>
+<div aria-label="Compétition française" class="stats-sub" hidden="" id="stats-subfrance" role="tablist">
+<button aria-selected="true" class="stats-tab active" data-stats-comp="belite" role="tab" type="button">Betclic ÉLITE</button>
+<button aria-selected="false" class="stats-tab" data-stats-comp="coupe" role="tab" type="button">Coupe de France</button>
+<button aria-selected="false" class="stats-tab" data-stats-comp="leaderscup" role="tab" type="button">Leaders Cup</button>
+<button aria-selected="false" class="stats-tab" data-stats-comp="supercoupe" role="tab" type="button">Supercoupe LNB</button>
+</div>
+<div class="stats-comp active" id="stats-euroleague">
+<h3 class="comp-title">EuroLeague</h3>
+<div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th><th data-sort="eval">Éval</th></tr></thead><tbody>
 <!-- ✏️ EuroLeague — MAJ : changer MJ · Min · Pts · Reb · Pd · Éval après chaque journée -->
 <tr data-player="Juhann Begarin" data-pos-order="Ailier"><td><span class="mono">JB</span>Juhann Begarin</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Myles Cale" data-pos-order="Arrière"><td><span class="mono">MC</span>Myles Cale</td><td>Arrière</td><td>5</td><td>79:17</td><td>23</td><td>11</td><td>7</td><td>23</td></tr>
@@ -78,32 +79,32 @@
 <tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>6</td><td>136:38</td><td>65</td><td>27</td><td>21</td><td>75</td></tr>
 <tr data-player="L. Sanz" data-pos-order="—"><td><span class="mono">LS</span>L. Sanz</td><td>—</td><td>1</td><td>1:10</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
 </tbody></table></div>
-    </div>
-    <div class="stats-comp" id="stats-belite">
-      <h3 class="comp-title">Betclic ÉLITE</h3>
-      <div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th><th data-sort="eval">Éval</th></tr></thead><tbody>
-<!-- ✏️ Betclic ÉLITE — MAJ : changer MJ · Min · Pts · Reb · Pd · Éval après chaque journée (cumul après J4) -->
+</div>
+<div class="stats-comp" id="stats-belite">
+<h3 class="comp-title">Betclic ÉLITE</h3>
+<div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th><th data-sort="eval">Éval</th></tr></thead><tbody>
+ Betclic ÉLITE — cumul actualisé avec la dernière feuille de match transmise ; évaluations cumulées non vérifiables 
 <tr data-player="Juhann Begarin" data-pos-order="Ailier"><td><span class="mono">JB</span>Juhann Begarin</td><td>Ailier</td><td>2</td><td>40:02</td><td>10</td><td>9</td><td>4</td><td>16</td></tr>
 <tr data-player="Myles Cale" data-pos-order="Arrière"><td><span class="mono">MC</span>Myles Cale</td><td>Arrière</td><td>1</td><td>11:57</td><td>4</td><td>2</td><td>0</td><td>—</td></tr>
-<tr data-player="Marc-Owen Fodzo Dada" data-pos-order="Meneur"><td><span class="mono">FD</span>Marc-Owen Fodzo Dada</td><td>Meneur</td><td>4</td><td>56:43</td><td>23</td><td>12</td><td>8</td><td>0</td></tr>
+<tr data-player="Marc-Owen Fodzo Dada" data-pos-order="Meneur"><td><span class="mono">FD</span>Marc-Owen Fodzo Dada</td><td>Meneur</td><td>5</td><td>72:49</td><td>31</td><td>13</td><td>10</td><td>—</td></tr>
 <tr data-player="TyTy Washington" data-pos-order="Meneur"><td><span class="mono">TyW</span>TyTy Washington</td><td>Meneur</td><td>1</td><td>26:36</td><td>10</td><td>2</td><td>6</td><td>11</td></tr>
-<tr data-player="Patty Mills" data-pos-order="Meneur"><td><span class="mono">PM</span>Patty Mills</td><td>Meneur</td><td>3</td><td>58:57</td><td>40</td><td>9</td><td>2</td><td>10</td></tr>
-<tr data-player="Bodian Massa" data-pos-order="Pivot"><td><span class="mono">BM</span>Bodian Massa</td><td>Pivot</td><td>4</td><td>49:15</td><td>12</td><td>14</td><td>2</td><td>0</td></tr>
-<tr data-player="Edwin Jackson" data-pos-order="Arrière"><td><span class="mono">EJ</span>Edwin Jackson</td><td>Arrière</td><td>4</td><td>57:11</td><td>7</td><td>9</td><td>6</td><td>11</td></tr>
+<tr data-player="Patty Mills" data-pos-order="Meneur"><td><span class="mono">PM</span>Patty Mills</td><td>Meneur</td><td>4</td><td>81:29</td><td>48</td><td>10</td><td>4</td><td>—</td></tr>
+<tr data-player="Bodian Massa" data-pos-order="Pivot"><td><span class="mono">BM</span>Bodian Massa</td><td>Pivot</td><td>5</td><td>59:57</td><td>18</td><td>20</td><td>2</td><td>—</td></tr>
+<tr data-player="Edwin Jackson" data-pos-order="Arrière"><td><span class="mono">EJ</span>Edwin Jackson</td><td>Arrière</td><td>5</td><td>62:46</td><td>8</td><td>9</td><td>6</td><td>—</td></tr>
 <tr data-player="Mathis Dossou-Yovo" data-pos-order="Pivot"><td><span class="mono">MDY</span>Mathis Dossou-Yovo</td><td>Pivot</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr data-player="Both Gach" data-pos-order="Ailier"><td><span class="mono">BG</span>Both Gach</td><td>Ailier</td><td>3</td><td>66:22</td><td>33</td><td>11</td><td>3</td><td>—</td></tr>
-<tr data-player="Joel Bolomboy" data-pos-order="Ailier fort"><td><span class="mono">JB</span>Joel Bolomboy</td><td>Ailier fort</td><td>4</td><td>96:17</td><td>28</td><td>25</td><td>8</td><td>13</td></tr>
+<tr data-player="Both Gach" data-pos-order="Ailier"><td><span class="mono">BG</span>Both Gach</td><td>Ailier</td><td>4</td><td>96:46</td><td>42</td><td>19</td><td>3</td><td>—</td></tr>
+<tr data-player="Joel Bolomboy" data-pos-order="Ailier fort"><td><span class="mono">JB</span>Joel Bolomboy</td><td>Ailier fort</td><td>5</td><td>115:04</td><td>32</td><td>29</td><td>8</td><td>—</td></tr>
 <tr data-player="David Lighty" data-pos-order="Ailier"><td><span class="mono">DL</span>David Lighty</td><td>Ailier</td><td>1</td><td>6:46</td><td>2</td><td>0</td><td>0</td><td>—</td></tr>
-<tr data-player="Hugo Besson" data-pos-order="Arrière"><td><span class="mono">HB</span>Hugo Besson</td><td>Arrière</td><td>4</td><td>93:11</td><td>47</td><td>8</td><td>15</td><td>7</td></tr>
-<tr data-player="Yves Pons" data-pos-order="Ailier fort"><td><span class="mono">YP</span>Yves Pons</td><td>Ailier fort</td><td>4</td><td>37:19</td><td>11</td><td>6</td><td>0</td><td>0</td></tr>
-<tr data-player="Tremont Waters" data-pos-order="Meneur"><td><span class="mono">TW</span>Tremont Waters</td><td>Meneur</td><td>4</td><td>89:35</td><td>56</td><td>5</td><td>20</td><td>6</td></tr>
-<tr data-player="Nate Sestina" data-pos-order="Ailier fort"><td><span class="mono">NS</span>Nate Sestina</td><td>Ailier fort</td><td>4</td><td>73:16</td><td>38</td><td>10</td><td>1</td><td>21</td></tr>
-<tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>3</td><td>76:24</td><td>39</td><td>9</td><td>9</td><td>9</td></tr>
-</tbody></table></div>
-    </div>
-    <div class="stats-comp" id="stats-coupe">
-      <h3 class="comp-title">Coupe de France</h3>
-      <div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
+<tr data-player="Hugo Besson" data-pos-order="Arrière"><td><span class="mono">HB</span>Hugo Besson</td><td>Arrière</td><td>5</td><td>112:27</td><td>58</td><td>11</td><td>18</td><td>—</td></tr>
+<tr data-player="Yves Pons" data-pos-order="Ailier fort"><td><span class="mono">YP</span>Yves Pons</td><td>Ailier fort</td><td>5</td><td>60:11</td><td>22</td><td>11</td><td>1</td><td>—</td></tr>
+<tr data-player="Tremont Waters" data-pos-order="Meneur"><td><span class="mono">TW</span>Tremont Waters</td><td>Meneur</td><td>5</td><td>106:59</td><td>62</td><td>5</td><td>26</td><td>—</td></tr>
+<tr data-player="Nate Sestina" data-pos-order="Ailier fort"><td><span class="mono">NS</span>Nate Sestina</td><td>Ailier fort</td><td>5</td><td>78:01</td><td>38</td><td>11</td><td>1</td><td>—</td></tr>
+<tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>4</td><td>99:18</td><td>49</td><td>11</td><td>14</td><td>—</td></tr>
+<tr data-player="L. Sanz" data-pos-order="—"><td><span class="mono">LS</span>L. Sanz</td><td>—</td><td>1</td><td>08:43</td><td>4</td><td>2</td><td>1</td><td>—</td></tr></tbody></table></div>
+</div>
+<div class="stats-comp" id="stats-coupe">
+<h3 class="comp-title">Coupe de France</h3>
+<div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
 <!-- ✏️ Coupe de France — MAJ : changer MJ · Min · Pts · Reb · Pd après chaque tour -->
 <tr data-player="Juhann Begarin" data-pos-order="Ailier"><td><span class="mono">JB</span>Juhann Begarin</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Myles Cale" data-pos-order="Arrière"><td><span class="mono">MC</span>Myles Cale</td><td>Arrière</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
@@ -122,10 +123,10 @@
 <tr data-player="Nate Sestina" data-pos-order="Ailier fort"><td><span class="mono">NS</span>Nate Sestina</td><td>Ailier fort</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 </tbody></table></div>
-    </div>
-    <div class="stats-comp" id="stats-leaderscup">
-      <h3 class="comp-title">Leaders Cup</h3>
-      <div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
+</div>
+<div class="stats-comp" id="stats-leaderscup">
+<h3 class="comp-title">Leaders Cup</h3>
+<div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
 <!-- ✏️ Leaders Cup — MAJ : changer MJ · Min · Pts · Reb · Pd après chaque match -->
 <tr data-player="Juhann Begarin" data-pos-order="Ailier"><td><span class="mono">JB</span>Juhann Begarin</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Myles Cale" data-pos-order="Arrière"><td><span class="mono">MC</span>Myles Cale</td><td>Arrière</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
@@ -144,10 +145,10 @@
 <tr data-player="Nate Sestina" data-pos-order="Ailier fort"><td><span class="mono">NS</span>Nate Sestina</td><td>Ailier fort</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 </tbody></table></div>
-    </div>
-    <div class="stats-comp" id="stats-supercoupe">
-      <h3 class="comp-title">Supercoupe LNB</h3>
-      <div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
+</div>
+<div class="stats-comp" id="stats-supercoupe">
+<h3 class="comp-title">Supercoupe LNB</h3>
+<div class="stats-table-scroll"><table><thead><tr><th data-sort="name">Joueur</th><th data-sort="pos">Poste</th><th data-sort="mj">MJ</th><th data-sort="min">Min</th><th data-sort="pts">Pts</th><th data-sort="reb">Reb</th><th data-sort="pd">Pd</th></tr></thead><tbody>
 <!-- ✏️ Supercoupe LNB — MAJ : changer MJ · Min · Pts · Reb · Pd après chaque match -->
 <tr data-player="Juhann Begarin" data-pos-order="Ailier"><td><span class="mono">JB</span>Juhann Begarin</td><td>Ailier</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Myles Cale" data-pos-order="Arrière"><td><span class="mono">MC</span>Myles Cale</td><td>Arrière</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
@@ -166,28 +167,28 @@
 <tr data-player="Nate Sestina" data-pos-order="Ailier fort"><td><span class="mono">NS</span>Nate Sestina</td><td>Ailier fort</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr data-player="Jae Crowder" data-pos-order="Ailier"><td><span class="mono">JC</span>Jae Crowder</td><td>Ailier</td><td>1</td><td>16:35</td><td>9</td><td>7</td><td>0</td></tr>
 </tbody></table></div>
-      <p class="stats-updated">Supercoupe LNB — stats <strong>finales</strong> du match du 19 septembre 2026 (1 match joué) · Source : LNB</p>
-    </div>
-    <p class="stats-updated">Mise à jour après la journée 7 d’EuroLeague (23 octobre 2026) et la journée 4 de Betclic ÉLITE · Sources : LNB / EuroLeague</p>
-  </div>
+<p class="stats-updated">Supercoupe LNB — stats <strong>finales</strong> du match du 19 septembre 2026 (1 match joué) · Source : LNB</p>
+</div>
+<p class="stats-updated">Statistiques Betclic ÉLITE : cumul actualisé avec la dernière feuille de match fournie (MJ, minutes, points, rebonds, passes). Évaluations cumulées à vérifier. EuroLeague : données précédentes conservées.</p>
+</div>
 </section>
 </main>
-<footer><div><strong>ACTU ASVEL</strong><p>Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club.</p></div><a href="https://www.instagram.com/ASVEL_NEWS" target="_blank" rel="noopener">Instagram @ASVEL_NEWS</a></footer>
-<div class="player-modal" id="playerModal" aria-hidden="true">
-  <div class="backdrop" data-close-player></div>
-  <article class="player-modal-card" role="dialog" aria-modal="true" aria-labelledby="playerModalName">
-    <button class="close" type="button" data-close-player aria-label="Fermer la fiche">✕</button>
-    <div class="player-modal-body">
-      <div class="player-pos" id="playerPos"></div><h2 id="playerModalName"></h2>
-      <div class="player-facts"><div class="player-fact"><small>Numéro</small><strong id="playerNum"></strong></div><div class="player-fact"><small>Nationalité</small><strong id="playerNat"></strong></div><div class="player-fact"><small>Naissance</small><strong id="playerBirth"></strong></div><div class="player-fact"><small>Taille</small><strong id="playerHeight"></strong></div></div>
-      <section class="player-section" id="playerClubsSec"><h3>Parcours</h3><ul id="playerClubs"></ul></section>
-      <section class="player-section" id="playerPalmaresSec"><h3>Palmarès</h3><ul id="playerPalmares"></ul></section>
-    </div>
-  </article>
+<footer><div><strong>ACTU ASVEL</strong><p>Média indépendant consacré à l’actualité de l’ASVEL, non affilié au club.</p></div><a href="https://www.instagram.com/ASVEL_NEWS" rel="noopener" target="_blank">Instagram @ASVEL_NEWS</a></footer>
+<div aria-hidden="true" class="player-modal" id="playerModal">
+<div class="backdrop" data-close-player=""></div>
+<article aria-labelledby="playerModalName" aria-modal="true" class="player-modal-card" role="dialog">
+<button aria-label="Fermer la fiche" class="close" data-close-player="" type="button">✕</button>
+<div class="player-modal-body">
+<div class="player-pos" id="playerPos"></div><h2 id="playerModalName"></h2>
+<div class="player-facts"><div class="player-fact"><small>Numéro</small><strong id="playerNum"></strong></div><div class="player-fact"><small>Nationalité</small><strong id="playerNat"></strong></div><div class="player-fact"><small>Naissance</small><strong id="playerBirth"></strong></div><div class="player-fact"><small>Taille</small><strong id="playerHeight"></strong></div></div>
+<section class="player-section" id="playerClubsSec"><h3>Parcours</h3><ul id="playerClubs"></ul></section>
+<section class="player-section" id="playerPalmaresSec"><h3>Palmarès</h3><ul id="playerPalmares"></ul></section>
 </div>
-<script src="site.js?v=20261002-theme-rouge" defer></script>
-<script src="data.js?v=20261002-theme-rouge" defer></script>
-<script src="notifs.js?v=20261002-theme-rouge" defer></script>
+</article>
+</div>
+<script defer="" src="site.js?v=20261002-theme-rouge"></script>
+<script defer="" src="data.js?v=20261002-theme-rouge"></script>
+<script defer="" src="notifs.js?v=20261002-theme-rouge"></script>
 <script>
 (function(){
 var app=document.getElementById('statsApp');if(!app)return;
