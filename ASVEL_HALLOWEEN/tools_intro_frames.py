@@ -59,7 +59,7 @@ place(bg, chars['freddy'], 165, 990, 380, 0.62, (255, 140, 60), -1, tint=(0.85, 
 place(bg, chars['myers'], 300, 1000, 395, 0.6, (255, 140, 60), -1, tint=(0.85, 0.88, 1.0))
 place(bg, chars['ghost'], 545, 1010, 420, 0.75, (255, 140, 60), -1, tint=(0.85, 0.88, 1.0))
 fog(bg, 920, 1080, 0.5)
-bg.convert('RGB').save('assets/intro_frames/shotB_start.jpg', quality=95)
+bg.convert('RGB').save('assets/intro/frames/shotB_start.jpg', quality=95)
 
 # --- Plan C : la route vers la LDLC Arena (ils avancent vers la caméra, l'arène derrière eux)
 bg = Image.open('assets/intro/frames/road_plate.png').convert('RGBA').resize((720, 1280), Image.LANCZOS)
@@ -68,5 +68,5 @@ place(bg, chars['freddy'], 175, 1110, 350, 0.5, (255, 90, 40), 0, tint=(1.05, 0.
 place(bg, chars['myers'], 315, 1125, 370, 0.5, (255, 90, 40), 0, tint=(1.05, 0.72, 0.68))
 place(bg, chars['ghost'], 520, 1135, 390, 0.62, (255, 90, 40), 0, tint=(1.05, 0.72, 0.68))
 fog(bg, 1080, 1200, 0.45)
-bg.convert('RGB').save('assets/intro_frames/shotC_start.jpg', quality=95)
+bg.convert('RGB').save('assets/intro/frames/shotC_start.jpg', quality=95)
 print('ok')
