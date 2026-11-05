@@ -47,20 +47,17 @@
     var primary = [
       ['Accueil', root + 'index.html', 'home'],
       ['Actualités', root + 'actualites.html', 'news'],
-      ['Matchs', root + 'matchs.html#calendrier', 'matches'],
+      ['Classement', root + 'matchs.html#classement', 'standings'],
+      ['Mercato', root + 'mercato.html', 'mercato'],
+      ['Calendrier', root + 'matchs.html#calendrier', 'matches'],
       ['Équipe', root + 'effectif.html', 'roster']
     ];
     var more = [
-      ['Statistiques', root + 'statistiques.html', 'stats', 'Chiffres par compétition'],
-      ['Classements', root + 'matchs.html#classement', 'standings', 'EuroLeague · Betclic ÉLITE'],
-      ['Mercato', root + 'mercato.html', 'mercato', 'Arrivées, départs, prêts'],
       ['Palmarès', root + 'palmares.html', 'honours', 'Titres et finales'],
-      ['Accès', root + 'acces.html', 'access', 'Venir à la salle'],
-      ['Mon compte', root + 'compte.html', 'account', 'Espace supporter'],
       ['À propos', root + 'a-propos.html', 'about', 'Le site et les mentions'],
-      ['Contact', root + 'a-propos.html#contact', 'contact', 'Nous écrire']
+      ['Nous contacter', root + 'nous-contacter.html', 'contact', 'Nous écrire']
     ];
-    if (FEATURES.bourse) more.splice(4, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
+    if (FEATURES.bourse) more.splice(1, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
     var moreKeys = more.map(function (m) { return m[2]; });
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -172,15 +169,12 @@
     function currentSection() {
       var page = location.pathname.split('/').pop() || 'index.html';
       if (inArticle || page === 'actualites.html') return 'news';
+      if (page === 'palmares.html') return 'honours';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
-      if (page === 'espace-membre.html') return 'account';
-      if (page === 'statistiques.html') return 'stats';
-      if (page === 'palmares.html') return 'honours';
-      if (page === 'acces.html') return 'access';
-      if (page === 'compte.html') return 'account';
       if (page === 'bourse-aux-places.html') return 'tickets';
-      if (page === 'a-propos.html') return location.hash === '#contact' ? 'contact' : 'about';
+      if (page === 'nous-contacter.html') return 'contact';
+      if (page === 'a-propos.html') return 'about';
       if (page === 'matchs.html') return location.hash === '#classement' ? 'standings' : 'matches';
       return 'home';
     }
