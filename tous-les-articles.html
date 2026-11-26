@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tous les Articles — ASVEL Fans</title>
+  <meta name="description" content="Archives complètes de tous les articles sur ASVEL : mercato, matchs, joueurs, actualités.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .search-box {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+    }
+
+    .articles-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .article-link {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .article-link:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .article-link h3 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text-dark);
+    }
+
+    .article-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .article-category {
+      display: inline-block;
+      background: rgba(212, 165, 116, 0.1);
+      color: var(--accent);
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link active">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
+    <div class="container">
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Tous les Articles</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Archives complètes — 38 articles sur l'ASVEL</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+
+      <!-- SEARCH -->
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Chercher un article... (joueur, match, mercato)"
+          onkeyup="filterArticles()"
+        >
+      </div>
+
+      <!-- ARTICLES GRID -->
+      <div class="articles-list" id="articlesList"></div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+  <script>
+    // All articles - automatically categorized by keyword
+    const articles = [
+      { title: 'Mercato ASVEL vs JFL', url: 'articles/asvel-mercato-jfl.html', cat: 'Mercato' },
+      { title: 'Quatre recrues et reprise collective', url: 'articles/asvel-quatre-recrues-reprise-collective.html', cat: 'Recrutement' },
+      { title: 'Effectif complet - Récap', url: 'articles/effectif-complet-recap-asvel.html', cat: 'Effectif' },
+      { title: 'Marc-Owen Fodzo Dada à l\'ASVEL', url: 'articles/fodzo-dada-asvel.html', cat: 'Joueur' },
+      { title: 'Fodzo Dada - Officiel', url: 'articles/fodzo-dada-officiel-asvel.html', cat: 'Recrutement' },
+      { title: 'Les frères Buss à l\'ASVEL', url: 'articles/freres-buss-asvel.html', cat: 'Rumeur' },
+      { title: 'Frères Buss - Exclusivité négociation', url: 'articles/freres-buss-exclusivite-negociation-asvel.html', cat: 'Mercato' },
+      { title: 'Histoire de l\'ASVEL (1948-Aujourd\'hui)', url: 'articles/histoire-asvel-1948-aujourdhui.html', cat: 'Histoire' },
+      { title: 'Hugo Besson à l\'ASVEL', url: 'articles/hugo-besson-asvel.html', cat: 'Joueur' },
+      { title: 'Hugo Besson - Nouvelle pièce du puzzle', url: 'articles/hugo-besson-nouvelle-piece-asvel.html', cat: 'Recrutement' },
+      { title: 'Hugo Besson - Officiel', url: 'articles/hugo-besson-officiel-asvel.html', cat: 'Recrutement' },
+      { title: 'Jackson & Lighty - Prolongation', url: 'articles/jackson-lighty-prolongation-asvel.html', cat: 'Contrat' },
+      { title: 'Jae Crowder à l\'ASVEL', url: 'articles/jae-crowder-asvel.html', cat: 'Joueur' },
+      { title: 'Joel Bolomboy à l\'ASVEL', url: 'articles/joel-bolomboy-asvel.html', cat: 'Joueur' },
+      { title: 'Joffrey Lauvergne à l\'ASVEL', url: 'articles/joffrey-lauvergne-asvel.html', cat: 'Rumeur' },
+      { title: 'Juhann Begarin - Pigiste médical', url: 'articles/juhann-begarin-asvel-pigiste-medical.html', cat: 'Recrutement' },
+      { title: 'Mathis Dossou-Yovo à l\'ASVEL', url: 'articles/mathis-dossou-yovo-asvel.html', cat: 'Joueur' },
+      { title: 'Mathis Dossou-Yovo - Officiel', url: 'articles/mathis-dossou-yovo-officiel-asvel.html', cat: 'Recrutement' },
+      { title: 'Mbaye Ndiaye - Départ à l\'Olympiacos', url: 'articles/mbaye-ndiaye-depart-olympiakos.html', cat: 'Départ' },
+      { title: 'Mbaye Ndiaye quitte l\'ASVEL', url: 'articles/mbaye-ndiaye-quitte-asvel.html', cat: 'Mercato' },
+      { title: 'Myles Cale à l\'ASVEL', url: 'articles/myles-cale-asvel.html', cat: 'Joueur' },
+      { title: 'Nate Sestina à l\'ASVEL', url: 'articles/nate-sestina-asvel.html', cat: 'Joueur' },
+      { title: 'Petr Cornelie à l\'ASVEL', url: 'articles/petr-cornelie-asvel.html', cat: 'Rumeur' },
+      { title: 'Le projet villeurbannais - Fiasco?', url: 'articles/projet-villeurbannais-fiasco.html', cat: 'Analyse' },
+      { title: 'Recrutement interdit - Problème de dette', url: 'articles/recrutement-interdit-asvel-dette-lauvergne.html', cat: 'Problème' },
+      { title: 'Supporters en colère', url: 'articles/supporters-colere-asvel.html', cat: 'Club' },
+      { title: 'Tony Parker clarifie la situation', url: 'articles/tony-parker-clarifie-situation-asvel-lauvergne.html', cat: 'Club' },
+      { title: 'Tony Parker - HiFi Francisco & dossiers manqués', url: 'articles/tony-parker-hifi-francisco-dossiers-manques.html', cat: 'Analyse' },
+      { title: 'Tony Parker sacrifie son salaire', url: 'articles/tony-parker-salaire-sacrifice-asvel.html', cat: 'Club' },
+      { title: 'Tremont Waters à l\'ASVEL', url: 'articles/tremont-waters-asvel.html', cat: 'Joueur' },
+      { title: 'Tremont Waters - Officiel', url: 'articles/tremont-waters-officiel-asvel.html', cat: 'Recrutement' },
+      { title: 'TyTy Washington à l\'ASVEL', url: 'articles/tyty-washington-asvel.html', cat: 'Joueur' },
+      { title: 'TyTy Washington - Officiel', url: 'articles/tyty-washington-officiel-asvel.html', cat: 'Recrutement' },
+      { title: 'Vincent Collet - Hésitation ASVEL?', url: 'articles/vincent-collet-hesitation-asvel.html', cat: 'Rumeur' },
+    ];
+
+    function renderArticles(articlesToRender) {
+      const container = document.getElementById('articlesList');
+
+      if (articlesToRender.length === 0) {
+        container.innerHTML = '<div class="no-results">Aucun article trouvé. Essayez une autre recherche.</div>';
+        return;
+      }
+
+      container.innerHTML = articlesToRender.map(article => `
+        <a href="${article.url}" class="article-link">
+          <span class="article-category">${article.cat}</span>
+          <h3>${article.title}</h3>
+          <div class="article-meta">📄 Lire l'article</div>
+        </a>
+      `).join('');
+    }
+
+    function filterArticles() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+      const filtered = articles.filter(article =>
+        article.title.toLowerCase().includes(searchTerm) ||
+        article.cat.toLowerCase().includes(searchTerm)
+      );
+
+      renderArticles(filtered);
+    }
+
+    // Render all articles on page load
+    renderArticles(articles);
+  </script>
+</body>
+</html>
