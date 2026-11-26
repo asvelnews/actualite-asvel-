@@ -1,163 +1,63 @@
 (function () {
   'use strict';
 
-  /* ---- Thème clair / sombre : bootstrap avant tout rendu ---- */
-  var THEME_KEY = 'asvel-theme';
-
-  function readStorage(key) {
-    try { return localStorage.getItem(key); } catch (e) { return null; }
-  }
-  function writeStorage(key, value) {
-    try { localStorage.setItem(key, value); } catch (e) { /* stockage indisponible */ }
-  }
-  function applyTheme(theme, persist) {
-    document.documentElement.setAttribute('data-theme', theme);
-    if (persist) writeStorage(THEME_KEY, theme);
-    var btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = theme === 'light' ? '☀' : '☾';
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#000000');
-  }
-  function toggleTheme() {
-    var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    applyTheme(next, true);
-  }
-  var savedTheme = readStorage(THEME_KEY);
-  if (savedTheme === 'light' || savedTheme === 'dark') {
-    applyTheme(savedTheme, false);
-  } else if (window.matchMedia) {
-    var mq = window.matchMedia('(prefers-color-scheme: light)');
-    var followSystem = function () {
-      if (!readStorage(THEME_KEY)) applyTheme(mq.matches ? 'light' : 'dark', false);
-    };
-    followSystem();
-    if (mq.addEventListener) mq.addEventListener('change', followSystem);
-    else if (mq.addListener) mq.addListener(followSystem);
-  }
-
   var header = document.querySelector('body > header, .site-header');
-  if (header) {
+  var nav = header && header.querySelector('nav, .site-nav, .nav');
+  var toggle = header && header.querySelector('.menu-toggle');
+
+  if (header && nav) {
     var inArticle = location.pathname.indexOf('/articles/') !== -1;
     var root = inArticle ? '../' : '';
-    /* Fonctionnalités préparées mais désactivées. Passer bourse à true quand le service de
-       Bourse aux places existe (page bourse-aux-places.html) : l'entrée « Plus » et le bloc
-       d'accueil (#bourse-block) apparaissent alors sans autre modification. */
-    var FEATURES = window.ASVEL_FEATURES || { bourse: false };
-
-    var primary = [
+    var items = [
       ['Accueil', root + 'index.html', 'home'],
       ['Actualités', root + 'actualites.html', 'news'],
-      ['Classement', root + 'matchs.html#classement', 'standings'],
       ['Mercato', root + 'mercato.html', 'mercato'],
-      ['Calendrier', root + 'matchs.html#calendrier', 'matches'],
-      ['Équipe', root + 'effectif.html', 'roster']
+      ['Matchs', root + 'matchs.html#calendrier', 'matches'],
+      ['Classements', root + 'matchs.html#classement', 'standings'],
+      ['Effectif', root + 'effectif.html', 'roster'],
+      ['Stats', root + 'statistiques.html', 'stats'],
+      ['Palmarès', root + 'palmares.html', 'honours'],
+      ['À propos', root + 'a-propos.html', 'about']
     ];
-    var more = [
-      ['Palmarès', root + 'palmares.html', 'honours', 'Titres et finales'],
-      ['À propos', root + 'a-propos.html', 'about', 'Le site et les mentions'],
-      ['Nous contacter', root + 'nous-contacter.html', 'contact', 'Nous écrire']
-    ];
-    if (FEATURES.bourse) more.splice(1, 0, ['Bourse aux places', root + 'bourse-aux-places.html', 'tickets', 'Échanger des places']);
-    var moreKeys = more.map(function (m) { return m[2]; });
-
-    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-    function linkHtml(item, withHint) {
-      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + esc(item[0]) +
-        (withHint && item[3] ? '<small>' + esc(item[3]) + '</small>' : '') + '</a>';
-    }
 
     header.classList.add('global-site-header');
 
     var logo = header.querySelector('.logo');
-    if (!logo) {
-      logo = document.createElement('a');
-      logo.className = 'logo';
-      header.insertBefore(logo, header.firstChild);
+    if (logo) {
+      var oldFanBadge = header.querySelector('.fan-badge');
+      if (oldFanBadge) oldFanBadge.remove();
+      var fanBadge = document.createElement('span');
+      fanBadge.className = 'fan-badge';
+      fanBadge.textContent = 'SITE FAN';
+      fanBadge.title = 'Média indépendant créé par des fans, non affilié au club ASVEL';
+      fanBadge.style.cssText = 'display:inline-flex;align-items:center;margin-left:.55rem;padding:.2rem .5rem;background:#c9a44d;color:#050505;border-radius:3px;font-family:Oswald,Arial,sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1;white-space:nowrap;vertical-align:middle;';
+      logo.insertAdjacentElement('afterend', fanBadge);
     }
-    logo.href = root + 'index.html';
-    logo.textContent = 'ACTU ASVEL';
 
-    var oldFanBadge = header.querySelector('.fan-badge');
-    if (oldFanBadge) oldFanBadge.remove();
-    var fanBadge = document.createElement('span');
-    fanBadge.className = 'fan-badge';
-    fanBadge.textContent = 'SITE FAN';
-    fanBadge.title = 'Média indépendant créé par des fans, non affilié au club ASVEL';
-    fanBadge.style.cssText = 'display:inline-flex;align-items:center;margin-left:.55rem;padding:.2rem .5rem;background:#ff3b30;color:#fff;border-radius:3px;font-family:Oswald,Arial,sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1;white-space:nowrap;vertical-align:middle;';
-    logo.insertAdjacentElement('afterend', fanBadge);
+    nav.classList.add('global-site-nav');
+    nav.id = 'site-navigation';
+    nav.setAttribute('aria-label', 'Navigation principale');
+    nav.innerHTML = items.map(function (item) {
+      return '<a href="' + item[1] + '" data-menu-page="' + item[2] + '">' + item[0] + '</a>';
+    }).join('');
 
-    var oldNav = header.querySelector('nav, .site-nav, .nav');
-    var desktopNav = document.createElement('nav');
-    desktopNav.id = 'site-navigation';
-    desktopNav.className = 'global-site-nav';
-    desktopNav.setAttribute('aria-label', 'Navigation principale');
-    desktopNav.innerHTML = primary.map(function (item) { return linkHtml(item, false); }).join('') +
-      '<button type="button" class="plus-toggle" id="plusToggle" aria-haspopup="true" aria-expanded="false" aria-controls="plus-panel">Plus <i aria-hidden="true">▾</i></button>';
-    if (oldNav) oldNav.replaceWith(desktopNav);
-    else header.appendChild(desktopNav);
-
-    /* Panneau « Plus » (bureau) : hors du <nav> pour ne pas hériter de ses styles de liens */
-    var plusPanel = document.createElement('div');
-    plusPanel.id = 'plus-panel';
-    plusPanel.className = 'plus-panel';
-    plusPanel.setAttribute('aria-label', 'Plus de pages');
-    plusPanel.hidden = true;
-    plusPanel.innerHTML = more.map(function (item) { return linkHtml(item, true); }).join('');
-    header.appendChild(plusPanel);
-    var plusToggle = desktopNav.querySelector('#plusToggle');
-    function setPlus(open, restoreFocus) {
-      plusPanel.hidden = !open;
-      plusToggle.setAttribute('aria-expanded', String(open));
-      plusToggle.classList.toggle('open', open);
-      if (!open && restoreFocus) plusToggle.focus();
+    if (!toggle) {
+      toggle = document.createElement('button');
+      toggle.className = 'menu-toggle';
+      toggle.type = 'button';
+      toggle.innerHTML = '<span></span><span></span><span></span>';
+      header.appendChild(toggle);
+    } else {
+      var cleanToggle = toggle.cloneNode(true);
+      toggle.parentNode.replaceChild(cleanToggle, toggle);
+      toggle = cleanToggle;
     }
-    plusToggle.addEventListener('click', function (event) {
-      event.stopPropagation();
-      setPlus(plusPanel.hidden, false);
-    });
-    plusPanel.addEventListener('click', function (event) {
-      if (event.target.closest('a')) setPlus(false, false);
-    });
-    document.addEventListener('click', function (event) {
-      if (!plusPanel.hidden && !plusPanel.contains(event.target)) setPlus(false, false);
-    });
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && !plusPanel.hidden) setPlus(false, true);
-    });
 
-    var oldToggle = header.querySelector('.menu-toggle, .global-menu-toggle');
-    if (oldToggle) oldToggle.remove();
-
-    var toggle = document.createElement('button');
-    toggle.type = 'button';
     toggle.id = 'globalMenuToggle';
-    toggle.className = 'menu-toggle global-menu-toggle';
-    toggle.setAttribute('aria-controls', 'mobile-site-navigation');
+    toggle.classList.add('global-menu-toggle');
+    toggle.setAttribute('aria-controls', nav.id);
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', 'Ouvrir le menu');
-    toggle.innerHTML = '<span></span><span></span><span></span>';
-    header.appendChild(toggle);
-
-    var themeBtn = document.createElement('button');
-    themeBtn.type = 'button';
-    themeBtn.className = 'theme-toggle';
-    themeBtn.id = 'themeToggle';
-    themeBtn.setAttribute('aria-label', 'Basculer entre le thème clair et sombre');
-    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀' : '☾';
-    header.insertBefore(themeBtn, toggle);
-    themeBtn.addEventListener('click', toggleTheme);
-
-    document.querySelectorAll('.mobile-nav-drawer,.mobile-nav-backdrop').forEach(function (el) { el.remove(); });
-
-    var drawer = document.createElement('nav');
-    drawer.id = 'mobile-site-navigation';
-    drawer.className = 'mobile-nav-drawer';
-    drawer.setAttribute('aria-label', 'Navigation mobile');
-    drawer.setAttribute('aria-hidden', 'true');
-    drawer.innerHTML = primary.map(function (item) { return linkHtml(item, false); }).join('') +
-      '<div class="drawer-label">Plus</div>' +
-      more.map(function (item) { return linkHtml(item, false); }).join('');
-    document.body.appendChild(drawer);
 
     var backdrop = document.createElement('button');
     backdrop.type = 'button';
@@ -169,76 +69,74 @@
     function currentSection() {
       var page = location.pathname.split('/').pop() || 'index.html';
       if (inArticle || page === 'actualites.html') return 'news';
-      if (page === 'palmares.html') return 'honours';
       if (page === 'mercato.html') return 'mercato';
       if (page === 'effectif.html') return 'roster';
-      if (page === 'bourse-aux-places.html') return 'tickets';
-      if (page === 'nous-contacter.html') return 'contact';
+      if (page === 'statistiques.html') return 'stats';
+      if (page === 'palmares.html') return 'honours';
       if (page === 'a-propos.html') return 'about';
-      if (page === 'matchs.html') return location.hash === '#classement' ? 'standings' : 'matches';
+      if (page === 'matchs.html') return location.hash.indexOf('classement') !== -1 ? 'standings' : 'matches';
       return 'home';
     }
 
     function markCurrentSection() {
       var section = currentSection();
-      [desktopNav, plusPanel, drawer].forEach(function (nav) {
-        nav.querySelectorAll('a').forEach(function (link) {
-          var active = link.dataset.menuPage === section;
-          link.classList.toggle('active', active);
-          if (active) link.setAttribute('aria-current', 'page');
-          else link.removeAttribute('aria-current');
-        });
+      nav.querySelectorAll('a').forEach(function (link) {
+        var active = link.dataset.menuPage === section;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
       });
-      plusToggle.classList.toggle('active', moreKeys.indexOf(section) !== -1);
     }
 
     function syncMenuPosition() {
-      var rect = header.getBoundingClientRect();
-      document.documentElement.style.setProperty('--mobile-nav-top', Math.max(0, Math.round(rect.bottom)) + 'px');
+      var bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+      document.documentElement.style.setProperty('--mobile-nav-top', bottom + 'px');
     }
 
-    function setMenu(open, restoreFocus) {
+    function closeMenu(restoreFocus) {
+      nav.classList.remove('open');
+      toggle.classList.remove('open');
+      backdrop.classList.remove('visible');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Ouvrir le menu');
+      document.body.classList.remove('menu-open');
+      if (restoreFocus) toggle.focus();
+    }
+
+    function openMenu() {
       syncMenuPosition();
-      drawer.classList.toggle('open', open);
-      toggle.classList.toggle('open', open);
-      backdrop.classList.toggle('visible', open);
-      document.body.classList.toggle('menu-open', open);
-      drawer.setAttribute('aria-hidden', String(!open));
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      if (!open && restoreFocus) toggle.focus();
+      nav.classList.add('open');
+      toggle.classList.add('open');
+      backdrop.classList.add('visible');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Fermer le menu');
+      document.body.classList.add('menu-open');
+      window.setTimeout(function () {
+        var firstLink = nav.querySelector('a');
+        if (firstLink) firstLink.focus();
+      }, 60);
     }
 
     toggle.addEventListener('click', function () {
-      setMenu(!drawer.classList.contains('open'), false);
+      if (nav.classList.contains('open')) closeMenu(false);
+      else openMenu();
     });
-    backdrop.addEventListener('click', function () { setMenu(false, true); });
-    drawer.addEventListener('click', function (event) {
-      if (event.target.closest('a')) setMenu(false, false);
+    backdrop.addEventListener('click', function () { closeMenu(true); });
+    nav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () { closeMenu(false); });
     });
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && drawer.classList.contains('open')) setMenu(false, true);
+      if (event.key === 'Escape' && nav.classList.contains('open')) closeMenu(true);
     });
     window.addEventListener('resize', function () {
-      syncMenuPosition();
-      if (window.innerWidth > 980 && drawer.classList.contains('open')) setMenu(false, false);
-      if (window.innerWidth <= 980 && !plusPanel.hidden) setPlus(false, false);
+      if (window.innerWidth > 980) closeMenu(false);
+      else if (nav.classList.contains('open')) syncMenuPosition();
     });
     window.addEventListener('scroll', function () {
-      if (drawer.classList.contains('open')) syncMenuPosition();
+      if (nav.classList.contains('open')) syncMenuPosition();
     }, { passive: true });
-    window.addEventListener('hashchange', function () {
-      markCurrentSection();
-      if (window.innerWidth <= 980) setMenu(false, false);
-    });
-
-    syncMenuPosition();
+    window.addEventListener('hashchange', markCurrentSection);
     markCurrentSection();
-
-    /* Blocs « préparés » : visibles uniquement quand la fonctionnalité est activée */
-    document.querySelectorAll('[data-feature]').forEach(function (block) {
-      block.hidden = !FEATURES[block.getAttribute('data-feature')];
-    });
   }
 
   /* ---- Lien "Mentions légales" dans le pied de page, sur toutes les pages ---- */
@@ -273,7 +171,9 @@
   topButton.setAttribute('aria-label', 'Revenir en haut de la page');
   topButton.textContent = '↑';
   document.body.appendChild(topButton);
-  topButton.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  topButton.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   function onScroll() {
     var y = window.scrollY || document.documentElement.scrollTop;
@@ -287,56 +187,60 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---- Monogrammes : images manquantes → placeholder noir/or ---- */
-  function initials(text, fallback) {
-    var words = String(text || '').trim().split(/\s+/).filter(Boolean);
-    if (!words.length) return fallback || 'ASVEL';
-    var out = words.map(function (w) { return w.charAt(0); }).slice(0, 2).join('').toUpperCase();
-    return out || fallback || 'ASVEL';
+  /* --- Animations d'apparition au défilement --- */
+  var revealTargets = document.querySelectorAll(
+    '.metric, .player, .news-card, .player-card, .staff-card, article.article, .latest-card, ' +
+    '.movement, .article-content > h2, .article-content > h3, .article-content > p, .article-content > blockquote, ' +
+    '.trophy, .comparison-card'
+  );
+  if (revealTargets.length && 'IntersectionObserver' in window) {
+    revealTargets.forEach(function (el) { el.classList.add('reveal-on-scroll'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach(function (el) { io.observe(el); });
+    /* Filet de sécurité : si un élément reste caché trop longtemps (contenu ajouté dynamiquement après coup), on le révèle quand même */
+    window.setTimeout(function () {
+      document.querySelectorAll('.reveal-on-scroll:not(.revealed)').forEach(function (el) {
+        el.classList.add('revealed');
+      });
+    }, 2500);
+  } else {
+    revealTargets.forEach(function (el) { el.classList.add('revealed'); });
   }
-  document.addEventListener('error', function (event) {
-    var target = event.target;
-    if (!target || target.tagName !== 'IMG') return;
-    if (target.matches('.hero-image')) { target.style.display = 'none'; return; }
-    if (target.closest('.initials')) {
-      var box = target.closest('.initials');
-      if (!box.textContent.trim()) {
-        var monogram = document.createElement('span');
-        monogram.className = 'media-fallback';
-        monogram.setAttribute('aria-hidden', 'true');
-        monogram.textContent = initials(target.getAttribute('alt') || '', 'ASVEL');
-        box.appendChild(monogram);
-      }
-      target.style.display = 'none';
-      return;
-    }
-    if (target.closest('.club-mark')) { target.style.display = 'none'; return; }
-    if (target.closest('.movement-photo')) {
-      var div = document.createElement('div');
-      div.className = 'movement-photo media-fallback';
-      div.textContent = initials(target.getAttribute('alt') || '', 'ASVEL');
-      if (target.parentNode) target.parentNode.replaceChild(div, target);
-      return;
-    }
-    target.style.display = 'none';
-  }, true);
 
-  /* ---- Reveal au défilement (désactivé si réduction de mouvement) ---- */
-  var revealTargets = document.querySelectorAll('.reveal-on-scroll');
-  if (revealTargets.length) {
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if ('IntersectionObserver' in window && !reduced) {
-      var revealObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      revealTargets.forEach(function (el) { revealObserver.observe(el); });
-    } else {
-      revealTargets.forEach(function (el) { el.classList.add('revealed'); });
-    }
+  /* --- Compteurs animés pour les chiffres clés --- */
+  var counters = document.querySelectorAll('.metric strong, .stat strong');
+  if (counters.length && 'IntersectionObserver' in window) {
+    var counterIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        counterIo.unobserve(el);
+        var raw = el.textContent.trim();
+        var match = raw.match(/^(\d+)/);
+        if (!match) return;
+        var target = parseInt(match[1], 10);
+        var suffix = raw.slice(match[1].length);
+        var start = 0;
+        var duration = 900;
+        var startTime = null;
+        function tick(ts) {
+          if (!startTime) startTime = ts;
+          var progress = Math.min(1, (ts - startTime) / duration);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = raw;
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { counterIo.observe(el); });
   }
 })();
