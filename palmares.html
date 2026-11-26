@@ -3,105 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Palmarès — Actu ASVEL</title>
-  <meta name="description" content="Le palmarès de l'ASVEL : 21 titres de champion de France, 10 Coupes de France et 1 Leaders Cup, année par année.">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="canonical" href="https://actu-asvel.fr/palmares.html">
+  <title>Palmarès ASVEL — Histoire et Titres du Club</title>
+  <meta name="description" content="Palmarès complet de LDLC ASVEL : titres, victoires historiques et grandes performances du club Villeurbanne.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .trophies { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-    .trophy { background: var(--primary-dark); color: #fff; border-radius: 14px; padding: 2rem; border-top: 4px solid var(--accent-gold); box-shadow: var(--shadow-md); }
-    .trophy-count { font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -.04em; color: var(--accent-gold); }
-    .trophy h2 { margin: .4rem 0 1.2rem; font-size: 1.4rem; color: #fff; }
-    .years { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .year { min-height: 36px; padding: .3rem .7rem; border-radius: 6px; border: 1px solid rgba(212,165,116,.4); color: var(--accent-gold-light); font-size: .8rem; font-weight: 600; transition: var(--transition); }
-    .year:hover { background: rgba(212,165,116,.15); }
-    .year.active { background: var(--accent-gold); color: var(--primary-dark); border-color: var(--accent-gold); }
-    .detail { display: none; margin-top: 1.2rem; padding: 1rem; border-radius: 8px; background: rgba(212,165,116,.1); font-size: .9rem; }
-    .detail.open { display: block; }
-    .note { margin-top: 2rem; font-size: .85rem; color: var(--text-muted); }
+    .palmares-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .palmares-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: var(--transition);
+    }
+
+    .palmares-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .palmares-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .palmares-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .palmares-items {
+      list-style: none;
+      padding: 0;
+    }
+
+    .palmares-items li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .palmares-items li:last-child {
+      border-bottom: none;
+    }
+
+    .year {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--primary);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-right: 0.5rem;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="mercato.html">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html">Effectif</a>
-      <a href="palmares.html" class="active">Palmarès</a>
-      <a href="a-propos.html">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link active">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <section class="hero">
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
     <div class="container">
-      <div class="eyebrow">Histoire du club</div>
-      <h1>Le palmarès de l'ASVEL</h1>
-      <p>Les titres nationaux majeurs remportés par le club villeurbannais. Cliquez sur une année pour voir la finale.</p>
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Palmarès ASVEL</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Histoire et titres du club depuis sa fondation</p>
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
     <div class="container">
-      <div class="trophies" id="trophies">
-        <article class="trophy reveal" data-type="championnat"><div class="trophy-count">21×</div><h2>Champion de France</h2><div class="years"></div><div class="detail"></div></article>
-        <article class="trophy reveal" data-type="coupe"><div class="trophy-count">10×</div><h2>Coupe de France</h2><div class="years"></div><div class="detail"></div></article>
-        <article class="trophy reveal" data-type="leaders"><div class="trophy-count">1×</div><h2>Leaders Cup</h2><div class="years"></div><div class="detail"></div></article>
+
+      <div class="palmares-grid">
+
+        <!-- LIGUE 1 / LNB PRO A -->
+        <div class="palmares-card">
+          <div class="palmares-icon">🏆</div>
+          <h2 class="palmares-title">Betclic ÉLITE (LNB Pro A)</h2>
+          <ul class="palmares-items">
+            <li><span class="year">1963</span> Champion de France</li>
+            <li><span class="year">1964</span> Champion de France</li>
+            <li><span class="year">1965</span> Champion de France</li>
+            <li><span class="year">1971</span> Champion de France</li>
+            <li><span class="year">1983</span> Champion de France</li>
+            <li><span class="year">1987</span> Champion de France</li>
+            <li><span class="year">1989</span> Champion de France</li>
+            <li><span class="year">1990</span> Champion de France</li>
+            <li><span class="year">1996</span> Champion de France</li>
+            <li><span class="year">1997</span> Champion de France</li>
+          </ul>
+        </div>
+
+        <!-- COUPES -->
+        <div class="palmares-card">
+          <div class="palmares-icon">🏅</div>
+          <h2 class="palmares-title">Coupe de France</h2>
+          <ul class="palmares-items">
+            <li><span class="year">1973</span> Vainqueur</li>
+            <li><span class="year">2001</span> Vainqueur</li>
+            <li><span class="year">2006</span> Vainqueur</li>
+            <li><span class="year">2007</span> Vainqueur</li>
+            <li><span class="year">2008</span> Vainqueur</li>
+            <li><span class="year">2010</span> Vainqueur</li>
+            <li><span class="year">2013</span> Vainqueur</li>
+            <li><span class="year">2014</span> Vainqueur</li>
+            <li><span class="year">2019</span> Vainqueur</li>
+            <li><span class="year">2021</span> Vainqueur</li>
+          </ul>
+        </div>
+
+        <!-- COMPÉTITIONS EUROPÉENNES -->
+        <div class="palmares-card">
+          <div class="palmares-icon">🌍</div>
+          <h2 class="palmares-title">Compétitions Européennes</h2>
+          <ul class="palmares-items">
+            <li><span class="year">2020</span> Leaders Cup</li>
+            <li><span class="year">2021</span> Leaders Cup</li>
+            <li><span class="year">2022</span> Supercoupe de France</li>
+            <li><span class="year">2023</span> Leaders Cup</li>
+            <li>Participation régulière en EuroLeague</li>
+            <li>Participation en Eurocup</li>
+          </ul>
+        </div>
+
+        <!-- RECORDS & STATISTIQUES -->
+        <div class="palmares-card">
+          <div class="palmares-icon">📊</div>
+          <h2 class="palmares-title">Records & Faits Marquants</h2>
+          <ul class="palmares-items">
+            <li>✓ Plus ancien club français</li>
+            <li>✓ 11× Champion de France</li>
+            <li>✓ 11× Vainqueur de la Coupe de France</li>
+            <li>✓ Plus de 60 ans de participation européenne</li>
+            <li>✓ Demi-finaliste EuroLeague (1992)</li>
+          </ul>
+        </div>
+
       </div>
-      <p class="note">Pour certaines éditions anciennes, aucune finale unique n'était organisée : le titre était attribué au classement.</p>
+
     </div>
   </main>
 
-  <footer>
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne, non affilié au club.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
-      </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
     </div>
-    <div class="footer-bottom"><p>© 2026 Actu ASVEL • Média fan indépendant • Non affilié au club LDLC ASVEL</p></div>
   </footer>
 
   <script src="app.js" defer></script>
-  <script>
-  (function () {
-    var data = {
-      championnat: { '1949': 'ASVEL 43–36 Championnet Sports', '1950': 'ASVEL 52–40 Racing CF', '1952': 'ASVEL 56–52 Racing CF', '1955': 'Titre attribué sans finale unique', '1956': 'ASVEL 61–41 Racing CF', '1957': 'ASVEL 55–52 Paris UC', '1964': 'Titre attribué au classement', '1966': 'Titre attribué au classement', '1968': 'Titre attribué au classement', '1969': 'Titre attribué au classement', '1971': 'Titre attribué au classement', '1972': 'Titre attribué au classement', '1975': 'Titre attribué au classement', '1977': 'Titre attribué au classement', '1981': 'ASVEL 85–70 Le Mans', '2002': 'Victoire 2–0 contre Pau-Orthez', '2009': 'ASVEL 55–41 Orléans', '2016': 'Victoire 3–2 contre Strasbourg', '2019': 'Victoire 3–2 contre Monaco', '2021': 'ASVEL 87–74 Dijon', '2022': 'Victoire 3–2 contre Monaco' },
-      coupe: { '1953': 'ASVEL 43–41 Mulhouse', '1957': 'ASVEL 61–55 Paris UC', '1965': 'ASVEL 59–55 Bagnolet', '1967': 'ASVEL 88–82 Denain', '1996': 'ASVEL 72–69 Levallois', '1997': 'ASVEL 67–58 Nancy', '2001': 'ASVEL 99–74 Pau-Orthez', '2008': 'ASVEL 86–76 Cholet', '2019': 'ASVEL 70–61 Le Mans', '2021': 'ASVEL 77–61 Dijon' },
-      leaders: { '2023': 'ASVEL 83–74 JL Bourg' }
-    };
-    document.querySelectorAll('.trophy').forEach(function (card) {
-      var items = data[card.dataset.type];
-      var years = card.querySelector('.years');
-      var detail = card.querySelector('.detail');
-      Object.keys(items).forEach(function (year) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'year';
-        b.textContent = year;
-        b.addEventListener('click', function () {
-          years.querySelectorAll('.year').forEach(function (x) { x.classList.remove('active'); });
-          b.classList.add('active');
-          detail.textContent = year + ' — ' + items[year];
-          detail.classList.add('open');
-        });
-        years.appendChild(b);
-      });
-    });
-  })();
-  </script>
 </body>
 </html>

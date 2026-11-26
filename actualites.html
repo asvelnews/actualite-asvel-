@@ -3,293 +3,272 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Actualités ASVEL — Toutes les informations</title>
+  <title>Actualités ASVEL 2026-2027 — Toutes les infos du club</title>
   <meta name="description" content="Toutes les actualités de l'ASVEL : mercato, résultats, EuroLeague, Betclic ÉLITE et vie du club Villeurbanne.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .hero { --year: 'NEWS'; }
+    .news-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
 
-    .news-filters {
+    .news-full-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-full-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .news-thumb-img {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--accent);
+    }
+
+    .news-full-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-full-date {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .news-full-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+
+    .news-full-excerpt {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .news-full-link {
+      display: inline-block;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      transition: var(--transition);
+    }
+
+    .news-full-link:hover {
+      transform: translateX(4px);
+    }
+
+    .filter-buttons {
       display: flex;
       gap: 0.8rem;
-      margin: 2rem 0;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
     }
 
     .filter-btn {
       padding: 0.6rem 1.2rem;
-      border-radius: 24px;
       border: 2px solid var(--border);
-      background: white;
-      font-size: 0.85rem;
+      border-radius: 24px;
+      background: var(--bg-card);
       font-weight: 600;
       text-transform: uppercase;
+      font-size: 0.75rem;
       letter-spacing: 0.05em;
       cursor: pointer;
       transition: var(--transition);
     }
 
     .filter-btn.active {
-      background: var(--accent-gold);
-      border-color: var(--accent-gold);
-      color: var(--primary-dark);
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--primary);
     }
 
-    .news-list {
-      display: grid;
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .news-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 100px 1fr auto;
-      gap: 1.5rem;
-      align-items: center;
-      padding: 1.5rem;
-      transition: var(--transition);
-    }
-
-    .news-item:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateX(4px);
-    }
-
-    .news-thumb {
-      width: 100px;
-      height: 100px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-red) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      flex-shrink: 0;
-    }
-
-    .news-info h3 {
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .news-meta {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .news-excerpt {
-      display: block;
-      margin-top: 0.5rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .news-link {
-      color: var(--accent-gold);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 768px) {
-      .news-item {
-        grid-template-columns: auto 1fr;
-        gap: 1rem;
-        padding: 1rem;
-      }
-
-      .news-thumb {
-        width: 70px;
-        height: 70px;
-        font-size: 1.8rem;
-      }
-
-      .news-link {
-        grid-column: 1 / -1;
-        margin-top: 0.5rem;
-      }
+    .filter-btn:hover {
+      border-color: var(--accent);
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="actualites.html" class="active">Actualités</a>
-      <a href="mercato.html">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html">Effectif</a>
-      <a href="palmares.html">Palmarès</a>
-      <a href="a-propos.html">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link active">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <section class="hero">
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
     <div class="container">
-      <h1>Toutes les actualités</h1>
-      <p>Suivi en direct de l'ASVEL : mercato, résultats, analyse et vie du club Villeurbanne.</p>
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Actualités</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Toutes les informations sur l'ASVEL Villeurbanne</p>
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
     <div class="container">
 
-      <!-- FILTRES -->
-      <div class="news-filters">
-        <button class="filter-btn active" onclick="filterNews('all')">Tout</button>
+      <!-- FILTERS -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterNews('all')">Toutes les actus</button>
         <button class="filter-btn" onclick="filterNews('mercato')">Mercato</button>
-        <button class="filter-btn" onclick="filterNews('resultat')">Résultats</button>
+        <button class="filter-btn" onclick="filterNews('match')">Matchs</button>
         <button class="filter-btn" onclick="filterNews('club')">Club</button>
       </div>
 
-      <!-- NEWS LIST -->
-      <div class="news-list" id="newsList">
+      <!-- NEWS GRID -->
+      <div class="news-full-grid">
 
-        <!-- 24 NOV: ASVEL vs MILAN -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">🏀</div>
-          <div class="news-info">
+        <article class="news-full-card reveal" data-category="match">
+          <div class="news-thumb-img">🏀</div>
+          <div class="news-full-content">
+            <div class="news-full-date">24 novembre 2026</div>
             <h3>ASVEL vs Milan : la remontée inachevée</h3>
-            <div class="news-meta">
-              <span>24 novembre 2026</span>
-              <span>EuroLeague</span>
-            </div>
-            <p class="news-excerpt">L'ASVEL s'est incliné 91-95 face à Olimpia Milano après avoir comblé presque tout un retard de 26 points (dernier quart 33-13). TyTy Washington a marqué 19 points.</p>
+            <p class="news-full-excerpt">L'ASVEL a chuté 95-91 face à Olimpia Milano après avoir remonté 26 points de retard en dernier quart. Cinquième défaite consécutive toutes compétitions confondues.</p>
+            <a href="articles/asvel-milan-remontee-inachevee.html" class="news-full-link">Lire l'article →</a>
           </div>
-        </div>
+        </article>
 
-        <!-- 23 NOV: MYLES CALE DEPARTURE -->
-        <div class="news-item reveal" data-category="mercato">
-          <div class="news-thumb">📋</div>
-          <div class="news-info">
+        <article class="news-full-card reveal" data-category="mercato">
+          <div class="news-thumb-img">📋</div>
+          <div class="news-full-content">
+            <div class="news-full-date">23 novembre 2026</div>
             <h3>Myles Cale quitte l'ASVEL</h3>
-            <div class="news-meta">
-              <span>23 novembre 2026</span>
-              <span>Mercato</span>
-            </div>
-            <p class="news-excerpt">L'ailier américain quitte le club d'un commun accord. Arrivé de Barcelone cet été, il n'a disputé que 6 matchs (4 points et 2 rebonds de moyenne en Betclic ÉLITE). Juhann Begarin devrait, lui, être prolongé jusqu'à la fin de la saison.</p>
+            <p class="news-full-excerpt">L'ailier américain quitte le club par consentement mutuel. Cale n'a pas trouvé sa place durant son passage à Villeurbanne (6 matchs).</p>
+            <a href="mercato.html" class="news-full-link">Voir le mercato →</a>
           </div>
-        </div>
+        </article>
 
-        <!-- 22 NOV: ASVEL vs BOURG -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">⚡</div>
-          <div class="news-info">
-            <h3>ASVEL chute face à Bourg (91-101)</h3>
-            <div class="news-meta">
-              <span>22 novembre 2026</span>
-              <span>Betclic ÉLITE</span>
-            </div>
-            <p class="news-excerpt">Troisième défaite en une semaine pour l'ASVEL, battue à domicile par JL Bourg après les deux revers en Turquie.</p>
+        <article class="news-full-card reveal" data-category="match">
+          <div class="news-thumb-img">⚡</div>
+          <div class="news-full-content">
+            <div class="news-full-date">15 novembre 2026</div>
+            <h3>L'ASVEL chute au Mans (109-93)</h3>
+            <p class="news-full-excerpt">Menée 18-0 dans le deuxième quart, l'ASVEL concède sa 2e défaite en championnat et recule à la 5e place de Betclic ÉLITE.</p>
+            <a href="articles/asvel-mans-chute-109-93.html" class="news-full-link">Lire l'article →</a>
           </div>
-        </div>
+        </article>
 
-        <!-- 20 NOV: ISTANBUL TURQUIE -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">🌍</div>
-          <div class="news-info">
-            <h3>Semaine turque catastrophique : 222 points encaissés en 2 matchs</h3>
-            <div class="news-meta">
-              <span>20 novembre 2026</span>
-              <span>EuroLeague</span>
-            </div>
-            <p class="news-excerpt">En déplacement à Istanbul, l'ASVEL subit deux lourdes défaites : 115-81 à Fenerbahçe (le 17) puis 107-81 à Anadolu Efes (le 20).</p>
+        <article class="news-full-card reveal" data-category="club">
+          <div class="news-thumb-img">🎯</div>
+          <div class="news-full-content">
+            <div class="news-full-date">10 novembre 2026</div>
+            <h3>Juhann Begarin prolongé jusqu'à la fin de saison</h3>
+            <p class="news-full-excerpt">L'ailier français, arrivé comme pigiste médical, devrait rester à l'ASVEL pour le reste de la saison. Selon les sources proches du club, l'annonce officielle est imminente.</p>
+            <a href="#" class="news-full-link">Lire la suite →</a>
           </div>
-        </div>
+        </article>
 
-        <!-- 15 NOV: LE MANS -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">🏆</div>
-          <div class="news-info">
-            <h3>L'ASVEL chute au Mans (109-93) et recule à la 5e place</h3>
-            <div class="news-meta">
-              <span>15 novembre 2026</span>
-              <span>Betclic ÉLITE</span>
-            </div>
-            <p class="news-excerpt">Menée 18-0 dans le deuxième quart-temps, l'ASVEL s'incline au Mans. Patty Mills (19 points) a mené la tentative de retour.</p>
-          </div>
-        </div>
-
-        <!-- 7 NOV: ASVEL vs PAU WIN -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">✅</div>
-          <div class="news-info">
+        <article class="news-full-card reveal" data-category="match">
+          <div class="news-thumb-img">🏆</div>
+          <div class="news-full-content">
+            <div class="news-full-date">8 novembre 2026</div>
             <h3>ASVEL domine Pau-Lacq-Orthez (106-97)</h3>
-            <div class="news-meta">
-              <span>7 novembre 2026</span>
-              <span>Betclic ÉLITE</span>
-            </div>
-            <p class="news-excerpt">Victoire de l'ASVEL à domicile face à Pau-Lacq-Orthez en Betclic ÉLITE.</p>
+            <p class="news-full-excerpt">Victoire importante de l'ASVEL face à Pau en Betclic ÉLITE. L'équipe de Tony Parker redresse la barre après les déceptions en EuroLeague.</p>
+            <a href="#" class="news-full-link">Lire l'article →</a>
           </div>
-        </div>
+        </article>
 
-        <!-- 30 OCT: BASKONIA -->
-        <div class="news-item reveal" data-category="resultat">
-          <div class="news-thumb">🎯</div>
-          <div class="news-info">
-            <h3>L'ASVEL s'impose à Baskonia en EuroLeague (94-79)</h3>
-            <div class="news-meta">
-              <span>30 octobre 2026</span>
-              <span>EuroLeague</span>
-            </div>
-            <p class="news-excerpt">Victoire de l'ASVEL sur le parquet de Baskonia, à Vitoria-Gasteiz.</p>
+        <article class="news-full-card reveal" data-category="club">
+          <div class="news-thumb-img">📢</div>
+          <div class="news-full-content">
+            <div class="news-full-date">1er novembre 2026</div>
+            <h3>Saison 2026-2027 : l'ASVEL débute son défi en EuroLeague</h3>
+            <p class="news-full-excerpt">La saison commence avec une équipe remaniée : TyTy Washington, Tremont Waters et Jae Crowder rejoignent les effectifs villeurbannais.</p>
+            <a href="#" class="news-full-link">Lire l'article →</a>
           </div>
-        </div>
+        </article>
 
       </div>
 
     </div>
   </main>
 
-  <footer>
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne. Résultats, mercato, EuroLeague, Betclic ÉLITE.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a></p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Actu ASVEL • Média fan indépendant</p>
     </div>
   </footer>
 
   <script src="app.js" defer></script>
   <script>
     function filterNews(category) {
-      const items = document.querySelectorAll('.news-item');
+      const cards = document.querySelectorAll('.news-full-card');
       const buttons = document.querySelectorAll('.filter-btn');
 
       buttons.forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
 
-      items.forEach(item => {
-        if (category === 'all' || item.dataset.category === category) {
-          item.style.display = '';
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = '';
         } else {
-          item.style.display = 'none';
+          card.style.display = 'none';
         }
       });
     }

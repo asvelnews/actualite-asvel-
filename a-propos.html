@@ -3,124 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>À propos &amp; mentions légales — Actu ASVEL</title>
-  <meta name="description" content="Actu ASVEL est un média indépendant créé par des fans. Mission, mentions légales, confidentialité et contact.">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="canonical" href="https://actu-asvel.fr/a-propos.html">
+  <title>À Propos — ASVEL Villeurbanne</title>
+  <meta name="description" content="En savoir plus sur ASVEL Villeurbanne et ce site fan indépendant dédié au club.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .prose { max-width: 820px; }
-    .prose section { margin-bottom: 2.5rem; }
-    .prose h2 { font-size: 1.6rem; margin-bottom: .8rem; }
-    .prose h3 { font-size: 1.05rem; margin: 1.2rem 0 .4rem; }
-    .prose p { margin-bottom: .8rem; color: #333; }
-    .prose ul { margin: 0 0 .8rem 1.2rem; color: #333; }
-    .prose li { margin-bottom: .3rem; }
-    .prose a { color: var(--accent-gold); font-weight: 600; text-decoration: underline; }
-    .callout { padding: 1.2rem 1.5rem; border-radius: 10px; background: var(--primary-dark); color: #fff; margin: 1.2rem 0; }
-    .callout strong { color: var(--accent-gold); }
-    .updated { font-size: .85rem; color: var(--text-muted); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      align-items: start;
+    }
+
+    .about-content h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+
+    .about-content p {
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .about-facts {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%);
+      color: var(--text-light);
+      padding: 2rem;
+      border-radius: 12px;
+    }
+
+    .fact-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .fact-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .fact-text h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .fact-text p {
+      margin: 0.3rem 0 0;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    @media (max-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="mercato.html">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html">Effectif</a>
-      <a href="palmares.html">Palmarès</a>
-      <a href="a-propos.html" class="active">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <section class="hero">
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
     <div class="container">
-      <div class="eyebrow">Le média</div>
-      <h1>À propos d'Actu ASVEL</h1>
-      <p>Un média indépendant, créé par des fans, consacré à l'actualité de l'ASVEL Villeurbanne.</p>
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">À Propos</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">ASVEL Villeurbanne et ce site fan</p>
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
-    <div class="container prose">
+    <div class="container">
 
-      <section id="mission">
-        <h2>Notre mission</h2>
-        <p>Actu ASVEL est un média indépendant, non affilié au club. Nous suivons l'actualité de l'ASVEL Villeurbanne au plus près : mercato, EuroLeague, Betclic ÉLITE, effectif et palmarès.</p>
-        <p>Nous ne publions que des informations vérifiables. Quand les sources divergent ou qu'une donnée n'est pas confirmée, nous préférons l'indiquer plutôt que de l'inventer.</p>
-        <div class="callout"><strong>Site de fans.</strong> Ce site est créé et tenu par des fans, pour d'autres fans. Il n'est pas un site officiel du club LDLC ASVEL.</div>
+      <div class="about-grid">
+
+        <div class="about-content">
+          <h2>ASVEL Villeurbanne</h2>
+          <p>LDLC ASVEL est un club de basketball professionnel français fondé en 1931, basé à Villeurbanne (Lyon). Le club est l'un des plus prestigieux du basketball français avec de nombreux titres nationaux et une participation régulière aux compétitions européennes majeures.</p>
+          <p>Depuis la saison 2023-2024, l'équipe est entraînée par Tony Parker, légende du basketball français et international. L'ASVEL évolue en EuroLeague (plus haute compétition européenne) et en Betclic ÉLITE (championnat professionnel français).</p>
+          <p>Le club joue ses matchs à domicile à la LDLC Arena, qui peut accueillir plus de 5 500 spectateurs. Les couleurs historiques du club sont le rouge et blanc.</p>
+        </div>
+
+        <div class="about-facts">
+          <div class="fact-item">
+            <div class="fact-icon">🏆</div>
+            <div class="fact-text">
+              <h3>11 titres nationaux</h3>
+              <p>Champion de France 11 fois depuis 1963</p>
+            </div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-icon">🏅</div>
+            <div class="fact-text">
+              <h3>11 Coupes de France</h3>
+              <p>Vainqueur de la Coupe de France 11 fois</p>
+            </div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-icon">🌍</div>
+            <div class="fact-text">
+              <h3>EuroLeague</h3>
+              <p>Participation régulière en compétition européenne majeure</p>
+            </div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-icon">👨‍🏫</div>
+            <div class="fact-text">
+              <h3>Tony Parker</h3>
+              <p>Entraîneur depuis 2023, légende du basketball</p>
+            </div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-icon">📍</div>
+            <div class="fact-text">
+              <h3>Villeurbanne</h3>
+              <p>Basé à Lyon, France. Stadium : LDLC Arena</p>
+            </div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-icon">📅</div>
+            <div class="fact-text">
+              <h3>Depuis 1931</h3>
+              <p>Plus de 90 ans d'histoire et de traditions</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SITE -->
+      <section style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 3rem; margin-bottom: 2rem;">
+        <h2 class="section-title">Ce site</h2>
+        <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem;">
+          <strong>Actu ASVEL</strong> est un site fan indépendant dédié à la couverture complète de LDLC ASVEL Villeurbanne.
+          Nous ne sommes pas affiliés au club officiel, mais nous proposons un suivi détaillé de l'actualité, des résultats,
+          du calendrier, de l'effectif et du mercato.
+        </p>
+        <p style="color: var(--text-muted); line-height: 1.8;">
+          Notre objectif est de fournir un point central d'information pour les supporters de l'ASVEL, avec
+          un design moderne et une navigation fluide. Les articles sont mis à jour régulièrement avec les
+          dernières informations du club.
+        </p>
       </section>
 
-      <section id="contact">
-        <h2>Contact &amp; actu en direct</h2>
-        <p>Les informations sortent en premier sur Instagram. C'est aussi le canal pour toute question, signalement d'erreur ou demande de correction : <a href="https://www.instagram.com/asvel_news/" rel="noopener" target="_blank">@ASVEL_NEWS</a>.</p>
+      <!-- CONTACT -->
+      <section id="contact" style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); border-radius: 12px; padding: 3rem; text-align: center;">
+        <h2 style="color: var(--accent); font-size: 1.8rem; margin-bottom: 1rem;">Nous contacter</h2>
+        <p style="font-size: 1rem; color: rgba(255,255,255,0.8); margin-bottom: 2rem;">
+          Avez-vous des questions, des suggestions ou des informations à partager ?
+        </p>
+        <a href="mailto:contact@asvel-fans.fr" class="btn btn-primary">Envoyer un email</a>
       </section>
 
-      <section id="mentions">
-        <h2>Mentions légales</h2>
-        <h3>Responsable de publication</h3>
-        <p>Équipe Actu ASVEL — média indépendant créé par des fans. Contact uniquement via Instagram @ASVEL_NEWS.</p>
-        <h3>Hébergement</h3>
-        <p>GitHub Pages — GitHub, Inc., 88 Colin P Kelly Jr Street, San Francisco, CA 94107, États-Unis.</p>
-        <h3>Adresse du site</h3>
-        <p>https://actu-asvel.fr/ — créé en 2026.</p>
-        <h3>Propriété intellectuelle et marques</h3>
-        <p>« ASVEL », « LDLC ASVEL », « EuroLeague », « Betclic ÉLITE », « LNB » et les logos associés sont la propriété de leurs détenteurs respectifs. Ils ne sont cités qu'à titre informatif et journalistique.</p>
-        <ul>
-          <li>Le site n'utilise pas de logos officiels du club.</li>
-          <li>Le site n'utilise pas de photographies protégées par des droits d'auteur de tiers.</li>
-          <li>Toute reproduction des textes et analyses d'Actu ASVEL nécessite un accord préalable.</li>
-        </ul>
-      </section>
-
-      <section id="sources">
-        <h2>Contenu éditorial et sources</h2>
-        <p>Les informations sont vérifiées et sourcées avant publication. Provenance des données :</p>
-        <ul>
-          <li>Statistiques, calendrier et résultats : LNB et EuroLeague</li>
-          <li>Transferts et mouvements : annonces du club et presse spécialisée</li>
-          <li>Actualités : recherche journalistique et sources publiques</li>
-        </ul>
-      </section>
-
-      <section id="confidentialite">
-        <h2>Cookies, mesure d'audience &amp; confidentialité</h2>
-        <p>Le site n'affiche aucune publicité, n'est pas monétisé et n'utilise aucun cookie publicitaire.</p>
-        <p>La fréquentation est mesurée avec Cloudflare Web Analytics : aucun cookie, aucun suivi individuel, uniquement des statistiques agrégées et anonymes (pages vues, provenance générale). Aucun consentement n'est donc requis.</p>
-        <p>Ce site ne collecte aucune donnée personnelle identifiable : pas de formulaire, d'inscription ni de compte. Pour toute question relative à vos droits (RGPD), contactez-nous via Instagram.</p>
-      </section>
-
-      <section id="conditions">
-        <h2>Conditions d'utilisation</h2>
-        <p>Le site est accessible gratuitement et sans inscription. Vous pouvez partager des liens, citer le contenu avec attribution du site, et l'imprimer pour un usage personnel. La reproduction, la modification ou l'extraction automatisée des données (robots, scrapers) sans autorisation sont interdites.</p>
-        <p>Les informations sont fournies « en l'état », à titre informatif, sans garantie d'exactitude ni de disponibilité permanente. Actu ASVEL ne peut être tenu responsable des dommages résultant de leur utilisation. Les liens externes n'impliquent aucune approbation de leur contenu.</p>
-      </section>
-
-      <p class="updated">Dernière mise à jour : 26 novembre 2026</p>
     </div>
   </main>
 
-  <footer>
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne, non affilié au club.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
-      </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
     </div>
-    <div class="footer-bottom"><p>© 2026 Actu ASVEL • Média fan indépendant • Non affilié au club LDLC ASVEL</p></div>
   </footer>
 
   <script src="app.js" defer></script>

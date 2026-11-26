@@ -3,255 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Actu ASVEL — Actualités, matchs & mercato en direct</title>
-  <meta name="description" content="Suivi complet de l'ASVEL Villeurbanne : actualités, résultats, mercato, EuroLeague, Betclic ÉLITE et effectif 2026-2027.">
-  <meta name="theme-color" content="#0a0a0a">
+  <title>ASVEL Villeurbanne — Actualités, Résultats & Calendrier 2026-2027</title>
+  <meta name="description" content="Suivi complet de LDLC ASVEL : actualités, résultats en direct, calendrier EuroLeague & Betclic ÉLITE, effectif et mercato de la saison 2026-2027.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
-  <style>
-    .hero { --year: '26'; }
-
-    .latest-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .news-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .news-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-4px);
-    }
-
-    .news-card-image {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-red) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 3rem;
-      font-weight: 700;
-    }
-
-    .news-card-content {
-      padding: 1.5rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .news-date {
-      font-size: 0.8rem;
-      color: var(--accent-gold);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-
-    .news-card h3 {
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .news-excerpt {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-top: 0.8rem;
-      flex: 1;
-    }
-
-    .news-link {
-      margin-top: 1rem;
-      color: var(--accent-gold);
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .match-card {
-      background: var(--primary-dark);
-      color: var(--text-light);
-      border-radius: 12px;
-      padding: 2rem;
-      border-left: 5px solid var(--accent-gold);
-      box-shadow: var(--shadow-md);
-    }
-
-    .match-label {
-      font-size: 0.75rem;
-      color: var(--accent-gold);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
-    }
-
-    .match-date {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .match-teams {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .match-team {
-      text-align: center;
-    }
-
-    .match-team-name {
-      font-size: 1.3rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
-    }
-
-    .match-vs {
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.5);
-      font-weight: 600;
-    }
-
-    .match-result {
-      background: rgba(212, 165, 116, 0.15);
-      border: 1px solid var(--accent-gold);
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .match-score {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .match-status {
-      font-size: 0.75rem;
-      color: var(--accent-gold);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .stat-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .cta-section {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, #1a1a1a 100%);
-      color: var(--text-light);
-      border-radius: 12px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin-top: 3rem;
-      border: 1px solid rgba(212, 165, 116, 0.2);
-    }
-
-    .cta-section h2 {
-      color: var(--accent-gold);
-      margin-bottom: 1rem;
-    }
-
-    .cta-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-
-    @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .match-teams {
-        grid-template-columns: 1fr;
-      }
-
-      .match-team-name {
-        font-size: 1.1rem;
-      }
-
-      .cta-buttons {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- HEADER -->
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html" class="active">Accueil</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="mercato.html">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html">Effectif</a>
-      <a href="palmares.html">Palmarès</a>
-      <a href="a-propos.html">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link active">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <h1>L'ASVEL au cœur de l'action</h1>
-      <p>Suivi complet de LDLC ASVEL : résultats, actualités, mercato et effectif de la saison 2026-2027. EuroLeague et Betclic ÉLITE en direct.</p>
+  <!-- CAROUSEL / BANDEAU DÉFILANT -->
+  <section class="carousel">
+    <div class="carousel-track">
+      <article class="carousel-slide active" data-id="1">
+        <div class="carousel-content">
+          <span class="carousel-label">Dernière actualité</span>
+          <h2>ASVEL vs Milan : la remontée inachevée</h2>
+          <p>L'ASVEL a chuté 95-91 face à Olimpia Milano après avoir remonté 26 points de retard en dernier quart. Cinquième défaite consécutive toutes compétitions confondues.</p>
+          <a href="articles/asvel-milan-remontee-inachevee.html" class="btn btn-primary">Lire la suite →</a>
+        </div>
+      </article>
+      <article class="carousel-slide" data-id="2">
+        <div class="carousel-content">
+          <span class="carousel-label">Mercato</span>
+          <h2>Myles Cale quitte l'ASVEL</h2>
+          <p>L'ailier américain quitte le club par consentement mutuel. Cale n'a pas trouvé sa place durant son passage à Villeurbanne.</p>
+          <a href="mercato.html" class="btn btn-primary">Voir le mercato →</a>
+        </div>
+      </article>
+      <article class="carousel-slide" data-id="3">
+        <div class="carousel-content">
+          <span class="carousel-label">Résultat Betclic ÉLITE</span>
+          <h2>L'ASVEL chute au Mans (109-93)</h2>
+          <p>Menée 18-0 dans le deuxième quart, l'ASVEL concède sa 2e défaite en championnat et recule à la 5e place.</p>
+          <a href="calendrier.html" class="btn btn-primary">Voir le calendrier →</a>
+        </div>
+      </article>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-dot active" data-slide="1" aria-label="Slide 1"></button>
+      <button class="carousel-dot" data-slide="2" aria-label="Slide 2"></button>
+      <button class="carousel-dot" data-slide="3" aria-label="Slide 3"></button>
     </div>
   </section>
 
@@ -259,153 +64,154 @@
   <main>
     <div class="container">
 
-      <!-- DERNIER RÉSULTAT -->
-      <section>
-        <h2>Dernier résultat</h2>
-        <p class="subtitle">La plus récente rencontre de l'ASVEL en date.</p>
-        <div class="match-card">
-          <div class="match-label">EuroLeague · 24 novembre 2026</div>
-          <div class="match-date">Mardi 24 novembre · LDLC Arena</div>
-          <div class="match-teams">
-            <div class="match-team">
-              <div class="match-team-name">ASVEL</div>
-              <div class="match-label" style="margin: 0.5rem 0 0;">Villeurbanne</div>
-            </div>
-            <div class="match-vs">vs</div>
-            <div class="match-team">
-              <div class="match-team-name">Milan</div>
-              <div class="match-label" style="margin: 0.5rem 0 0;">Olimpia Milano</div>
-            </div>
-          </div>
-          <div class="match-result">
-            <div class="match-score">91 — 95</div>
-            <div class="match-status">Défaite</div>
-          </div>
-          <p style="margin-top: 1.5rem; color: rgba(255, 255, 255, 0.8); font-size: 0.95rem;">
-            Malgré une incroyable remontée en dernier quart (33-13), l'ASVEL n'a pas pu rattraper les 26 points de retard face à Milan. TyTy Washington a marqué 19 points.
-          </p>
-        </div>
-      </section>
-
-      <!-- STATISTIQUES CLÉS -->
-      <section>
-        <h2>Saison 2026-2027 en chiffres</h2>
+      <!-- DERNIÈRE STAT -->
+      <section class="stats-section">
+        <h2 class="section-title">Saison 2026-2027 en chiffres</h2>
         <div class="stats-grid">
-          <div class="stat-box">
-            <div class="stat-number">5</div>
-            <div class="stat-label">Défaites consécutives</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number">4e</div>
-            <div class="stat-label">Betclic ÉLITE (23 nov.)</div>
-          </div>
-          <div class="stat-box">
+          <div class="stat-card">
             <div class="stat-number">4-10</div>
             <div class="stat-label">Bilan EuroLeague</div>
           </div>
-          <div class="stat-box">
-            <div class="stat-number">222</div>
-            <div class="stat-label">Pts encaissés à Istanbul (2 matchs)</div>
+          <div class="stat-card">
+            <div class="stat-number">4ᵉ</div>
+            <div class="stat-label">Betclic ÉLITE</div>
           </div>
-        </div>
-      </section>
-
-      <!-- ACTUALITÉS RÉCENTES -->
-      <section>
-        <h2>Dernières actualités</h2>
-        <p class="subtitle">Toutes les infos importantes du moment.</p>
-        <div class="latest-grid">
-          <div class="news-card reveal">
-            <div class="news-card-image">🏀</div>
-            <div class="news-card-content">
-              <div class="news-date">24 novembre 2026</div>
-              <h3>ASVEL vs Milan : la remontée inachevée</h3>
-              <p class="news-excerpt">L'ASVEL a chuté 95-91 face à Olimpia Milano après avoir remonté 26 points de retard en dernier quart. Cinquième défaite consécutive toutes compétitions confondues.</p>
-              <a href="actualites.html" class="news-link">Lire la suite →</a>
-            </div>
+          <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Défaites consécutives</div>
           </div>
-
-          <div class="news-card reveal">
-            <div class="news-card-image">📋</div>
-            <div class="news-card-content">
-              <div class="news-date">23 novembre 2026</div>
-              <h3>Myles Cale quitte l'ASVEL</h3>
-              <p class="news-excerpt">L'ailier américain quitte le club par consentement mutuel. Cale n'a pas trouvé sa place durant son passage à Villeurbanne.</p>
-              <a href="mercato.html" class="news-link">Voir le mercato →</a>
-            </div>
-          </div>
-
-          <div class="news-card reveal">
-            <div class="news-card-image">⚡</div>
-            <div class="news-card-content">
-              <div class="news-date">15 novembre 2026</div>
-              <h3>L'ASVEL chute au Mans (109-93)</h3>
-              <p class="news-excerpt">Menée 18-0 dans le deuxième quart, l'ASVEL concède sa 2e défaite en championnat et recule à la 5e place.</p>
-              <a href="matchs.html" class="news-link">Voir tous les matchs →</a>
-            </div>
+          <div class="stat-card">
+            <div class="stat-number">25</div>
+            <div class="stat-label">Joueurs à l'effectif</div>
           </div>
         </div>
       </section>
 
       <!-- PROCHAINS MATCHS -->
-      <section>
-        <h2>Prochains rendez-vous</h2>
-        <p class="subtitle">Matchs confirmés par une source. Calendrier complet dans l'onglet Matchs.</p>
-        <div class="grid grid--2">
+      <section class="upcoming-section">
+        <h2 class="section-title">Prochains rendez-vous</h2>
+        <div class="matches-preview">
           <div class="match-card">
-            <div class="match-label">EuroLeague</div>
-            <div class="match-date">Jeudi 17 décembre</div>
-            <div class="match-teams">
-              <div class="match-team"><div class="match-team-name">ASVEL</div></div>
-              <div class="match-vs">vs</div>
-              <div class="match-team"><div class="match-team-name">Dubai</div></div>
+            <div class="match-header">
+              <span class="comp-label">EuroLeague</span>
+              <span class="match-date">17 décembre</span>
             </div>
-            <p style="margin-top: 1rem; color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">À domicile · heure à confirmer</p>
+            <div class="match-body">
+              <h3>ASVEL <span class="vs">vs</span> Dubai Basketball</h3>
+              <p>LDLC Arena • heure à confirmer</p>
+            </div>
           </div>
           <div class="match-card">
-            <div class="match-label">EuroLeague</div>
-            <div class="match-date">Mardi 22 décembre, 20h00</div>
-            <div class="match-teams">
-              <div class="match-team"><div class="match-team-name">ASVEL</div></div>
-              <div class="match-vs">vs</div>
-              <div class="match-team"><div class="match-team-name">Barcelone</div></div>
+            <div class="match-header">
+              <span class="comp-label">EuroLeague</span>
+              <span class="match-date">22 décembre</span>
             </div>
-            <p style="margin-top: 1rem; color: rgba(255, 255, 255, 0.8); font-size: 0.9rem;">LDLC Arena</p>
+            <div class="match-body">
+              <h3>ASVEL <span class="vs">vs</span> FC Barcelone</h3>
+              <p>LDLC Arena • 20h00</p>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="match-header">
+              <span class="comp-label">EuroLeague</span>
+              <span class="match-date">30 décembre</span>
+            </div>
+            <div class="match-body">
+              <h3>ASVEL <span class="vs">vs</span> Olympiacos</h3>
+              <p>LDLC Arena • 20h00</p>
+            </div>
           </div>
         </div>
+        <a href="calendrier.html" class="btn btn-secondary">Voir le calendrier complet →</a>
       </section>
 
-      <!-- CTA SECTION -->
-      <section class="cta-section">
-        <h2>Suivi complet de l'ASVEL</h2>
-        <p>Découvrez tous les détails : calendrier complet, classements, effectif détaillé, et mercato 2026.</p>
-        <div class="cta-buttons">
-          <a href="matchs.html" class="btn btn-primary">Calendrier & Classements</a>
-          <a href="effectif.html" class="btn btn-ghost">L'effectif complet</a>
+      <!-- EFFECTIF SECTION -->
+      <section class="roster-section">
+        <h2 class="section-title">Effectif 2026-2027</h2>
+        <div class="roster-preview">
+          <div class="roster-card">
+            <div class="card-label">Coach</div>
+            <h3>Tony Parker</h3>
+            <p>Entraîneur depuis 2023</p>
+          </div>
+          <div class="roster-card">
+            <div class="card-label">Meneurs</div>
+            <h3>4</h3>
+            <p>Patty Mills, TyTy Washington, Tremont Waters, Marc-Owen Fodzo Dada</p>
+          </div>
+          <div class="roster-card">
+            <div class="card-label">Arrières</div>
+            <h3>2</h3>
+            <p>Edwin Jackson, Hugo Besson</p>
+          </div>
+          <div class="roster-card">
+            <div class="card-label">Ailiers</div>
+            <h3>5</h3>
+            <p>David Lighty, Juhann Begarin, Both Gach, Jae Crowder, Yves Pons</p>
+          </div>
         </div>
+        <a href="effectif.html" class="btn btn-secondary">Voir l'effectif complet →</a>
+      </section>
+
+      <!-- ACTUALITÉS SECTION -->
+      <section class="news-section">
+        <h2 class="section-title">Dernières actualités</h2>
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-date">24 novembre 2026</div>
+            <h3>ASVEL vs Milan : la remontée inachevée</h3>
+            <p>L'ASVEL a chuté 95-91 face à Olimpia Milano après avoir remonté 26 points de retard en dernier quart...</p>
+            <a href="articles/asvel-milan-remontee-inachevee.html" class="news-link">Lire l'article</a>
+          </article>
+          <article class="news-card">
+            <div class="news-date">23 novembre 2026</div>
+            <h3>Myles Cale quitte l'ASVEL</h3>
+            <p>L'ailier américain quitte le club par consentement mutuel après 6 matchs seulement cette saison...</p>
+            <a href="mercato.html" class="news-link">Lire l'article</a>
+          </article>
+          <article class="news-card">
+            <div class="news-date">15 novembre 2026</div>
+            <h3>L'ASVEL chute au Mans (109-93)</h3>
+            <p>Menée 18-0 dans le deuxième quart, l'ASVEL concède sa 2e défaite en championnat...</p>
+            <a href="articles/asvel-mans-chute-109-93.html" class="news-link">Lire l'article</a>
+          </article>
+        </div>
+        <a href="actualites.html" class="btn btn-secondary">Voir tous les articles →</a>
       </section>
 
     </div>
   </main>
 
   <!-- FOOTER -->
-  <footer>
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne. Résultats, mercato, EuroLeague, Betclic ÉLITE — suivi complet de la saison 2026-2027.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE. Entraîné par Tony Parker depuis 2023.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a><br><a href="a-propos.html#contact">Contact</a></p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Actu ASVEL • Média fan indépendant • Non affilié au club LDLC ASVEL</p>
     </div>
   </footer>
 

@@ -3,230 +3,295 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Effectif 2026-2027 — Actu ASVEL</title>
+  <title>Effectif ASVEL 2026-2027 — Tous les joueurs</title>
   <meta name="description" content="L'effectif complet de LDLC ASVEL pour la saison 2026-2027 : postes, numéros, parcours et palmarès de chaque joueur.">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="canonical" href="https://actu-asvel.fr/effectif.html">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .filters { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.5rem 0 2rem; }
-    .filter-btn { padding: .6rem 1.2rem; border-radius: 24px; border: 2px solid var(--border); background: #fff; font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; transition: var(--transition); }
-    .filter-btn:hover { border-color: var(--accent-gold); }
-    .filter-btn.active { background: var(--accent-gold); border-color: var(--accent-gold); color: var(--primary-dark); }
+    .roster-filters {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
 
-    .roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
-    .player { position: relative; overflow: hidden; text-align: left; background: var(--primary-dark); color: #fff; border-radius: 14px; padding: 1.5rem; min-height: 260px; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow-sm); transition: var(--transition); }
-    .player:hover, .player:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow-lg); outline: none; }
-    .player::before { content: attr(data-initials); position: absolute; top: .4rem; right: 1rem; font-size: 5.5rem; font-weight: 900; letter-spacing: -.05em; color: rgba(212,165,116,.12); line-height: 1; }
-    .player::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(90deg, var(--accent-gold), transparent); }
-    .player-num { position: absolute; top: 1.2rem; left: 1.5rem; font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); }
-    .player-badge { align-self: flex-start; margin-bottom: .8rem; padding: .25rem .6rem; border-radius: 4px; background: var(--accent-gold); color: var(--primary-dark); font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-    .player-pos { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--accent-gold-light); }
-    .player-name { margin: .3rem 0 .6rem; font-size: 1.45rem; font-weight: 800; line-height: 1.1; letter-spacing: -.02em; }
-    .player-meta { font-size: .82rem; color: rgba(255,255,255,.6); }
+    .roster-filter-btn {
+      padding: 0.6rem 1.2rem;
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      background: var(--bg-card);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
 
-    .departures { margin-top: 4rem; }
-    .departure { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem 1.5rem; }
-    .departure strong { font-size: 1.05rem; }
-    .departure span { color: var(--text-muted); font-size: .9rem; }
+    .roster-filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--primary);
+    }
 
-    dialog { width: min(560px, 92vw); max-height: 88vh; border: 0; border-radius: 16px; padding: 0; background: #fff; box-shadow: var(--shadow-lg); }
-    dialog::backdrop { background: rgba(10,10,10,.7); backdrop-filter: blur(3px); }
-    .modal-head { position: relative; padding: 2rem 2rem 1.5rem; background: var(--primary-dark); color: #fff; border-bottom: 3px solid var(--accent-gold); }
-    .modal-head .player-num { position: static; display: block; margin-bottom: .4rem; }
-    .modal-head h2 { margin: 0; font-size: 2rem; }
-    .modal-close { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; font-size: 1.1rem; }
-    .modal-close:hover { background: var(--accent-gold); color: var(--primary-dark); }
-    .modal-body { padding: 1.5rem 2rem 2rem; overflow: auto; }
-    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
-    .facts span { display: block; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
-    .facts strong { font-size: .95rem; }
-    .modal-body h4 { margin: 1.4rem 0 .6rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-gold); }
-    .modal-body ul { list-style: none; display: grid; gap: .4rem; }
-    .modal-body li { padding-left: 1rem; position: relative; font-size: .92rem; }
-    .modal-body li::before { content: '◆'; position: absolute; left: 0; font-size: .5rem; top: .45rem; color: var(--accent-gold); }
-    .modal-note { margin-top: 1.2rem; padding: .9rem 1rem; border-radius: 8px; background: var(--primary-light); font-size: .88rem; color: var(--text-muted); }
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
 
-    @media (max-width: 520px) { .facts { grid-template-columns: 1fr 1fr; } .departure { flex-direction: column; align-items: flex-start; } }
+    .player-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%);
+      color: var(--text-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(212, 165, 116, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 280px;
+    }
+
+    .player-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+
+    .player-initials {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(212, 165, 116, 0.1);
+    }
+
+    .player-num {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .player-pos {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 1rem;
+    }
+
+    .player-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+
+    .player-info {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: auto;
+    }
+
+    .departures-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    .departure-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .departure-item:last-child {
+      border-bottom: none;
+    }
+
+    .departure-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .departure-info {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .roster-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .departure-item {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="mercato.html">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html" class="active">Effectif</a>
-      <a href="palmares.html">Palmarès</a>
-      <a href="a-propos.html">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link active">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <section class="hero">
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
     <div class="container">
-      <div class="eyebrow">Saison 2026-2027</div>
-      <h1>L'effectif villeurbannais</h1>
-      <p>Les joueurs de LDLC ASVEL, entraînés par Tony Parker. Cliquez sur un joueur pour voir son parcours et son palmarès.</p>
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">L'effectif 2026-2027</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Entraîneur : Tony Parker • 25 joueurs • Saison en EuroLeague et Betclic ÉLITE</p>
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
     <div class="container">
-      <div class="filters" role="group" aria-label="Filtrer par poste">
-        <button class="filter-btn active" data-filter="all">Tous</button>
-        <button class="filter-btn" data-filter="meneur">Meneurs</button>
-        <button class="filter-btn" data-filter="arriere">Arrières</button>
-        <button class="filter-btn" data-filter="ailier">Ailiers</button>
-        <button class="filter-btn" data-filter="ailier-fort">Ailiers forts</button>
-        <button class="filter-btn" data-filter="pivot">Pivots</button>
+
+      <!-- FILTERS -->
+      <div class="roster-filters">
+        <button class="roster-filter-btn active" onclick="filterRoster('all')">Tous</button>
+        <button class="roster-filter-btn" onclick="filterRoster('meneur')">Meneurs</button>
+        <button class="roster-filter-btn" onclick="filterRoster('arriere')">Arrières</button>
+        <button class="roster-filter-btn" onclick="filterRoster('ailier')">Ailiers</button>
+        <button class="roster-filter-btn" onclick="filterRoster('ailier-fort')">Ailiers forts</button>
+        <button class="roster-filter-btn" onclick="filterRoster('pivot')">Pivots</button>
       </div>
 
-      <div class="roster" id="roster"></div>
+      <!-- ROSTER GRID -->
+      <div class="roster-grid" id="roster"></div>
 
-      <section class="departures">
-        <div class="eyebrow">En cours de saison</div>
-        <h2>Départs</h2>
-        <div class="card departure">
-          <div><strong>Myles Cale</strong> · <span>Arrière / Ailier, n°0</span></div>
-          <span>Parti d'un commun accord le 23 novembre 2026 après 6 matchs.</span>
+      <!-- DEPARTURES -->
+      <section class="departures-section">
+        <h2 class="section-title">Départs en cours de saison</h2>
+        <div class="departure-item">
+          <div>
+            <div class="departure-name">Myles Cale</div>
+            <div class="departure-info">Arrière / Ailier, n°0</div>
+          </div>
+          <div class="departure-info">Parti d'un commun accord le 23 novembre 2026 après 6 matchs.</div>
         </div>
       </section>
+
     </div>
   </main>
 
-  <dialog id="playerModal" aria-labelledby="modalName">
-    <div class="modal-head">
-      <button class="modal-close" type="button" aria-label="Fermer">✕</button>
-      <span class="player-num" id="modalNum"></span>
-      <span class="player-pos" id="modalPos"></span>
-      <h2 id="modalName"></h2>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-  </dialog>
-
-  <footer>
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne, non affilié au club.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
-      </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
     </div>
-    <div class="footer-bottom"><p>© 2026 Actu ASVEL • Média fan indépendant • Non affilié au club LDLC ASVEL</p></div>
   </footer>
 
   <script src="app.js" defer></script>
   <script>
-  (function () {
-    var players = [
-      { name: 'Patty Mills', num: 8, pos: 'Meneur', groups: ['meneur'], nat: 'Australien', born: '11 août 1988', height: '1,83 m',
-        clubs: ['Portland Trail Blazers', 'San Antonio Spurs', 'Brooklyn Nets', 'Atlanta Hawks', 'Miami Heat', 'Utah Jazz', 'Los Angeles Clippers', 'CB Canarias'],
-        honours: ['Champion NBA (2014)', 'Médaillé de bronze aux Jeux olympiques de Tokyo', 'Champion d’Océanie (2007, 2011, 2013 et 2015)'] },
-      { name: 'TyTy Washington', num: 3, pos: 'Meneur', groups: ['meneur'], nat: 'Américain', born: '15 novembre 2001', height: '1,91 m',
-        clubs: ['Kentucky Wildcats', 'Memphis Grizzlies', 'Houston Rockets', 'Milwaukee Bucks', 'Phoenix Suns', 'Los Angeles Clippers', 'LDLC ASVEL — depuis 2026'] },
-      { name: 'Tremont Waters', num: 51, pos: 'Meneur', groups: ['meneur'], nat: 'Portoricain', born: '10 janvier 1998', height: '1,78 m',
-        clubs: ['Boston Celtics', 'Toronto Raptors', 'Washington Wizards', 'Gigantes de Carolina', 'Metropolitans 92', 'Guangdong Southern Tigers', 'Shanghai Sharks', 'LDLC ASVEL — depuis 2026'],
-        honours: ['Meilleur rookie de G League (2020)', 'Champion de Porto Rico avec les Gigantes de Carolina (2023)', 'Meilleur rookie du championnat de Porto Rico (2022)'] },
-      { name: 'Marc-Owen Fodzo Dada', num: 1, pos: 'Meneur', groups: ['meneur'], nat: 'Français', born: '11 novembre 2006', height: '1,90 m',
-        clubs: ['Basket Club Courneuvien', 'Vendée Challans Basket', 'SLUC Nancy', 'LDLC ASVEL — depuis 2026'] },
-      { name: 'Hugo Besson', num: 25, pos: 'Arrière / Meneur', groups: ['arriere', 'meneur'], nat: 'Français', born: '26 avril 2001', height: '1,94 m',
-        clubs: ['Élan Chalon', 'Saint-Quentin', 'New Zealand Breakers', 'Metropolitans 92', 'FMP Belgrade', 'Openjobmetis Varese', 'Manisa Basket', 'Tofaş Bursa', 'LDLC ASVEL — depuis 2026'] },
-      { name: 'Edwin Jackson', num: 11, pos: 'Arrière', groups: ['arriere'], nat: 'Français', born: '18 septembre 1989', height: '1,90 m',
-        clubs: ['ASVEL — 2007-2014', 'FC Barcelone', 'Málaga', 'Estudiantes Madrid', 'Guangdong Southern Tigers', 'Budućnost Podgorica', 'ASVEL — 2019-2020', 'Estudiantes Madrid', 'Nanterre 92', 'Menorca Bàsquet', 'ASVEL — depuis 2023'],
-        honours: ['Vainqueur de la Coupe de France avec l’ASVEL (2008)', 'MVP de Pro A avec l’ASVEL (2013)', '3ᵉ du Championnat du monde avec l’équipe de France (2014)'] },
-      { name: 'David Lighty', num: 23, pos: 'Ailier / Arrière', groups: ['ailier', 'arriere'], nat: 'Américain', born: '27 mai 1988', height: '1,98 m',
-        clubs: ['Pallacanestro Cantù', 'Vanoli Cremona', 'Nanterre 92', 'LDLC ASVEL — 2014-2016', 'Aquila Trento', 'Dinamo Sassari', 'LDLC ASVEL — depuis 2017'],
-        honours: ['5× Champion de France (2013, 2016, 2019, 2021, 2022)', '2× MVP des Finales (2013, 2021)', '3× Vainqueur de la Coupe de France (2014, 2019, 2021)', 'Supercoupe de France (2016)', 'Leaders Cup (2023)'] },
-      { name: 'Juhann Begarin', num: 97, pos: 'Ailier', groups: ['ailier'], nat: 'Français', born: '7 août 2002', height: '1,96 m',
-        badge: 'Prolongation attendue',
-        note: 'Arrivé le 7 octobre comme pigiste médical de Mathis Dossou-Yovo. Selon la presse, il devrait être conservé jusqu’à la fin de la saison ; l’annonce officielle n’a pas encore été faite.',
-        clubs: ['Paris Basketball (2019-2022)', 'Nanterre 92 (2023-2024)', 'AS Monaco (2024-2026)', 'LDLC ASVEL — depuis octobre 2026'],
-        honours: ['Champion de France (2026)', 'Vainqueur de la Coupe de France (2026)', 'Vainqueur de la Leaders Cup (2026)'] },
-      { name: 'Both Gach', num: 14, pos: 'Ailier', groups: ['ailier'], nat: 'Sud-Soudanais', born: '4 février 1999', height: '2,01 m',
-        clubs: ['Sigal Prishtina', 'BC Nokia', 'Darüşşafaka', 'JL Bourg'],
-        honours: ['Champion de Finlande (2024)', 'MVP des Finales du championnat de Finlande (2024)', 'Vainqueur de l’EuroCup (2026)'] },
-      { name: 'Jae Crowder', num: 99, pos: 'Ailier / Ailier fort', groups: ['ailier', 'ailier-fort'], nat: 'Américain', born: '6 juillet 1990', height: '1,98 m',
-        clubs: ['Dallas Mavericks', 'Boston Celtics', 'Cleveland Cavaliers', 'Utah Jazz', 'Memphis Grizzlies', 'Miami Heat', 'Phoenix Suns', 'Milwaukee Bucks', 'Sacramento Kings', 'Vaqueros de Bayamón', 'LDLC ASVEL — depuis 2026'],
-        honours: ['Finaliste NBA avec le Miami Heat (2020)', 'Finaliste NBA avec les Phoenix Suns (2021)', 'Big East Player of the Year (2012)'] },
-      { name: 'Yves Pons', num: 35, pos: 'Ailier fort', groups: ['ailier-fort'], nat: 'Français', born: '7 mai 1999', height: '1,97 m',
-        clubs: ['Memphis Grizzlies', 'Memphis Hustle', 'LDLC ASVEL', 'Bàsquet Girona', 'MoraBanc Andorra'],
-        honours: ['Vainqueur de la Leaders Cup (2023)'] },
-      { name: 'Joel Bolomboy', num: 21, pos: 'Ailier fort', groups: ['ailier-fort'], nat: 'Américano-ukrainien', born: '28 janvier 1994', height: '2,06 m',
-        clubs: ['Utah Jazz — 2016-2017', 'Milwaukee Bucks — 2017-2018', 'CSKA Moscou — 2018-2022', 'Olympiacos — 2022-2023', 'Crvena Zvezda Belgrade — 2023-2026'],
-        honours: ['Vainqueur de l’EuroLeague (2019)', 'Champion de la VTB League (2019 et 2021)', 'Champion de Grèce et vainqueur de la Coupe de Grèce (2023)', 'Champion de l’ABA League (2024)', 'Champion de Serbie (2024)', 'Vainqueur de la Coupe de Serbie (2024 et 2025)'] },
-      { name: 'Nate Sestina', num: 77, pos: 'Ailier fort / Pivot', groups: ['ailier-fort', 'pivot'], nat: 'Américano-macédonien', born: '12 mai 1997', height: '2,06 m',
-        clubs: ['Türk Telekom', 'Fenerbahçe', 'Valence', 'Olimpia Milan'],
-        honours: ['Champion et vainqueur de la Coupe de Turquie (2024)', 'Champion et vainqueur de la Coupe d’Italie (2026)'] },
-      { name: 'Mathis Dossou-Yovo', num: 12, pos: 'Pivot', groups: ['pivot'], nat: 'Français', born: '6 novembre 2000', height: '2,06 m',
-        clubs: ['Pôle France', 'Saint-Quentin', 'Nanterre 92', 'Paris Basketball', 'Nanterre 92', 'LDLC ASVEL — depuis 2026'] },
-      { name: 'Bodian Massa', num: 10, pos: 'Pivot', groups: ['pivot'], nat: 'Français', born: '21 octobre 1997', height: '2,10 m',
-        clubs: ['Fos Provence Basket', 'SIG Strasbourg', 'JL Bourg', 'Manisa Basket'],
-        honours: ['International français'] }
+    const players = [
+      { name: 'Patty Mills', num: 8, pos: 'Meneur', groups: ['meneur'], nat: 'Australien', height: '1,83 m' },
+      { name: 'TyTy Washington', num: 3, pos: 'Meneur', groups: ['meneur'], nat: 'Américain', height: '1,91 m' },
+      { name: 'Tremont Waters', num: 51, pos: 'Meneur', groups: ['meneur'], nat: 'Portoricain', height: '1,78 m' },
+      { name: 'Marc-Owen Fodzo Dada', num: 1, pos: 'Meneur', groups: ['meneur'], nat: 'Français', height: '1,90 m' },
+      { name: 'Hugo Besson', num: 25, pos: 'Arrière / Meneur', groups: ['arriere', 'meneur'], nat: 'Français', height: '1,94 m' },
+      { name: 'Edwin Jackson', num: 11, pos: 'Arrière', groups: ['arriere'], nat: 'Français', height: '1,90 m' },
+      { name: 'David Lighty', num: 23, pos: 'Ailier / Arrière', groups: ['ailier', 'arriere'], nat: 'Américain', height: '1,98 m' },
+      { name: 'Juhann Begarin', num: 97, pos: 'Ailier', groups: ['ailier'], nat: 'Français', height: '1,96 m' },
+      { name: 'Both Gach', num: 14, pos: 'Ailier', groups: ['ailier'], nat: 'Sud-Soudanais', height: '2,01 m' },
+      { name: 'Jae Crowder', num: 99, pos: 'Ailier / Ailier fort', groups: ['ailier', 'ailier-fort'], nat: 'Américain', height: '1,98 m' },
+      { name: 'Yves Pons', num: 35, pos: 'Ailier fort', groups: ['ailier-fort'], nat: 'Français', height: '1,97 m' },
+      { name: 'Joel Bolomboy', num: 21, pos: 'Ailier fort', groups: ['ailier-fort'], nat: 'Américano-ukrainien', height: '2,06 m' },
+      { name: 'Nate Sestina', num: 77, pos: 'Ailier fort / Pivot', groups: ['ailier-fort', 'pivot'], nat: 'Américano-macédonien', height: '2,06 m' },
+      { name: 'Mathis Dossou-Yovo', num: 12, pos: 'Pivot', groups: ['pivot'], nat: 'Français', height: '2,06 m' },
+      { name: 'Bodian Massa', num: 10, pos: 'Pivot', groups: ['pivot'], nat: 'Français', height: '2,10 m' }
     ];
 
-    function esc(s) {
-      return String(s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-    function initials(name) {
-      return name.split(/[\s-]+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+    function getInitials(name) {
+      return name.split(/[\s-]+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
     }
 
-    var roster = document.getElementById('roster');
-    roster.innerHTML = players.map(function (p, i) {
-      return '<button class="player reveal" type="button" data-index="' + i + '" data-groups="' + p.groups.join(' ') + '" data-initials="' + initials(p.name) + '">' +
-        '<span class="player-num">#' + p.num + '</span>' +
-        (p.badge ? '<span class="player-badge">' + esc(p.badge) + '</span>' : '') +
-        '<span class="player-pos">' + esc(p.pos) + '</span>' +
-        '<span class="player-name">' + esc(p.name) + '</span>' +
-        '<span class="player-meta">' + esc(p.nat) + ' · ' + esc(p.height) + '</span>' +
-        '</button>';
-    }).join('');
+    function renderRoster() {
+      const roster = document.getElementById('roster');
+      roster.innerHTML = players.map(p => `
+        <div class="player-card reveal" data-groups="${p.groups.join(' ')}">
+          <span class="player-initials">${getInitials(p.name)}</span>
+          <div>
+            <span class="player-num">#${p.num}</span>
+            <div class="player-pos">${p.pos}</div>
+            <div class="player-name">${p.name}</div>
+          </div>
+          <div class="player-info">
+            ${p.nat} • ${p.height}
+          </div>
+        </div>
+      `).join('');
+    }
 
-    var buttons = document.querySelectorAll('.filter-btn');
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var f = btn.dataset.filter;
-        buttons.forEach(function (b) { b.classList.toggle('active', b === btn); });
-        roster.querySelectorAll('.player').forEach(function (card) {
-          card.hidden = f !== 'all' && card.dataset.groups.split(' ').indexOf(f) === -1;
-        });
+    function filterRoster(filter) {
+      const cards = document.querySelectorAll('.player-card');
+      const buttons = document.querySelectorAll('.roster-filter-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.groups.split(' ').includes(filter)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
       });
-    });
+    }
 
-    var modal = document.getElementById('playerModal');
-    roster.addEventListener('click', function (e) {
-      var card = e.target.closest('.player');
-      if (!card) return;
-      var p = players[card.dataset.index];
-      document.getElementById('modalNum').textContent = '#' + p.num;
-      document.getElementById('modalPos').textContent = p.pos;
-      document.getElementById('modalName').textContent = p.name;
-      var list = function (items) { return '<ul>' + items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; };
-      document.getElementById('modalBody').innerHTML =
-        '<div class="facts"><div><span>Nationalité</span><strong>' + esc(p.nat) + '</strong></div>' +
-        '<div><span>Naissance</span><strong>' + esc(p.born) + '</strong></div>' +
-        '<div><span>Taille</span><strong>' + esc(p.height) + '</strong></div></div>' +
-        (p.note ? '<p class="modal-note">' + esc(p.note) + '</p>' : '') +
-        '<h4>Parcours</h4>' + list(p.clubs) +
-        (p.honours ? '<h4>Palmarès</h4>' + list(p.honours) : '');
-      modal.showModal();
-    });
-    modal.querySelector('.modal-close').addEventListener('click', function () { modal.close(); });
-    modal.addEventListener('click', function (e) { if (e.target === modal) modal.close(); });
-  })();
+    renderRoster();
   </script>
 </body>
 </html>

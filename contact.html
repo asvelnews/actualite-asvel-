@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — ASVEL Fans</title>
+  <meta name="description" content="Contactez-nous avec vos questions, suggestions ou informations sur l'ASVEL.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .contact-item p {
+      margin: 0.3rem 0 0;
+      color: var(--text-muted);
+    }
+
+    .contact-form {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%);
+      color: var(--text-light);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .contact-form h2 {
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-light);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
+    <div class="container">
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Contactez-nous</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Des questions ou des suggestions ? Nous sommes à votre écoute !</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+
+      <div class="contact-grid">
+
+        <!-- CONTACT INFO -->
+        <div class="contact-info">
+          <h2 class="section-title">Infos & Coordonnées</h2>
+
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <h3>Email</h3>
+              <p><a href="mailto:contact@asvel-fans.fr" style="color: var(--accent);">contact@asvel-fans.fr</a></p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🌐</div>
+            <div>
+              <h3>Site Web</h3>
+              <p>asvel-fans.fr</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <h3>Réseaux Sociaux</h3>
+              <p>Suivez-nous sur les réseaux sociaux pour les dernières actualités</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🏀</div>
+            <div>
+              <h3>Club Officiel</h3>
+              <p>LDLC ASVEL<br>LDLC Arena<br>Villeurbanne, Lyon 69100<br>France</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">⏱️</div>
+            <div>
+              <h3>Temps de Réponse</h3>
+              <p>Nous répondons généralement sous 24-48h</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT FORM -->
+        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <h2>Envoyez-nous un message</h2>
+
+          <div class="form-group">
+            <label for="name">Nom</label>
+            <input type="text" id="name" name="name" placeholder="Votre nom" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="votre.email@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Sujet</label>
+            <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Envoyer le message</button>
+        </form>
+
+      </div>
+
+      <!-- FAQ SECTION -->
+      <section style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+        <h2 class="section-title">Questions Fréquentes</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Êtes-vous affiliés au club officiel ?</h3>
+            <p style="color: var(--text-muted);">Non, nous sommes un site fan indépendant. Nous ne sommes pas directement affiliés à LDLC ASVEL, mais nous couvrons l'actualité du club.</p>
+          </div>
+          <div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Comment puis-je soumettre une info ?</h3>
+            <p style="color: var(--text-muted);">Vous pouvez nous contacter via le formulaire ou par email si vous avez une information importante à partager.</p>
+          </div>
+          <div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">À quelle fréquence mettez-vous à jour ?</h3>
+            <p style="color: var(--text-muted);">Nous mettons à jour le site quotidiennement pendant la saison avec les résultats, news et calendrier actualisés.</p>
+          </div>
+          <div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Pouvez-vous relayer une annonce ?</h3>
+            <p style="color: var(--text-muted);">Oui, contactez-nous pour explorer les possibilités. Nous discuterons de votre demande.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

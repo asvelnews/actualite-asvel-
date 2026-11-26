@@ -3,247 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mercato 2026-2027 — Actu ASVEL</title>
-  <meta name="description" content="Toutes les arrivées, les départs et les prêts de LDLC ASVEL durant le mercato estival 2026 et pendant la saison.">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="canonical" href="https://actu-asvel.fr/mercato.html">
+  <title>Mercato ASVEL 2026-2027 — Transferts & Rumeurs</title>
+  <meta name="description" content="Suivi complet du mercato de l'ASVEL 2026-2027 : transferts, arrivées, départs et rumeurs du club Villeurbanne.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23d4a574' width='100' height='100'/><text x='50' y='70' font-size='80' font-weight='bold' text-anchor='middle' fill='%230a0a0a'>◆</text></svg>">
-  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .hero { --year: '26'; }
+    .mercato-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
 
-    .tools { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: 2rem 0 1.5rem; padding: 1.2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; }
-    .filter-btn { min-height: 42px; padding: .6rem 1.1rem; border-radius: 8px; border: 2px solid var(--border); background: #fff; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; transition: var(--transition); }
-    .filter-btn:hover { border-color: var(--accent-gold); }
-    .filter-btn.active { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--accent-gold); }
-    .search { flex: 1 1 220px; min-height: 42px; padding: .6rem .9rem; border: 1px solid var(--border); border-radius: 8px; background: var(--primary-light); font-size: .9rem; }
-    .result-count { width: 100%; font-size: .8rem; color: var(--text-muted); }
+    .mercato-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--accent);
+    }
 
-    .movement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
-    .movement { position: relative; overflow: hidden; padding: 1.4rem 1.4rem 1.2rem 1.6rem; display: flex; flex-direction: column; }
-    .movement::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
-    .movement[data-type="arrival"]::before { background: var(--accent-gold); }
-    .movement[data-type="departure"]::before { background: var(--accent-red); }
-    .movement.hidden { display: none; }
-    .movement-top { display: flex; justify-content: space-between; align-items: center; gap: .8rem; }
-    .movement-type { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
-    .movement[data-type="arrival"] .movement-type { color: var(--accent-gold); }
-    .movement[data-type="departure"] .movement-type { color: var(--accent-red); }
-    .movement-season { font-size: .7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-    .movement h3 { margin: .7rem 0 .2rem; font-size: 1.15rem; }
-    .movement-pos { font-size: .78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-    .movement-desc { margin-top: .6rem; font-size: .86rem; color: var(--text-muted); flex: 1; }
-    .empty { display: none; padding: 2.5rem; text-align: center; border: 1px dashed var(--border); border-radius: 12px; color: var(--text-muted); }
-    .empty.show { display: block; }
+    .transfer-item {
+      display: grid;
+      grid-template-columns: 150px 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
 
-    .highlight { margin-bottom: 3rem; }
-    .highlight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-    .highlight-card { background: var(--primary-dark); color: #fff; border-radius: 12px; padding: 1.8rem; border-left: 5px solid var(--accent-gold); }
-    .highlight-card.is-departure { border-left-color: var(--accent-red); }
-    .highlight-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-gold); margin-bottom: .6rem; }
-    .highlight-card.is-departure .highlight-label { color: #ff8da1; }
-    .highlight-card h3 { margin: 0 0 .5rem; font-size: 1.4rem; }
-    .highlight-card p { color: rgba(255,255,255,.75); font-size: .9rem; }
+    .transfer-item:last-child {
+      border-bottom: none;
+    }
 
-    @media (max-width: 620px) { .movement-grid { grid-template-columns: 1fr; } .filter-btn { flex: 1 1 45%; } .search { flex-basis: 100%; } }
+    .transfer-player {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .transfer-info {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .transfer-date {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .arrival { border-left: 4px solid #4ade80; }
+    .departure { border-left: 4px solid var(--accent-red); }
+
+    @media (max-width: 768px) {
+      .transfer-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .transfer-date {
+        text-align: left;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">ACTU ASVEL</a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="mercato.html" class="active">Mercato</a>
-      <a href="matchs.html">Matchs</a>
-      <a href="effectif.html">Effectif</a>
-      <a href="a-propos.html">À propos</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">ASVEL</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Accueil</a>
+        <a href="actualites.html" class="nav-link">Actualités</a>
+        <a href="calendrier.html" class="nav-link">Calendrier</a>
+        <a href="effectif.html" class="nav-link">Effectif</a>
+        <a href="mercato.html" class="nav-link active">Mercato</a>
+        <a href="palmares.html" class="nav-link">Palmarès</a>
+      </nav>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
   </header>
 
-  <section class="hero">
+  <!-- PAGE TITLE -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1a1a1a 100%); color: var(--text-light); padding: 3rem 1.5rem;">
     <div class="container">
-      <div class="eyebrow">Intersaison &amp; cours de saison 2026</div>
-      <h1>Le mercato villeurbannais</h1>
-      <p>Tous les mouvements enregistrés par LDLC ASVEL : les arrivées de l'été, les départs, et les ajustements en cours de saison.</p>
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Mercato 2026-2027</h1>
+      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.8);">Transferts, arrivées et départs de l'ASVEL</p>
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
     <div class="container">
 
-      <section class="highlight">
-        <h2>Derniers mouvements</h2>
-        <p class="subtitle">Les deux événements les plus récents du mercato ASVEL.</p>
-        <div class="highlight-grid">
-          <div class="highlight-card is-departure reveal">
-            <div class="highlight-label">Départ · 23 novembre 2026</div>
-            <h3>Myles Cale</h3>
-            <p>L'ailier américain quitte le club d'un commun accord après seulement 6 matchs disputés (4 points et 2 rebonds de moyenne en Betclic ÉLITE). Arrivé libre de Barcelone à l'été 2026, il n'aura pas trouvé sa place à Villeurbanne.</p>
+      <!-- ARRIVÉES -->
+      <section class="mercato-section">
+        <h2 class="mercato-title">🟢 Arrivées 2026-2027</h2>
+        <div>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">TyTy Washington</div>
+            <div>
+              <div class="transfer-info">Meneur, 1,91 m • Depuis NBA (Phoenix Suns)</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">Contrat 2 ans</div>
+            </div>
+            <div class="transfer-date">Août 2026</div>
           </div>
-          <div class="highlight-card reveal">
-            <div class="highlight-label">Arrivée · 7 octobre 2026</div>
-            <h3>Juhann Begarin</h3>
-            <p>Signé comme pigiste médical pour remplacer Mathis Dossou-Yovo. Selon la presse, l'ailier français devrait rester jusqu'à la fin de la saison, une prolongation étant attendue — non encore officialisée par le club.</p>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">Tremont Waters</div>
+            <div>
+              <div class="transfer-info">Meneur, 1,78 m • Depuis Shanghai Sharks</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">Contrat 1 an</div>
+            </div>
+            <div class="transfer-date">Août 2026</div>
+          </div>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">Jae Crowder</div>
+            <div>
+              <div class="transfer-info">Ailier / Ailier fort, 1,98 m • Depuis Sacramento Kings</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">Contrat 1 an</div>
+            </div>
+            <div class="transfer-date">Août 2026</div>
+          </div>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">Joel Bolomboy</div>
+            <div>
+              <div class="transfer-info">Ailier fort, 2,06 m • Depuis Crvena Zvezda Belgrade</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">Contrat 1 an</div>
+            </div>
+            <div class="transfer-date">Août 2026</div>
+          </div>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">Both Gach</div>
+            <div>
+              <div class="transfer-info">Ailier, 2,01 m • Depuis JL Bourg</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">Contrat 1 an</div>
+            </div>
+            <div class="transfer-date">Août 2026</div>
+          </div>
+          <div class="transfer-item arrival">
+            <div class="transfer-player">Juhann Begarin</div>
+            <div>
+              <div class="transfer-info">Ailier, 1,96 m • Depuis AS Monaco (pigiste médical)</div>
+              <div style="font-size: 0.8rem; color: var(--accent); margin-top: 0.3rem;">À confirmer jusqu'à fin saison</div>
+            </div>
+            <div class="transfer-date">Octobre 2026</div>
           </div>
         </div>
       </section>
 
-      <div class="tools">
-        <button class="filter-btn active" type="button" data-filter="all">Tous</button>
-        <button class="filter-btn" type="button" data-filter="arrival">Arrivées</button>
-        <button class="filter-btn" type="button" data-filter="departure">Départs</button>
-        <input class="search" id="search" type="search" placeholder="Rechercher un joueur…" aria-label="Rechercher un joueur">
-        <div class="result-count" id="count"></div>
-      </div>
+      <!-- DÉPARTS -->
+      <section class="mercato-section">
+        <h2 class="mercato-title">🔴 Départs 2026-2027</h2>
+        <div>
+          <div class="transfer-item departure">
+            <div class="transfer-player">Myles Cale</div>
+            <div>
+              <div class="transfer-info">Arrière / Ailier, 1,88 m • Départ d'un commun accord</div>
+              <div style="font-size: 0.8rem; color: var(--accent-red); margin-top: 0.3rem;">6 matchs disputés cette saison</div>
+            </div>
+            <div class="transfer-date">23 novembre 2026</div>
+          </div>
+        </div>
+      </section>
 
-      <div class="empty" id="empty">Aucun mouvement ne correspond à votre recherche.</div>
-
-      <div class="movement-grid" id="movements">
-        <div class="movement" data-type="departure" data-name="Myles Cale">
-          <div class="movement-top"><span class="movement-type">Départ</span><span class="movement-season">23 nov. 2026</span></div>
-          <h3>Myles Cale</h3>
-          <span class="movement-pos">Arrière / Ailier</span>
-          <p class="movement-desc">Quitte l'ASVEL d'un commun accord après 6 matchs disputés cette saison.</p>
+      <!-- INFOS -->
+      <section class="mercato-section" style="background: rgba(212, 165, 116, 0.05);">
+        <h2 class="mercato-title">ℹ️ État du marché</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+          <div style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem;">6</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">Arrivées principales</div>
+          </div>
+          <div style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-red); margin-bottom: 0.5rem;">1</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">Départ majeur</div>
+          </div>
+          <div style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem;">15</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">Joueurs actuels</div>
+          </div>
+          <div style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem;">10</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">Nationalités différentes</div>
+          </div>
         </div>
-        <div class="movement" data-type="arrival" data-name="Juhann Begarin">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">7 oct. 2026</span></div>
-          <h3>Juhann Begarin</h3>
-          <span class="movement-pos">Ailier</span>
-          <p class="movement-desc">Pigiste médical signé pour remplacer Mathis Dossou-Yovo ; prolongation attendue jusqu'à la fin de la saison.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Both Gach">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Both Gach</h3>
-          <span class="movement-pos">Ailier</span>
-          <p class="movement-desc">Intégré au groupe villeurbannais pour la saison 2026-2027 en provenance de JL Bourg.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Yves Pons">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Yves Pons</h3>
-          <span class="movement-pos">Ailier fort</span>
-          <p class="movement-desc">Retour à l'ASVEL après son passage par MoraBanc Andorra.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Patty Mills">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Patty Mills</h3>
-          <span class="movement-pos">Meneur</span>
-          <p class="movement-desc">L'international australien, champion NBA 2014, apporte son expérience au projet villeurbannais.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Joel Bolomboy">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Joel Bolomboy</h3>
-          <span class="movement-pos">Ailier fort</span>
-          <p class="movement-desc">Le champion d'EuroLeague 2019 (CSKA Moscou) renforce le secteur intérieur.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Nate Sestina">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Nate Sestina</h3>
-          <span class="movement-pos">Ailier fort / Pivot</span>
-          <p class="movement-desc">Intérieur capable d'écarter le jeu grâce à son tir extérieur, en provenance d'Olimpia Milan.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Marc-Owen Fodzo Dada">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Marc-Owen Fodzo Dada</h3>
-          <span class="movement-pos">Meneur</span>
-          <p class="movement-desc">Jeune joueur formé localement, en provenance du SLUC Nancy.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Myles Cale">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Myles Cale</h3>
-          <span class="movement-pos">Arrière / Ailier</span>
-          <p class="movement-desc">Arrivé libre après la fin de son contrat avec le FC Barcelone (parti depuis le 23 novembre, voir ci-dessus).</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Jae Crowder">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Jae Crowder</h3>
-          <span class="movement-pos">Ailier / Ailier fort</span>
-          <p class="movement-desc">Vétéran de 14 saisons NBA et de deux finales disputées, portera le numéro 99.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Hugo Besson">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Hugo Besson</h3>
-          <span class="movement-pos">Arrière / Meneur</span>
-          <p class="movement-desc">Arrière-meneur français créatif, en provenance de Tofaş Bursa.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Tremont Waters">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Tremont Waters</h3>
-          <span class="movement-pos">Meneur</span>
-          <p class="movement-desc">Meneur portoricain passé par la NBA et Shanghai Sharks.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="Mathis Dossou-Yovo">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>Mathis Dossou-Yovo</h3>
-          <span class="movement-pos">Pivot</span>
-          <p class="movement-desc">Intérieur français, auteur d'une grosse saison à Nanterre 92.</p>
-        </div>
-        <div class="movement" data-type="arrival" data-name="TyTy Washington">
-          <div class="movement-top"><span class="movement-type">Arrivée</span><span class="movement-season">Été 2026</span></div>
-          <h3>TyTy Washington</h3>
-          <span class="movement-pos">Meneur</span>
-          <p class="movement-desc">Ancien choix de premier tour de Draft NBA, découvre l'EuroLeague à Villeurbanne.</p>
-        </div>
-      </div>
-
-      <p class="card-compact" style="margin-top:1.5rem; font-size:.85rem; color:var(--text-muted);"><strong>À noter :</strong> seuls les mouvements confirmés par une source fiable sont listés. Les départs de l'été 2026 (joueurs non reconduits) ne sont pas détaillés individuellement ici, faute de confirmation complète à date — voir l'<a href="effectif.html" style="color:var(--accent-gold);">effectif actuel</a> pour la liste complète des joueurs présents.</p>
+      </section>
 
     </div>
   </main>
 
-  <footer>
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container">
-      <div>
-        <h4>Actu ASVEL</h4>
-        <p>Média indépendant consacré à l'actualité de LDLC ASVEL Villeurbanne, non affilié au club.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>À propos</h4>
+          <p>ASVEL Villeurbanne est un club de basketball français basé à Lyon, engagé en EuroLeague et Betclic ÉLITE.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="calendrier.html">Calendrier</a></li>
+            <li><a href="effectif.html">Effectif</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Infos</h4>
+          <ul>
+            <li><a href="mercato.html">Mercato</a></li>
+            <li><a href="palmares.html">Palmarès</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h4>Navigation</h4>
-        <p><a href="index.html">Accueil</a><br><a href="actualites.html">Actualités</a><br><a href="matchs.html">Matchs</a><br><a href="mercato.html">Mercato</a></p>
-      </div>
-      <div>
-        <h4>Infos</h4>
-        <p><a href="effectif.html">Effectif</a><br><a href="palmares.html">Palmarès</a><br><a href="a-propos.html">À propos</a></p>
+      <div class="footer-bottom">
+        <p>© 2026 ASVEL Fans • Média indépendant • Non affilié au club LDLC ASVEL</p>
       </div>
     </div>
-    <div class="footer-bottom"><p>© 2026 Actu ASVEL • Média fan indépendant • Non affilié au club LDLC ASVEL</p></div>
   </footer>
 
   <script src="app.js" defer></script>
-  <script>
-  (function () {
-    var filters = [].slice.call(document.querySelectorAll('.filter-btn'));
-    var cards = [].slice.call(document.querySelectorAll('.movement'));
-    var search = document.getElementById('search');
-    var count = document.getElementById('count');
-    var empty = document.getElementById('empty');
-    var active = 'all';
-
-    function normalize(v) { return v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
-
-    function update() {
-      var query = normalize(search.value.trim());
-      var total = 0;
-      cards.forEach(function (card) {
-        var visible = (active === 'all' || card.dataset.type === active) && (!query || normalize(card.dataset.name).indexOf(query) !== -1);
-        card.classList.toggle('hidden', !visible);
-        if (visible) total++;
-      });
-      count.textContent = total + (total > 1 ? ' mouvements affichés' : ' mouvement affiché');
-      empty.classList.toggle('show', total === 0);
-    }
-
-    filters.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        active = btn.dataset.filter;
-        filters.forEach(function (b) { b.classList.toggle('active', b === btn); });
-        update();
-      });
-    });
-    search.addEventListener('input', update);
-    update();
-  })();
-  </script>
 </body>
 </html>

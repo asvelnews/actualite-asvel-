@@ -1,56 +1,75 @@
-/* ======= ACTU ASVEL — Navigation & Utilitaires ======= */
+/* ========== ASVEL 2026-2027 — APP LOGIC ========== */
 
 (function() {
   'use strict';
 
-  // ======= MENU MOBILE =======
-  const menuToggle = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('nav');
+  // ========== CAROUSEL ==========
+  const carousel = document.querySelector('.carousel-track');
+  if (carousel) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    let currentSlide = 0;
 
-  if (menuToggle && nav) {
-    menuToggle.addEventListener('click', function() {
-      const isOpen = nav.classList.toggle('open');
-      menuToggle.classList.toggle('open', isOpen);
-      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    function showSlide(n) {
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      slides[n].classList.add('active');
+      dots[n].classList.add('active');
+      currentSlide = n;
+    }
+
+    // Auto-advance carousel every 5 seconds
+    setInterval(() => {
+      showSlide((currentSlide + 1) % slides.length);
+    }, 5000);
+
+    // Dots click handlers
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => showSlide(idx));
+    });
+  }
+
+  // ========== MOBILE MENU ==========
+  const menuBtn = document.querySelector('.menu-btn');
+  const nav = document.querySelector('.nav');
+
+  if (menuBtn && nav) {
+    menuBtn.addEventListener('click', () => {
+      nav.classList.toggle('open');
     });
 
-    nav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', function() {
+    nav.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
         nav.classList.remove('open');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
       });
     });
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && nav.classList.contains('open')) {
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
         nav.classList.remove('open');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }
 
-  // ======= ACTIVE NAV LINK =======
+  // ========== ACTIVE NAV LINK ==========
   function updateActiveLink() {
     const currentPath = window.location.pathname;
     const fileName = currentPath.split('/').pop() || 'index.html';
 
-    nav?.querySelectorAll('a').forEach(link => {
+    document.querySelectorAll('.nav-link').forEach(link => {
       const href = link.getAttribute('href');
       const isActive = href === fileName ||
                       (fileName === '' && href === 'index.html') ||
                       (currentPath.endsWith(href));
-
       link.classList.toggle('active', isActive);
-      link.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
   }
 
   updateActiveLink();
   window.addEventListener('hashchange', updateActiveLink);
 
-  // ======= SCROLL REVEAL =======
+  // ========== SCROLL REVEAL ==========
   const revealElements = document.querySelectorAll('.reveal');
   if (revealElements.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
@@ -65,7 +84,7 @@
     revealElements.forEach(el => observer.observe(el));
   }
 
-  // ======= SHARE BUTTON =======
+  // ========== SHARE FUNCTIONALITY ==========
   window.shareArticle = async function(title, text, url) {
     const data = { title, text, url: url || window.location.href };
 
@@ -104,7 +123,7 @@
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: var(--primary-dark);
+      background: var(--primary);
       color: white;
       padding: 1rem 1.5rem;
       border-radius: 8px;
@@ -116,11 +135,5 @@
     document.body.appendChild(notif);
     setTimeout(() => notif.remove(), 2000);
   }
-
-  // ======= LAZY LOAD IMAGES =======
-  document.querySelectorAll('img[data-src]').forEach(img => {
-    img.src = img.dataset.src;
-    img.removeAttribute('data-src');
-  });
 
 })();
